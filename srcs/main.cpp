@@ -39,7 +39,7 @@ int main(int ac, char **av) {
 		exit_error(ERR_ARGS);
 	std::cout << "You entered: " << av[0] << std::endl;
 
-	MLXWrapper MLXSetup (WIDTH, HEIGHT, true);
+	MLXWrapper MLXSetup (WIDTH, HEIGHT, false);
 	mlx_image_t *renderer;
 	mlx_image_t *image;
 

@@ -6,7 +6,7 @@
 /*   By: jcoquard <jcoquard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 23:53:04 by xcharra           #+#    #+#             */
-/*   Updated: 2025/02/24 18:13:21 by jcoquard         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:41:55 by jcoquard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ public:
 	bool		isKeyDown(keys_t key) const;
 
 	mlx_t		*getMlx() const { return _mlx; }
-	mlx_image_t	*getImage(size_t i) const { return _images[i]; }
+	mlx_image_t	*getImage(size_t i) const;
 
 	int32_t		getWidth() const {return (_width);}
 	int32_t		getHeight() const {return (_height);}

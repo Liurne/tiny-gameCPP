@@ -6,7 +6,7 @@
 /*   By: jcoquard <jcoquard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:58:04 by xcharra           #+#    #+#             */
-/*   Updated: 2025/02/24 18:13:09 by jcoquard         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:41:30 by jcoquard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,12 @@ void MLXWrapper::resizeHook(mlx_resizefunc func, void *param) const {
 
 bool MLXWrapper::isKeyDown(const keys_t key) const {
 	return (mlx_is_key_down(_mlx, key));
+}
+
+mlx_image_t *MLXWrapper::getImage(size_t i) const {
+	if (i > _images.size())
+		throw std::invalid_argument(ERR_MLX_IMAGE_INDEX);
+	return _images[i];
 }
 
 MLXWrapper::~MLXWrapper() {
