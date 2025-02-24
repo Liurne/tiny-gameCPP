@@ -6,17 +6,17 @@
 /*   By: jcoquard <jcoquard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 23:53:04 by xcharra           #+#    #+#             */
-/*   Updated: 2025/02/24 14:38:25 by jcoquard         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:44:03 by jcoquard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MLXWRAPPER_HPP
 # define MLXWRAPPER_HPP
 
-# include "../MLX/include/MLX42/MLX42.h"
-# include <vector>
+# include "include.h"
+# include "define.h"
 
-typedef std::vector<mlx_image_t *>	vecImages;
+typedef std::vector<mlx_image_t *>	vecMLXImages;
 
 class MLXWrapper {
 public:
@@ -25,11 +25,10 @@ public:
 	MLXWrapper		*operator()();
 
 	mlx_t		*init();
-	mlx_image_t	*newImage(int32_t width, int32_t height);
-	int32_t		imageToWindow(size_t i, int32_t x, int32_t y) const;
-	void		putPixel(size_t i, int32_t x, int32_t y, uint32_t color) const;
-	bool		resizeImage(size_t i, uint32_t nwidth, uint32_t nheight);
 	void		loop() const;
+
+	mlx_image_t	*newImage(int32_t width, int32_t height);
+	int32_t		imageToWindow(mlx_image_t	*img, int32_t x, int32_t y) const;
 
 	bool		loopHook(void(* f)(void*), void *param) const;
 	void		resizeHook(mlx_resizefunc func, void *param) const;
@@ -38,15 +37,15 @@ public:
 	mlx_t		*getMlx() const { return _mlx; }
 	mlx_image_t	*getImage(size_t i) const { return _images[i]; }
 
-	int32_t		getWidth() const;
-	int32_t		getHeight() const;
+	int32_t		getWidth() const {return (_width);}
+	int32_t		getHeight() const {return (_height);}
 
 private:
-	int32_t		_width;
-	int32_t		_height;
-	bool		_resize;
-	mlx_t		*_mlx;
-	vecImages	_images;
+	int32_t			_width;
+	int32_t			_height;
+	bool			_resize;
+	mlx_t			*_mlx;
+	vecMLXImages	_images;
 
 	MLXWrapper();
 	MLXWrapper(MLXWrapper const &src);
