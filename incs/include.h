@@ -10,4 +10,14 @@
 
 # include "../MLX/include/MLX42/MLX42.h"
 
+typedef union u_color {
+	struct {
+		uint8_t a;
+		uint8_t b;
+		uint8_t g;
+		uint8_t	r;
+	};
+	uint32_t	raw;
+}	t_color;
+
 #endif
