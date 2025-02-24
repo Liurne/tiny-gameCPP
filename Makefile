@@ -6,7 +6,8 @@ INCS		:=	\
 
 
 SRCS		:=	\
-				MLXWrapper.cpp\
+				class/MLXWrapper.cpp\
+				parsing/parse.cpp\
 				main.cpp\
 
 INCS_D		:=	incs/
