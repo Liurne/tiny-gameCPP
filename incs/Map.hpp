@@ -10,8 +10,6 @@ public:
 	Map(Map const &src);
 	Map &operator=(Map const &rhs);
 
-	void		generate();
-
 	int32_t		getWidth() const;
 	int32_t		getHeight() const;
 
