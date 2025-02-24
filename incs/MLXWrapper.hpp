@@ -6,7 +6,7 @@
 /*   By: jcoquard <jcoquard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 23:53:04 by xcharra           #+#    #+#             */
-/*   Updated: 2025/02/24 18:41:55 by jcoquard         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:44:09 by jcoquard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ public:
 
 	mlx_t		*init();
 	void		loop() const;
+	void		close();
 
 	mlx_image_t	*newImage(int32_t width, int32_t height);
 	mlx_image_t *newTexture(std::string path);

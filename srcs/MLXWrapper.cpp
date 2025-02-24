@@ -6,7 +6,7 @@
 /*   By: jcoquard <jcoquard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:58:04 by xcharra           #+#    #+#             */
-/*   Updated: 2025/02/24 18:41:30 by jcoquard         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:44:18 by jcoquard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@ mlx_t *MLXWrapper::init() {
 
 void MLXWrapper::loop() const {
 	mlx_loop(_mlx);
+}
+
+void MLXWrapper::close() {
+	mlx_close_window(_mlx);
 }
 
 mlx_image_t *MLXWrapper::newImage(int32_t width, int32_t height) {
