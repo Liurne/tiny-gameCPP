@@ -1,0 +1,7 @@
+/home/jcoquard/Documents/tiny-gameCPP/MLX/build/CMakeFiles/mlx42.dir
+/home/jcoquard/Documents/tiny-gameCPP/MLX/build/CMakeFiles/edit_cache.dir
+/home/jcoquard/Documents/tiny-gameCPP/MLX/build/CMakeFiles/rebuild_cache.dir
+/home/jcoquard/Documents/tiny-gameCPP/MLX/build/CMakeFiles/list_install_components.dir
+/home/jcoquard/Documents/tiny-gameCPP/MLX/build/CMakeFiles/install.dir
+/home/jcoquard/Documents/tiny-gameCPP/MLX/build/CMakeFiles/install/local.dir
+/home/jcoquard/Documents/tiny-gameCPP/MLX/build/CMakeFiles/install/strip.dir
