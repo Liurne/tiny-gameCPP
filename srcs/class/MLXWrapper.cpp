@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   MLXWrapper.cpp                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jcoquard <jcoquard@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 22:58:04 by xcharra           #+#    #+#             */
-/*   Updated: 2025/02/24 18:44:18 by jcoquard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "MLXWrapper.hpp"
 
 MLXWrapper::MLXWrapper(int32_t width, int32_t height, bool resize) : _width(width), _height(height), _resize(resize), _mlx(NULL) {
