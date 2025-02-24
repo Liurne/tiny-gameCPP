@@ -34,3 +34,5 @@
 # Debug files
 old/
 .vscode/
+MLX/build
+tiny-gameCPP
