@@ -6,7 +6,7 @@
 /*   By: jcoquard <jcoquard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 23:53:04 by xcharra           #+#    #+#             */
-/*   Updated: 2025/02/24 15:44:03 by jcoquard         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:13:21 by jcoquard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define MLXWRAPPER_HPP
 
 # include "include.h"
-# include "define.h"
+# include "error.h"
 
 typedef std::vector<mlx_image_t *>	vecMLXImages;
 
@@ -28,6 +28,7 @@ public:
 	void		loop() const;
 
 	mlx_image_t	*newImage(int32_t width, int32_t height);
+	mlx_image_t *newTexture(std::string path);
 	int32_t		imageToWindow(mlx_image_t	*img, int32_t x, int32_t y) const;
 
 	bool		loopHook(void(* f)(void*), void *param) const;

@@ -6,7 +6,7 @@
 /*   By: jcoquard <jcoquard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:58:04 by xcharra           #+#    #+#             */
-/*   Updated: 2025/02/24 15:42:43 by jcoquard         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:13:09 by jcoquard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,26 @@ mlx_t *MLXWrapper::init() {
 
 void MLXWrapper::loop() const {
 	mlx_loop(_mlx);
+}
+
+mlx_image_t *MLXWrapper::newImage(int32_t width, int32_t height) {
+	mlx_image_t	*newImage = mlx_new_image(_mlx, width, height);
+	if (!newImage)
+		throw std::runtime_error(ERR_MLX_IMAGE);
+	_images.push_back(newImage);
+	return (newImage);
+}
+
+mlx_image_t *MLXWrapper::newTexture(std::string path) {
+	mlx_texture_t* newTexture = mlx_load_png(path.c_str());
+	if (!newTexture)
+		throw std::runtime_error(ERR_MLX_TEXTURE);
+	mlx_image_t* newImage = mlx_texture_to_image(_mlx, newTexture);
+	mlx_delete_texture(newTexture);
+	if (!newImage)
+		throw std::runtime_error(ERR_MLX_IMAGE);
+	_images.push_back(newImage);
+	return (newImage);
 }
 
 int32_t	MLXWrapper::imageToWindow(mlx_image_t	*img, int32_t x, int32_t y) const {
