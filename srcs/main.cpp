@@ -7,8 +7,9 @@ void exit_error(const std::string &msg) {
 }
 
 void my_hook(void *MLXSetup) {
-	if (static_cast<MLXWrapper *>(MLXSetup)->isKeyDown(MLX_KEY_ESCAPE))
-		mlx_close_window(static_cast<MLXWrapper *>(MLXSetup)->getMlx());
+	MLXWrapper *mlx = static_cast<MLXWrapper *>(MLXSetup);
+	if (mlx->isKeyDown(MLX_KEY_ESCAPE))
+		mlx->close();
 }
 
 void put_pixel(mlx_image_t *img, int32_t x, int32_t y, uint32_t color) {
