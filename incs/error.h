@@ -1,8 +1,6 @@
 #ifndef DEFINE_H
 # define DEFINE_H
 
-# include "include.h"
-
 //ERRORS MESSAGES
 # define ERR_ARGS "Invalid number of argument"
 # define ERR_MLX_INIT "Failed to initialize MLX library"

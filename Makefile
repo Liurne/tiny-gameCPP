@@ -3,11 +3,17 @@
 ########################################################################################################################
 INCS		:=	\
 				MLXWrapper.hpp\
+				Map.hpp\
+				GameLife.hpp\
+				Program.hpp\
 
 
 SRCS		:=	\
 				class/MLXWrapper.cpp\
-				parsing/parse.cpp\
+				class/Map.cpp\
+				class/GameLife.cpp\
+				class/Program.cpp\
+				utils.cpp\
 				main.cpp\
 
 INCS_D		:=	incs/
@@ -103,11 +109,9 @@ $(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.cpp | $(OBJS_D) $(DEPS_D)
 
 $(OBJS_D)	:
 			mkdir -p $(OBJS_D)/class
-			mkdir -p $(OBJS_D)/parsing
 
 $(DEPS_D)	:
 			mkdir -p $(DEPS_D)/class
-			mkdir -p $(DEPS_D)/parsing
 
 mlx			:
 			cmake $(MLX_D) -B $(MLX_D)/build && make -C $(MLX_D)/build -j4

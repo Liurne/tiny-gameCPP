@@ -1,6 +1,6 @@
 #include "Map.hpp"
 
-Map::Map() : _width(MAP_WIDTH), _height(MAP_HEIGHT) {
+Map::Map(){
 	std::cout << "Map constructor called, generating map" << std::endl;
 }
 
@@ -16,16 +16,19 @@ Map::Map(Map const &src) {
 Map &Map::operator=(Map const &rhs) {
 	std::cout << "Map assignment operator called" << std::endl;
 	if (this != &rhs) {
-		_width = rhs._width;
-		_height = rhs._height;
+		for (int32_t i = 0; i < MAP_WIDTH; i++) {
+			for (int32_t j = 0; j < MAP_HEIGHT; j++) {
+				_map[i][j] = rhs._map[i][j];
+			}
+		}
 	}
 	return (*this);
 }
 
-int32_t Map::getWidth() const {
-	return (_width);
-}
-
-int32_t Map::getHeight() const {
-	return (_height);
+void Map::generateMap() {
+	for (int32_t i = 0; i < MAP_WIDTH; i++) {
+		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
+			_map[i][j] = '0';
+		}
+	}
 }
