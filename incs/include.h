@@ -20,6 +20,11 @@ typedef union u_color {
 	uint32_t	raw;
 }	t_color;
 
+typedef struct u_veci {
+	int x;
+	int y;
+}	t_veci;
+
 void exit_error(const std::string &msg);
 void put_pixel(mlx_image_t *img, int32_t x, int32_t y, uint32_t color);
 void fill_img(mlx_image_t *img, uint32_t color);

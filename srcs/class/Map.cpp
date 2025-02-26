@@ -44,15 +44,29 @@ void Map::displayMap(mlx_image_t *renderer) const {
 			if (_map[i][j] == '1') {
 				fill_img(renderer, 0x00FF00FF);
 			}
+			else if (_map[i][j] == 'S') {
+				fill_img(renderer, 0x00FFFFFF);
+			}
+			else if (_map[i][j] == 'E') {
+				fill_img(renderer, 0xFF00FFFF);
+			}
+			else if (_map[i][j] == 'C') {
+				fill_img(renderer, 0xFFFF00FF);
+			}
 			else {
-				fill_img(renderer, 0x000000FF);
+				fill_img(renderer, 0x0000FFFF);
 			}
 		}
 	}
 }
 
 void Map::_placeMapStart() {
-
+	int side = rand() % 4;
+	int x;
+	if (side % 2)
+		x = rand() % (MAP_WIDTH - MAP_MARGING * 2) + MAP_MARGING;
+	else
+		x = rand() % (MAP_HEIGHT - MAP_MARGING * 2) + MAP_MARGING;
 }
 
 void Map::_placeMapExit() {

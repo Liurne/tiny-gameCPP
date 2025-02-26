@@ -3,11 +3,10 @@
 
 #include "game_rule.h"
 #include "MLXWrapper.hpp"
-#include "GameLife.hpp"
 
 class Map {
 public:
-	Map();
+	Map(char **map, int width, int height);
 	~Map();
 	Map(Map const &src);
 	Map &operator=(Map const &rhs);
@@ -19,12 +18,11 @@ public:
 
 private:
 	char		_map[MAP_WIDTH][MAP_HEIGHT];
+	int			_nbCollectible;
+	t_veci		_start;
+	t_veci		_exit;
+	Map();
 
-	void		_placeMapStart();
-	void		_placeMapExit();
-	void		_placeMapElement();
-	void		_verifyMapElement();
-	void		_clearWrongMapElement();
 };
 
 #endif
