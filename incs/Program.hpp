@@ -16,10 +16,11 @@ public:
 	
 	MLXWrapper	MLXSetup;
 	mlx_image_t	*renderer;
-	mlx_image_t	*test;
 
 	GameLife	gameLife;
 	mlx_image_t	*cell;
+
+	int 		iter;
 
 private:
 	Program(Program const &src);

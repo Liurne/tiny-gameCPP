@@ -33,13 +33,13 @@ void GameLife::generateGrid() {
 			_grid[i][j] = '0';
 		}
 	}
-	int nbCellToPlace = (MAP_WIDTH * MAP_HEIGHT) * 0.55;
+	int nbCellToPlace = ((MAP_WIDTH - MAP_MARGING * 2) * (MAP_HEIGHT - MAP_MARGING * 2)) * 0.55;
 	for (int i = 0; i < nbCellToPlace; i++) {
 		bool isAlive;
 		do {
 			isAlive = false;
-			int x = rand() % MAP_WIDTH;
-			int y = rand() % MAP_HEIGHT;
+			int x = (rand() % (MAP_WIDTH - MAP_MARGING * 2)) + MAP_MARGING;
+			int y = (rand() % (MAP_HEIGHT - MAP_MARGING * 2)) + MAP_MARGING;
 			if (_grid[x][y] == '1') {
 				isAlive = true;
 			}
@@ -67,15 +67,14 @@ void GameLife::updateLife() {
 			}
 		}
 	}
+	usleep(5000);
 }
 
-void GameLife::displayAliveCell(void *MLXSetup, mlx_image_t	*cell) const {
-	MLXWrapper *mlx = static_cast<MLXWrapper *>(MLXSetup);
-	
+void GameLife::displayAliveCell(mlx_image_t *renderer, mlx_image_t	*cell) const {
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
 			if (_grid[i][j] == '1') {
-				mlx->imageToWindow(cell, i * TILE_SIZE, j * TILE_SIZE);
+				draw_image(renderer, cell, i * TILE_SIZE, j * TILE_SIZE);
 			}
 		}
 	}

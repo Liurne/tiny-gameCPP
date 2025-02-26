@@ -13,12 +13,12 @@ public:
 
 	void	generateGrid();
 	void	updateLife();
-	void	displayAliveCell(void *MLXSetup, mlx_image_t	*cell) const;
+	void	displayAliveCell(mlx_image_t *renderer,mlx_image_t *cell) const;
 
 	char	**getGrid() const { return ((char **)_grid); }
 
 private:
-	char		_grid[MAP_WIDTH][MAP_HEIGHT];
+	char		_grid[MAP_WIDTH+2][MAP_HEIGHT+2];
 	bool		_generating;
 
 	bool	_isGenerating() const { return (_generating); }

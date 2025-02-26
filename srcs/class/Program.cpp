@@ -1,20 +1,18 @@
 #include "Program.hpp"
 
-Program::Program() : MLXSetup(WIDTH, HEIGHT, false), gameLife() {
+Program::Program() : MLXSetup(WIDTH, HEIGHT, false), gameLife(), iter(0) {
 	std::cout << "Program constructor called" << std::endl;
 	try {
 		MLXSetup.init();
 		renderer = MLXSetup.newImage(WIDTH, HEIGHT);
-		test = MLXSetup.newImage(WIDTH, HEIGHT);
 		cell = MLXSetup.newImage(TILE_SIZE, TILE_SIZE);
 	}
 	catch (const std::exception &e) {
 		exit_error(e.what());
 	}
 
-	fill_img(renderer, 0x000000FF, WIDTH, HEIGHT);
-	fill_img(test, 0xFF0000FF, WIDTH, HEIGHT);
-	fill_img(cell, 0xFFFFFFFF, TILE_SIZE, TILE_SIZE);
+	fill_img(renderer, 0x000000FF);
+	fill_img(cell, 0xFFFFFFFF);
 
 	gameLife.generateGrid();
 }
@@ -24,8 +22,9 @@ Program::~Program() {
 }
 
 void Program::run() {
-	MLXSetup.loopHook(my_keyhook, this);
-	MLXSetup.loopHook(my_program, this);
+	MLXSetup.imageToWindow(renderer, 0, 0);
+	MLXSetup.keyHook(keyhook, this);
+	MLXSetup.loopHook(process, this);
 	MLXSetup.loop();
 }
 

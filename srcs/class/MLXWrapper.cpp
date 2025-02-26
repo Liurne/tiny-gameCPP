@@ -55,6 +55,10 @@ bool MLXWrapper::loopHook(void(* f)(void*), void *param) const {
 	return (added);
 }
 
+void MLXWrapper::keyHook(mlx_keyfunc func, void *param) const {
+	mlx_key_hook(_mlx, func, param);
+}
+
 void MLXWrapper::resizeHook(mlx_resizefunc func, void *param) const {
 	mlx_resize_hook(_mlx, func, param);
 }
