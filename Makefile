@@ -3,15 +3,17 @@
 ########################################################################################################################
 INCS		:=	\
 				MLXWrapper.hpp\
-				Map.hpp\
 				GameLife.hpp\
+				MapGenerator.hpp\
+				Map.hpp\
 				Program.hpp\
 
 
 SRCS		:=	\
 				class/MLXWrapper.cpp\
-				class/Map.cpp\
 				class/GameLife.cpp\
+				class/MapGenerator.cpp\
+				class/Map.cpp\
 				class/Program.cpp\
 				utils.cpp\
 				process.cpp\

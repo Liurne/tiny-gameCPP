@@ -1,20 +1,18 @@
 #include "Program.hpp"
 
-Program::Program() : MLXSetup(WIDTH, HEIGHT, false), gameLife(), iter(0) {
+Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0) {
 	std::cout << "Program constructor called" << std::endl;
 	try {
 		MLXSetup.init();
 		renderer = MLXSetup.newImage(WIDTH, HEIGHT);
-		cell = MLXSetup.newImage(TILE_SIZE, TILE_SIZE);
+		map_img = MLXSetup.newImage(WIDTH, HEIGHT);
 	}
 	catch (const std::exception &e) {
 		exit_error(e.what());
 	}
 
 	fill_img(renderer, 0x000000FF);
-	fill_img(cell, 0xFFFFFFFF);
-
-	gameLife.generateGrid();
+	fill_img(map_img, 0x000000FF);
 }
 
 Program::~Program() {
@@ -28,7 +26,7 @@ void Program::run() {
 	MLXSetup.loop();
 }
 
-//Private constructor
+//Useless
 Program::Program(Program const &src) : MLXSetup(WIDTH, HEIGHT, false), gameLife()  {
 	std::cout << "Program copy constructor called" << std::endl;
 	*this = src;
