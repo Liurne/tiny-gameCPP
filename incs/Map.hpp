@@ -3,26 +3,33 @@
 
 #include "game_rule.h"
 #include "MLXWrapper.hpp"
+#include "MapGenerator.hpp"
 
 class Map {
 public:
-	Map(char **map, int width, int height);
+	Map();
 	~Map();
 	Map(Map const &src);
 	Map &operator=(Map const &rhs);
 
-	void	generateMap();
+	void	initMap();
 	void	displayMap(mlx_image_t *renderer) const;
 
-	char	**getMap() const { return ((char **)_map); }
+	int		getNbCollectible() const { return _nbCollectible; }
+	int		getNbCollectibleLeft() { return _nbCollectible; }
+	t_veci	getSpawn() const { return _start; }
+	t_veci	getEnemy() const { return _enemy; }
 
 private:
 	char		_map[MAP_WIDTH][MAP_HEIGHT];
 	int			_nbCollectible;
+	int			_nbCollectibleLeft;
 	t_veci		_start;
-	t_veci		_exit;
-	Map();
+	t_veci		_enemy;
 
+	bool		_mapCreated;
+
+	void		_parseMapElement();
 };
 
 #endif
