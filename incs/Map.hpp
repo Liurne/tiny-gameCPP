@@ -22,7 +22,7 @@ public:
 
 private:
 	char		_map[MAP_WIDTH][MAP_HEIGHT];
-	int			_nbCollectible;
+	uint32_t	_nbCollectible;
 	int			_nbCollectibleLeft;
 	t_veci		_start;
 	t_veci		_enemy;

@@ -63,8 +63,9 @@ void MapGenerator::_placeMapEnemy() {
 }
 
 void MapGenerator::_placeMapElement() {
-	_nbCollectible = rand() % NB_MAX_COLLECTIBLE + 1;
-	for (int i = 0; i < _nbCollectible; i++) {
+	_nbCollectible = NB_MAX_COLLECTIBLE;
+	_nbCollectible = (rand() % (int)(_nbCollectible - NB_MIN_COLLECTIBLE)) + NB_MIN_COLLECTIBLE;
+	for (uint32_t i = 0; i < _nbCollectible; i++) {
 		t_veci vec;
 		do {
 			vec = (t_veci){.x = rand() % MAP_WIDTH, .y = rand() % MAP_HEIGHT};

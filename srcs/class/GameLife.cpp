@@ -16,7 +16,6 @@ GameLife::~GameLife() {
 }
 
 void GameLife::generateGrid() {
-	std::cout << "GameLife generateGrid called" << std::endl;
 	_isGenerating = true;
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {

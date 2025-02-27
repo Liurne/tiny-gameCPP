@@ -8,15 +8,15 @@ public:
 	MapGenerator();
 	~MapGenerator();
 
-	void	generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT]);
+	void		generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT]);
 
 private:
-	char	_map[MAP_WIDTH][MAP_HEIGHT];
-	int		_nbCollectible;
-	t_veci	_start;
-	t_veci	_enemy;
-	bool	_isEnemyValid;
-	bool	_isAtLeastOneCollectible;
+	char		_map[MAP_WIDTH][MAP_HEIGHT];
+	uint32_t	_nbCollectible;
+	t_veci		_start;
+	t_veci		_enemy;
+	bool		_isEnemyValid;
+	bool		_isAtLeastOneCollectible;
 
 	void		_placeMapStart();
 	void		_placeMapEnemy();
