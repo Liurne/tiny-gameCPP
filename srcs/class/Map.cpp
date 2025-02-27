@@ -1,6 +1,6 @@
 #include "Map.hpp"
 
-Map::Map() : _nbCollectible(0), _nbCollectibleLeft(0), _mapCreated(false), _start({0, 0}), _enemy({0, 0}) {
+Map::Map() : _nbCollectible(0), _nbCollectibleLeft(0), _start((t_veci){.x = 0, .y = 0}), _enemy((t_veci){.x = 0, .y = 0}), _mapCreated(false) {
 	std::cout << "Map constructor called, generating map" << std::endl;
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
