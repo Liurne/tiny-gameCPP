@@ -13,6 +13,8 @@ Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0) {
 
 	fill_img(renderer, 0x000000FF);
 	fill_img(map_img, 0x000000FF);
+	gameLife.generateGrid();
+	map.initMap();
 }
 
 Program::~Program() {
