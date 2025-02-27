@@ -144,14 +144,12 @@ void MapGenerator::_copyMap(char dst[MAP_WIDTH][MAP_HEIGHT], char src[MAP_WIDTH]
 
 void MapGenerator::_clearWrongMapElement(char mapVerified[MAP_WIDTH][MAP_HEIGHT]) {
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
-		std::cout << mapVerified[i] << std::endl;
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
 
 			if (mapVerified[i][j] == 'C' || mapVerified[i][j] == 'E')
 				_map[i][j] = '1';
 		}
 	}
-	std::cout << std::endl;
 }
 
 //useless 
