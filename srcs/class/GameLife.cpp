@@ -53,7 +53,7 @@ void GameLife::updateLife() {
 	usleep(5000);
 }
 
-void GameLife::displayAliveCell(mlx_image_t *renderer, mlx_image_t	*cell) const {
+void GameLife::displayAliveCell(mlx_image_t *renderer) const {
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
 			if (_grid[i][j] == '1') {

@@ -11,7 +11,7 @@ public:
 
 	void	generateGrid();
 	void	updateLife();
-	void	displayAliveCell(mlx_image_t *renderer,mlx_image_t *cell) const;
+	void	displayAliveCell(mlx_image_t *renderer) const;
 
 	char 	getCell(uint32_t x, uint32_t y) const;
 
