@@ -9,6 +9,7 @@
 # include <cmath>
 
 # include "../MLX/include/MLX42/MLX42.h"
+# include "../lodepng/lodepng.h"
 
 typedef union u_color {
 	struct {
