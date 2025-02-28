@@ -63,6 +63,10 @@ void MLXWrapper::resizeHook(mlx_resizefunc func, void *param) const {
 	mlx_resize_hook(_mlx, func, param);
 }
 
+void MLXWrapper::mouseHook(mlx_mousefunc func, void *param) const {
+	mlx_mouse_hook(_mlx, func, param);
+}
+
 bool MLXWrapper::isKeyDown(const keys_t key) const {
 	return (mlx_is_key_down(_mlx, key));
 }

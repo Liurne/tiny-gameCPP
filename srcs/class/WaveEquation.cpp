@@ -28,6 +28,21 @@ void WaveEquation::init() {
 	}
 }
 
+// void update() {
+//     std::vector<std::vector<float>> new_grid = grid;
+
+//     for (int x = 1; x < WIDTH - 1; ++x) {
+//         for (int y = 1; y < HEIGHT - 1; ++y) {
+//             float laplacian = grid[x + 1][y] + grid[x - 1][y] + grid[x][y + 1] + grid[x][y - 1] - 4 * grid[x][y];
+//             new_grid[x][y] = 2 * grid[x][y] - old_grid[x][y] + c * c * dt * dt * laplacian;
+//             new_grid[x][y] *= damping;
+//         }
+//     }
+
+//     old_grid = grid;
+//     grid = new_grid;
+// }
+
 void WaveEquation::upadate() {
 	std::vector<std::vector<float> > new_grid = grid;
 

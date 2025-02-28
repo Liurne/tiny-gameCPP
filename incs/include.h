@@ -35,5 +35,6 @@ void gradiant(mlx_image *img, int32_t width, int32_t height);
 
 void process(void *program);
 void keyhook(mlx_key_data_t keydata, void *program);
+void moosehook(mouse_key_t button, action_t action, modifier_key_t mods, void* param);
 
 #endif

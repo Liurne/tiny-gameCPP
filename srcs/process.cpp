@@ -53,3 +53,16 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 			prgm->waveEquation.init();
 	}
 }
+
+void moosehook(mouse_key_t button, action_t action, modifier_key_t mods, void* program) {
+	Program		*prgm = static_cast<Program *>(program);
+	t_veci pos = (t_veci){.x = 0, .y = 0};
+	(void)mods;
+
+	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS) {
+		mlx_get_mouse_pos(prgm->MLXSetup.getMlx(), &pos.x, &pos.y);
+		if (prgm->display == 2)
+			prgm->waveEquation.drop(pos.x / TILE_SIZE, pos.y / TILE_SIZE, 10.0f);
+		std::cout << "(" << pos.x << ", " << pos.y << ")" << std::endl;
+	}
+}

@@ -27,6 +27,7 @@ void Program::run() {
 	MLXSetup.imageToWindow(renderer, 0, 0);
 	MLXSetup.imageToWindow(wave_img, 0, 0);
 	MLXSetup.keyHook(keyhook, this);
+	MLXSetup.mouseHook(moosehook, this);
 	MLXSetup.loopHook(process, this);
 	MLXSetup.loop();
 }

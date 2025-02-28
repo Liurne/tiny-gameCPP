@@ -21,7 +21,8 @@ public:
 	int32_t		imageToWindow(mlx_image_t	*img, int32_t x, int32_t y) const;
 
 	bool		loopHook(void(* f)(void*), void *param) const;
-	void 		keyHook(mlx_keyfunc func, void *param) const;	
+	void 		keyHook(mlx_keyfunc func, void *param) const;
+	void		mouseHook(mlx_mousefunc func, void *param) const;
 	void		resizeHook(mlx_resizefunc func, void *param) const;
 	bool		isKeyDown(keys_t key) const;
 
