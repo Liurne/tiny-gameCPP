@@ -5,13 +5,18 @@ void process(void *program) {
 	GameLife	*gameLife = &prgm->gameLife;
 	Map			*map = &prgm->map;
 
-	fill_img(prgm->renderer, 0x00000000);
 	if (prgm->display == 0) {
+		fill_img(prgm->renderer, 0x000000FF);
 		gameLife->updateLife();
 		gameLife->displayAliveCell(prgm->renderer);
 	}
 	if (prgm->display == 1) {
 		map->displayMap(prgm->renderer);
+	}
+	if (prgm->display == 2) {
+		fill_img(prgm->renderer, 0x3580C8FF);
+		prgm->waveEquation.upadate();
+		prgm->waveEquation.display(prgm->wave_img);
 	}
 }
 
@@ -29,6 +34,8 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 		prgm->display = 0;
 	if (keydata.key == MLX_KEY_2 && keydata.action == MLX_PRESS)
 		prgm->display = 1;
+	if (keydata.key == MLX_KEY_3 && keydata.action == MLX_PRESS)
+		prgm->display = 2;
 	if (prgm->display == 0) {
 		if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS)
 			gameLife->generateGrid();
@@ -38,5 +45,11 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 			map->initMap();
 		// if (keydata.key == MLX_KEY_ENTER && keydata.action == MLX_PRESS)
 			
+	}
+	if (prgm->display == 2) {
+		if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS)
+			prgm->waveEquation.drop((WIDTH / TILE_SIZE) / 2, (HEIGHT / TILE_SIZE) / 2, 10.0f);
+		if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS)
+			prgm->waveEquation.init();
 	}
 }

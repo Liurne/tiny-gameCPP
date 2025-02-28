@@ -7,6 +7,7 @@
 # include "MLXWrapper.hpp"
 # include "GameLife.hpp"
 # include "Map.hpp"
+# include "WaveEquation.hpp"
 
 class Program {
 public:
@@ -22,6 +23,10 @@ public:
 
 	Map map;
 	mlx_image_t	*map_img;
+
+	WaveEquation waveEquation;
+	mlx_image_t	*wave_img;
+
 
 	int display;
 

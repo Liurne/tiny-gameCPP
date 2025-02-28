@@ -6,7 +6,9 @@ INCS		:=	\
 				GameLife.hpp\
 				MapGenerator.hpp\
 				Map.hpp\
+				WaveEquation.hpp\
 				Program.hpp\
+
 
 
 SRCS		:=	\
@@ -14,6 +16,7 @@ SRCS		:=	\
 				class/GameLife.cpp\
 				class/MapGenerator.cpp\
 				class/Map.cpp\
+				class/WaveEquation.cpp\
 				class/Program.cpp\
 				utils.cpp\
 				process.cpp\

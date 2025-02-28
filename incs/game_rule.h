@@ -10,4 +10,5 @@
 # define NB_MIN_COLLECTIBLE (MAP_WIDTH - MAP_MARGING * 2) * (MAP_HEIGHT - MAP_MARGING * 2) * 0.01
 # define TILE_SIZE 10//32
 
+
 #endif

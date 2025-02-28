@@ -91,7 +91,7 @@ bool GameLife::_isDead(int32_t x, int32_t y) const {
 	return (_countAliveNeighbours(x, y) < 4);
 }
 
-//Useless
+//Unused
 
 GameLife::GameLife(GameLife const &src) {
 	std::cout << "GameLife copy constructor called" << std::endl;

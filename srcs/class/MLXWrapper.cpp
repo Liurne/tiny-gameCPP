@@ -84,7 +84,8 @@ MLXWrapper::~MLXWrapper() {
 		mlx_terminate(_mlx);
 }
 
-//Useless constructors and operators
+//Unused
+
 MLXWrapper::MLXWrapper() : _width(0), _height(0), _resize(false), _mlx(NULL), _images(0) {
 	std::cout << "MLXSetup default constructor called" << std::endl;
 }

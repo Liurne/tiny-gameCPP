@@ -153,7 +153,7 @@ void MapGenerator::_clearWrongMapElement(char mapVerified[MAP_WIDTH][MAP_HEIGHT]
 	}
 }
 
-//useless 
+//Unused
 
 MapGenerator::MapGenerator(MapGenerator const &src) {
 	std::cout << "MapGenerator copy constructor called" << std::endl;
