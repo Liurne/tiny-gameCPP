@@ -14,7 +14,6 @@ public:
 
 	void	initMap();
 	void	displayMap(mlx_image_t *renderer) const;
-	void	saveMapToPNG() const;
 
 	int		getNbCollectible() const { return _nbCollectible; }
 	int		getNbCollectibleLeft() { return _nbCollectible; }

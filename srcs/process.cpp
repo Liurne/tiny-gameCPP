@@ -30,6 +30,9 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		mlx->close();
+	if (keydata.key == MLX_KEY_ENTER && keydata.action == MLX_PRESS)
+		// save_img(prgm->renderer);
+		mlx_image_to_png(prgm->renderer, "screenshot.png");
 	if (keydata.key == MLX_KEY_1 && keydata.action == MLX_PRESS)
 		prgm->display = 0;
 	if (keydata.key == MLX_KEY_2 && keydata.action == MLX_PRESS)

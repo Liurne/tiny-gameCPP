@@ -31,7 +31,7 @@ set(BUILD_TESTS	OFF CACHE BOOL "Build the tests to verify the integrity of the l
 # -----------------------------------------------------------------------------
 
 # Reduce the size of LodePNG, we don't need these things.
-add_definitions(-D LODEPNG_NO_COMPILE_ENCODER)
+# add_definitions(-D LODEPNG_NO_COMPILE_ENCODER)
 add_definitions(-D LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS)
 
 if(UNIX AND NOT EMSCRIPTEN)

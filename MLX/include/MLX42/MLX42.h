@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   MLX42.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: W2Wizard <main@w2wizard.dev>                 +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2021/12/28 02:29:06 by W2Wizard      #+#    #+#                 */
-/*   Updated: 2023/03/30 16:23:19 by ntamayo-      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   MLX42.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcoquard <jcoquard@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/28 02:29:06 by W2Wizard          #+#    #+#             */
+/*   Updated: 2025/02/28 16:23:53 by jcoquard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -789,6 +789,14 @@ bool mlx_loop_hook(mlx_t* mlx, void (*f)(void*), void* param);
  */
 mlx_texture_t* mlx_load_png(const char* path);
 
+/**
+ * Loads a texture from the given file path.
+ * 
+ * @param[in] image The image to save int png.
+ * @param[in] path The file path to the texture.
+ * @returns The texture struct containing its information.
+ */
+bool mlx_image_to_png(mlx_image_t *image, const char* path);
 /**
  * Loads an XPM42 texture from the given file path.
  * 

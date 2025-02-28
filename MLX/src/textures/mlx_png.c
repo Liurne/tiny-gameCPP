@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   mlx_png.c                                          :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: W2Wizard <main@w2wizard.dev>                 +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2022/02/16 23:11:29 by W2Wizard      #+#    #+#                 */
-/*   Updated: 2022/06/27 19:55:06 by lde-la-h      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   mlx_png.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcoquard <jcoquard@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/16 23:11:29 by W2Wizard          #+#    #+#             */
+/*   Updated: 2025/02/28 16:23:05 by jcoquard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,15 @@ mlx_texture_t* mlx_load_png(const char* path)
 		return ((void*)mlx_error(MLX_INVPNG));
 	}
 	return (image);
+}
+
+bool mlx_image_to_png(mlx_image_t *image, char* path) {
+	uint32_t error;
+	if ((error = lodepng_encode32_file(path, image->pixels, image->width, image->height)))
+	{
+		// Explicitly print error on purpose
+		fprintf(stderr, "MLX42: LodePNG: %s\n", lodepng_error_text(error));
+		return (false);
+	}
+	return (true);
 }

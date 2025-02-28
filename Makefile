@@ -55,16 +55,6 @@ MLX_F		:=	$(MLX_A) -ldl -lglfw -pthread -lm
 ##### MLX on the system
 #MLX_F		:=	-ldl -lmlx42 -lglfw -pthread -lm
 
-LOADPNG 	:=	lodepng.a
-
-LOADPNG_D	:=	lodepng
-
-LOADPNG_I	:=	$(LOADPNG_D)/include/
-
-# LOADPNG_H	:=	$(LOADPNG_I)lodepng.h
-
-LOADPNG_A	:=	$(LOADPNG_D)/$(LOADPNG)
-
 ########################################################################################################################
 #                                                        FLAGS                                                         #
 ########################################################################################################################
@@ -115,10 +105,10 @@ RESET		:=	\001\033[0m\002
 
 .DEFAULT_GOAL = all
 
-all			:	mlx loadpng $(NAME) banner
+all			:	mlx $(NAME) banner
 
-$(NAME)		:	$(OBJS) $(MLX_A) $(LOADPNG_A)
-			$(CC) $(CFLAGS) $(OFLAGS) -o $(NAME) $(OBJS) $(MLX_F) $(LOADPNG_A)
+$(NAME)		:	$(OBJS) $(MLX_A)
+			$(CC) $(CFLAGS) $(OFLAGS) -o $(NAME) $(OBJS) $(MLX_F)
 
 $(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.cpp | $(OBJS_D) $(DEPS_D)
 			$(CC) $(CFLAGS) $(OFLAGS) $(DFLAGS) -c $< -o $@
@@ -134,8 +124,6 @@ mlx			:
 #$(MLX_A)	:	FORCE
 #			$(MAKE) -C $(MLX_D) 2>/dev/null
 
-loadpng		:
-			$(MAKE) -C $(LOADPNG_D)
 
 leaks		:	all
 			$(VALGRIND) ./$(NAME) $(ARGS)

@@ -7,9 +7,9 @@
 # include <stdint.h>
 # include <vector>
 # include <cmath>
+# include <ctime>
 
 # include "../MLX/include/MLX42/MLX42.h"
-# include "../lodepng/lodepng.h"
 
 typedef union u_color {
 	struct {
@@ -32,7 +32,7 @@ void fill_img(mlx_image_t *img, uint32_t color);
 void draw_rect(mlx_image_t *img, int32_t x, int32_t y, int32_t width, int32_t height, uint32_t color);
 void draw_image(mlx_image_t *dst, mlx_image_t *src, int32_t x, int32_t y);
 bool resize_image(mlx_image_t *img, int32_t nwidth, int32_t nheight);
-void gradiant(mlx_image *img, int32_t width, int32_t height);
+void gradiant(mlx_image_t *img, int32_t width, int32_t height);
 
 void process(void *program);
 void keyhook(mlx_key_data_t keydata, void *program);

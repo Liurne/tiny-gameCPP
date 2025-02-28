@@ -35,6 +35,13 @@ Map &Map::operator=(Map const &rhs) {
 	return (*this);
 }
 
+void Map::initMap() {
+	MapGenerator mapGenerator;
+	mapGenerator.generateMap(_map);
+	_parseMapElement();
+	_mapCreated = true;
+}
+
 void Map::displayMap(mlx_image_t *renderer) const {
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
@@ -55,13 +62,6 @@ void Map::displayMap(mlx_image_t *renderer) const {
 			}
 		}
 	}
-}
-
-void Map::initMap() {
-	MapGenerator mapGenerator;
-	mapGenerator.generateMap(_map);
-	_parseMapElement();
-	_mapCreated = true;
 }
 
 void Map::_parseMapElement() {
