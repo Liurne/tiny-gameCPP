@@ -2,11 +2,22 @@
 
 //Public
 
-GameLife::GameLife() : _isGenerating(false) {
+GameLife::GameLife() : _width(MAP_WIDTH), _height(MAP_HEIGHT), _density(0.55), _isGenerating(false) {
 	std::cout << "GameLife constructor called" << std::endl;
-	for (int32_t i = 0; i < MAP_WIDTH; i++) {
-		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
-			_grid[i][j] = '0';
+	for (uint32_t i = 0; i < MAP_WIDTH; i++) {
+		_grid.push_back(std::vector<char>());
+		for (uint32_t j = 0; j < MAP_HEIGHT; j++) {
+			_grid[i].push_back('0');
+		}
+	}
+}
+
+GameLife::GameLife(uint32_t width, uint32_t height, float density) : _width(width), _height(height), _density(density), _isGenerating(false) {
+	std::cout << "GameLife constructor called" << std::endl;
+	for (uint32_t i = 0; i < width; i++) {
+		_grid.push_back(std::vector<char>());
+		for (uint32_t j = 0; j < height; j++) {
+			_grid[i].push_back('0');
 		}
 	}
 }
@@ -16,18 +27,19 @@ GameLife::~GameLife() {
 }
 
 void GameLife::generateGrid() {
+	std::cout << "GameLife generateGrid called" << std::endl;
 	_isGenerating = true;
-	for (int32_t i = 0; i < MAP_WIDTH; i++) {
-		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
+	for (uint32_t i = 0; i < _width; i++) {
+		for (uint32_t j = 0; j < _height; j++) {
 			_grid[i][j] = '0';
 		}
 	}
-	int nbCellToPlace = ((MAP_WIDTH - MAP_MARGING * 2) * (MAP_HEIGHT - MAP_MARGING * 2)) * 0.55;
+	int nbCellToPlace = ((_width - MAP_MARGING * 2) * (_height - MAP_MARGING * 2)) * 0.55;
 	for (int i = 0; i < nbCellToPlace; i++) {
 		t_veci vec;
 		do {
-			vec.x = (rand() % (MAP_WIDTH - MAP_MARGING * 2)) + MAP_MARGING;
-			vec.y = (rand() % (MAP_HEIGHT - MAP_MARGING * 2)) + MAP_MARGING;
+			vec.x = (rand() % (_width - MAP_MARGING * 2)) + MAP_MARGING;
+			vec.y = (rand() % (_height - MAP_MARGING * 2)) + MAP_MARGING;
 		} while (_grid[vec.x][vec.y] == '1');
 		_grid[vec.x][vec.y] = '1';
 	}
@@ -35,35 +47,36 @@ void GameLife::generateGrid() {
 }
 
 void GameLife::updateLife() {
+	std::cout << "GameLife updateLife called" << std::endl;
 	if (_isGenerating) {
 		return ;
 	}
-	for (int32_t i = 0; i < MAP_WIDTH; i++) {
-		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
+	for (uint32_t i = 0; i < _width; i++) {
+		for (uint32_t j = 0; j < _height; j++) {
 			if (_grid[i][j] == '1' && _isDead(i, j)) {
 				_grid[i][j] = '0';
 			}
 			else if (_grid[i][j] == '0' && _isAlive(i, j)) {
 				_grid[i][j] = '1';
-				
 			}
 		}
 	}
 	usleep(5000);
 }
 
-void GameLife::displayAliveCell(mlx_image_t *renderer) const {
-	for (int32_t i = 0; i < MAP_WIDTH; i++) {
-		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
+void GameLife::displayAliveCell(mlx_image_t *renderer,uint32_t cell_size) const {
+	std::cout << "GameLife displayAliveCell called" << std::endl;
+	for (uint32_t i = 0; i < _width; i++) {
+		for (uint32_t j = 0; j < _height; j++) {
 			if (_grid[i][j] == '1') {
-				draw_rect(renderer, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE, 0xFFFFFFFF);
+				draw_rect(renderer, i * cell_size, j * cell_size, cell_size, cell_size, 0xFFFFFFFF);
 			}
 		}
 	}
 }
 
 char	GameLife::getCell(uint32_t x, uint32_t y) const {
-	if (x > MAP_WIDTH || y > MAP_HEIGHT)
+	if (x >= _width || y >= _height)
 		return ('0');
 	return (_grid[x][y]);
 }
@@ -71,6 +84,7 @@ char	GameLife::getCell(uint32_t x, uint32_t y) const {
 //Private
 
 int GameLife::_countAliveNeighbours(int32_t x, int32_t y) const {
+	std::cout << "GameLife _countAliveNeighbours called" << std::endl;
 	int count = 0;
 	for (int32_t i = -1; i <= 1; i++) {
 		for (int32_t j = -1; j <= 1; j++) {
