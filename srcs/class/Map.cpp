@@ -42,6 +42,30 @@ void Map::initMap() {
 	_mapCreated = true;
 }
 
+void createMapImage(mlx_image_t *map_img, uint32_t tile_size) {
+	(void)map_img;
+	if (map_img->width != MAP_WIDTH * tile_size || map_img->height != MAP_HEIGHT * tile_size) {
+		if (!resize_image(map_img, MAP_WIDTH * tile_size, MAP_HEIGHT * tile_size)) {
+			exit_error("Failed to resize image");
+		}
+	}
+	GameLife gameLife(100,100,0.55);
+	gameLife.generateGrid();
+	for (int i = 0; i < 100; i++) {
+		gameLife.updateLife();
+	}
+	for (uint32_t i = 0; i < MAP_WIDTH; i++) {
+		for (uint32_t j = 0; j < MAP_HEIGHT; j++) {
+			if (gameLife.getCell(i, j) == '1') {
+				draw_rect(map_img, i * tile_size, j * tile_size, tile_size, tile_size, 0xFFFFFFFF);
+			}
+			if (gameLife.getCell(i, j) == '0') {
+				draw_rect(map_img, i * tile_size, j * tile_size, tile_size, tile_size, 0x000000FF);
+			}
+		}
+	}
+}
+
 void Map::displayMap(mlx_image_t *renderer) const {
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {

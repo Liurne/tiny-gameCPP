@@ -8,7 +8,7 @@ void process(void *program) {
 	if (prgm->display == 0) {
 		fill_img(prgm->renderer, 0x000000FF);
 		gameLife->updateLife();
-		gameLife->displayAliveCell(prgm->renderer);
+		gameLife->displayAliveCell(prgm->renderer, TILE_SIZE);
 	}
 	if (prgm->display == 1) {
 		map->displayMap(prgm->renderer);
@@ -16,7 +16,7 @@ void process(void *program) {
 	if (prgm->display == 2) {
 		fill_img(prgm->renderer, 0x3580C8FF);
 		prgm->waveEquation.upadate();
-		prgm->waveEquation.display(prgm->wave_img);
+		prgm->waveEquation.display(prgm->renderer);
 	}
 }
 
@@ -30,8 +30,7 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		mlx->close();
-	if (keydata.key == MLX_KEY_ENTER && keydata.action == MLX_PRESS)
-		// save_img(prgm->renderer);
+	if (keydata.key == MLX_KEY_Q && keydata.action == MLX_PRESS)
 		mlx_image_to_png(prgm->renderer, "screenshot.png");
 	if (keydata.key == MLX_KEY_1 && keydata.action == MLX_PRESS)
 		prgm->display = 0;

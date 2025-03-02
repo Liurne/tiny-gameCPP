@@ -74,7 +74,6 @@ void WaveEquation::drop(int x, int y, float amplitude) {
 }
 
 void WaveEquation::display(mlx_image_t *renderer) {
-	(void)renderer;
 	for (int x = 0; x < width; ++x) {
 		for (int y = 0; y < height; ++y) {
 			float height = grid[x][y];
@@ -85,6 +84,13 @@ void WaveEquation::display(mlx_image_t *renderer) {
 			float speed = std::abs(grid[x][y] - old_grid[x][y]);
 			if (speed > 0.2f) {
 				waveColor.a = 255;
+			}
+
+			if (grid[x][y] == 0.0f || !grid[x][y]) {
+				waveColor.a = 255;
+				waveColor.b = 200;
+				waveColor.g = 128;
+				waveColor.r = 53;
 			}
 			draw_rect(renderer, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, waveColor.raw);
 		}

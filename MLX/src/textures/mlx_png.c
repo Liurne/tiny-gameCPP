@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_png.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcoquard <jcoquard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: liurne <liurne@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/16 23:11:29 by W2Wizard          #+#    #+#             */
-/*   Updated: 2025/02/28 16:23:05 by jcoquard         ###   ########.fr       */
+/*   Updated: 2025/03/01 17:11:23 by liurne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ mlx_texture_t* mlx_load_png(const char* path)
 	return (image);
 }
 
-bool mlx_image_to_png(mlx_image_t *image, char* path) {
+bool mlx_image_to_png(mlx_image_t *image, const char* path) {
 	uint32_t error;
 	if ((error = lodepng_encode32_file(path, image->pixels, image->width, image->height)))
 	{
