@@ -27,7 +27,7 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 	Map			*map = &prgm->map;
 
 
-
+	std::cout << "key: " << keydata.key << std::endl;
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		mlx->close();
 	if (keydata.key == MLX_KEY_Q && keydata.action == MLX_PRESS)
@@ -45,7 +45,8 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 	if (prgm->display == 1) {
 		if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS)
 			map->initMap();
-		// if (keydata.key == MLX_KEY_ENTER && keydata.action == MLX_PRESS)
+		if (keydata.key == MLX_KEY_ENTER && keydata.action == MLX_PRESS)
+			map->createMapImage(prgm->map_img, TILE_SIZE);
 			
 	}
 	if (prgm->display == 2) {

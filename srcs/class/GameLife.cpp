@@ -27,14 +27,13 @@ GameLife::~GameLife() {
 }
 
 void GameLife::generateGrid() {
-	std::cout << "GameLife generateGrid called" << std::endl;
 	_isGenerating = true;
 	for (uint32_t i = 0; i < _width; i++) {
 		for (uint32_t j = 0; j < _height; j++) {
 			_grid[i][j] = '0';
 		}
 	}
-	int nbCellToPlace = ((_width - MAP_MARGING * 2) * (_height - MAP_MARGING * 2)) * 0.55;
+	int nbCellToPlace = ((_width - MAP_MARGING * 2) * (_height - MAP_MARGING * 2)) * _density;
 	for (int i = 0; i < nbCellToPlace; i++) {
 		t_veci vec;
 		do {
@@ -47,7 +46,6 @@ void GameLife::generateGrid() {
 }
 
 void GameLife::updateLife() {
-	std::cout << "GameLife updateLife called" << std::endl;
 	if (_isGenerating) {
 		return ;
 	}
@@ -65,7 +63,6 @@ void GameLife::updateLife() {
 }
 
 void GameLife::displayAliveCell(mlx_image_t *renderer,uint32_t cell_size) const {
-	std::cout << "GameLife displayAliveCell called" << std::endl;
 	for (uint32_t i = 0; i < _width; i++) {
 		for (uint32_t j = 0; j < _height; j++) {
 			if (_grid[i][j] == '1') {
@@ -84,7 +81,6 @@ char	GameLife::getCell(uint32_t x, uint32_t y) const {
 //Private
 
 int GameLife::_countAliveNeighbours(int32_t x, int32_t y) const {
-	std::cout << "GameLife _countAliveNeighbours called" << std::endl;
 	int count = 0;
 	for (int32_t i = -1; i <= 1; i++) {
 		for (int32_t j = -1; j <= 1; j++) {

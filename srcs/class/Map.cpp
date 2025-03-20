@@ -42,28 +42,41 @@ void Map::initMap() {
 	_mapCreated = true;
 }
 
-void createMapImage(mlx_image_t *map_img, uint32_t tile_size) {
+void Map::createMapImage(mlx_image_t *map_img, uint32_t tile_size) {
 	(void)map_img;
 	if (map_img->width != MAP_WIDTH * tile_size || map_img->height != MAP_HEIGHT * tile_size) {
 		if (!resize_image(map_img, MAP_WIDTH * tile_size, MAP_HEIGHT * tile_size)) {
 			exit_error("Failed to resize image");
 		}
 	}
-	GameLife gameLife(100,100,0.55);
+	int widthGrid = 100;
+	int heightGrid = 100;
+	int cellSize = (tile_size * MAP_WIDTH)/ widthGrid;
+	GameLife gameLife(widthGrid, heightGrid, 0.55);
 	gameLife.generateGrid();
 	for (int i = 0; i < 100; i++) {
 		gameLife.updateLife();
 	}
 	for (uint32_t i = 0; i < MAP_WIDTH; i++) {
 		for (uint32_t j = 0; j < MAP_HEIGHT; j++) {
-			if (gameLife.getCell(i, j) == '1') {
-				draw_rect(map_img, i * tile_size, j * tile_size, tile_size, tile_size, 0xFFFFFFFF);
+			if (_map[i][j] == '1') {
+				for (int k = 0; k < widthGrid / MAP_WIDTH; k++) {
+					for (int l = 0; l < heightGrid / MAP_HEIGHT; l++) {
+						if (gameLife.getCell(i * 2 + k, j * 2 + l) == '1') {
+							draw_rect(map_img, i * tile_size + k * cellSize, j * tile_size + l * cellSize, cellSize, cellSize, 0x99FF99FF);
+						}
+						else {
+							draw_rect(map_img, i * tile_size + k * cellSize, j * tile_size + l * cellSize, cellSize, cellSize, 0x00FF00FF);
+						}
+					}
+				}
 			}
-			if (gameLife.getCell(i, j) == '0') {
-				draw_rect(map_img, i * tile_size, j * tile_size, tile_size, tile_size, 0x000000FF);
+			if (_map[i][j] == '0') {
+				draw_rect(map_img, i * tile_size, j * tile_size, tile_size, tile_size, 0x0000FFFF);
 			}
 		}
 	}
+	mlx_image_to_png(map_img, "map.png");
 }
 
 void Map::displayMap(mlx_image_t *renderer) const {

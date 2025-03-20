@@ -13,7 +13,7 @@ public:
 	Map &operator=(Map const &rhs);
 
 	void	initMap();
-	void	createMapImage(mlx_image_t *map_img);
+	void	createMapImage(mlx_image_t *map_img, uint32_t tile_size);
 	void	displayMap(mlx_image_t *renderer) const;
 
 	int		getNbCollectible() const { return _nbCollectible; }
