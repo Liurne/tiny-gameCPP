@@ -34,20 +34,27 @@ void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT]) {
 void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT], float density) {
 	GameLife gameLife(MAP_WIDTH, MAP_HEIGHT, density);
 	gameLife.generateGrid();
+	std::cout << "Generate map step 1" << std::endl; 
 	for (int i = 0; i < 15; i++) {
 		gameLife.updateLife();
 	}
-
+	std::cout << "Generate map step 2" << std::endl;
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
 			_map[i][j] = gameLife.getCell(i, j);
 		}
 	}
-	_placeMapStart();
-	_placeMapEnemy();
-	_placeMapCollectible();
-	_verifyMapElement();
+	std::cout << "Generate map step 3" << std::endl;
+	//_placeMapStart();
+	std::cout << "Generate map step 4" << std::endl;
+	//_placeMapEnemy();
+	std::cout << "Generate map step 5" << std::endl;
+	//_placeMapCollectible();
+	std::cout << "Generate map step 6" << std::endl;
+	//_verifyMapElement();
+	std::cout << "Generate map step 7" << std::endl;
 	_copyMap(newMap);
+	std::cout << "Generate map step 8" << std::endl;
 }
 
 void	MapGenerator::generateMapElement(char map[MAP_WIDTH][MAP_HEIGHT]) {

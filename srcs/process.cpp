@@ -26,36 +26,44 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 		map->generateMap();
 	}
 	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS && !prgm->isWritingGrassDensity) {
+		std::cout << "Enter Map Density: ";
 		prgm->isWritingIsleDensity = true;
 	}
 	if (keydata.key == MLX_KEY_G && keydata.action == MLX_PRESS && !prgm->isWritingIsleDensity) {
+		std::cout << "Enter Grass Density: ";
 		prgm->isWritingGrassDensity = true;
 	}
-	if (keydata.key == MLX_KEY_ENTER && keydata.action == MLX_PRESS) {
+	if (keydata.key == MLX_KEY_ENTER && keydata.action == MLX_PRESS && (prgm->isWritingIsleDensity || prgm->isWritingGrassDensity)) {
 		float num;
 		std::stringstream ss(prgm->density);
     	ss >> num;
 		if (num > 1.0f)
-			prgm->density = "1.0";
+			prgm->density = "0.55";
 		if (prgm->isWritingIsleDensity) {
+			std::cout << "Map Density: " << prgm->density << std::endl;
 			map->generateMap(num);
+			std::cout << "Map Generated" << std::endl;
 			prgm->isWritingIsleDensity = false;
 		}
 		if (prgm->isWritingGrassDensity) {
+			std::cout << "Grass Density: " << prgm->density << std::endl;
 			map->generateMapGrass(num);
+			map->generateMapGrassBig(num);
+			std::cout << "Grass Generated" << std::endl;
 			prgm->isWritingGrassDensity = false;
 		}
 		prgm->density = "";
 	}
 	if (prgm->isWritingIsleDensity || prgm->isWritingGrassDensity) {
 		if (keydata.key == MLX_KEY_BACKSPACE && keydata.action == MLX_PRESS) {
-			if (prgm->density.size() > 0)
-				prgm->density.pop_back();
+			if (!density.empty()) {
+				density.resize(density.size() - 1);  // Resize the string to remove the last character
+			}
 		}
-		else if (keydata.key >= MLX_KEY_0 && keydata.key <= MLX_KEY_9 && keydata.action == MLX_PRESS) {
-			prgm->density += keydata.key;
+		else if (keydata.key >= MLX_KEY_KP_0 && keydata.key <= MLX_KEY_KP_9 && keydata.action == MLX_PRESS) {
+			prgm->density += '0' + (keydata.key - MLX_KEY_KP_0);
 		}
-		else if (keydata.key == MLX_KEY_PERIOD && keydata.action == MLX_PRESS) {
+		else if (keydata.key == MLX_KEY_KP_DECIMAL && keydata.action == MLX_PRESS) {
 			prgm->density += '.';
 		}
 	}

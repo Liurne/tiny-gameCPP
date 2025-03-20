@@ -27,6 +27,7 @@ GameLife::~GameLife() {
 }
 
 void GameLife::generateGrid() {
+	std::cout << "Generating grid" << std::endl;
 	_isGenerating = true;
 	for (uint32_t i = 0; i < _width; i++) {
 		for (uint32_t j = 0; j < _height; j++) {
@@ -43,6 +44,7 @@ void GameLife::generateGrid() {
 		_grid[vec.x][vec.y] = '1';
 	}
 	_isGenerating = false;
+	std::cout << "Grid generated" << std::endl;
 }
 
 void GameLife::updateLife() {

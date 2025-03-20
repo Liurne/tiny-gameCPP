@@ -44,7 +44,9 @@ void Map::generateMap() {
 }
 
 void Map::generateMap(float density) {
+	std::cout << "Generating map with density: " << density << std::endl;
 	_mapGenerator.generateMap(_map, density);
+	std::cout << "Map generated" << std::endl;
 	_parseMapElement();
 	generateMapGrass();
 	generateMapGrassBig();
