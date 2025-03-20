@@ -19,20 +19,20 @@ public:
 	MLXWrapper	MLXSetup;
 	mlx_image_t	*renderer;
 
-	GameLife	gameLife;
-
 	Map map;
-	mlx_image_t	*map_img;
-
-	WaveEquation waveEquation;
-	mlx_image_t	*wave_img;
-
+	t_mapDisplay mapDisplay;
 
 	int display;
+	bool isWritingIsleDensity;
+	bool isWritingGrassDensity;
+	std::string density;
+
 
 private:
 	Program(Program const &src);
 	Program &operator=(Program const &rhs);
+
+
 
 };
 

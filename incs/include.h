@@ -2,6 +2,8 @@
 # define INCLUDE_H
 
 # include <iostream>
+# include <string>
+# include <sstream>
 # include <unistd.h>
 # include <stdint.h>
 # include <stdint.h>
@@ -25,6 +27,15 @@ typedef struct u_veci {
 	int x;
 	int y;
 }	t_veci;
+
+typedef struct u_mapDisplay {
+	bool displayElement;
+	bool displayCollectible;
+	bool displayEnemy;
+	bool displaySpawn;
+	bool displayMapGrass;
+	bool displayMapGrassBig;
+}	t_mapDisplay;
 
 void exit_error(const std::string &msg);
 void put_pixel(mlx_image_t *img, int32_t x, int32_t y, uint32_t color);

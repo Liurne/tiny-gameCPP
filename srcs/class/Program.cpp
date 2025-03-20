@@ -1,22 +1,19 @@
 #include "Program.hpp"
 
-Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0) {
+Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0), isWritingIsleDensity(false), isWritingGrassDensity(false), density("") {
 	std::cout << "Program constructor called" << std::endl;
 	try {
 		MLXSetup.init();
 		renderer = MLXSetup.newImage(WIDTH, HEIGHT);
-		map_img = MLXSetup.newImage(WIDTH, HEIGHT);
-		wave_img = MLXSetup.newImage(WIDTH, HEIGHT);
 	}
 	catch (const std::exception &e) {
 		exit_error(e.what());
 	}
 
+	mapDisplay = (t_mapDisplay){.displayElement = true, .displayCollectible = true, .displayEnemy = true, .displaySpawn = true, .displayMapGrass = true, .displayMapGrassBig = true};
+
 	fill_img(renderer, 0x000000FF);
-	fill_img(map_img, 0x000000FF);
-	fill_img(wave_img, 0x00000000);
-	gameLife.generateGrid();
-	map.initMap();
+	map.generateMap();
 }
 
 Program::~Program() {
@@ -25,7 +22,6 @@ Program::~Program() {
 
 void Program::run() {
 	MLXSetup.imageToWindow(renderer, 0, 0);
-	MLXSetup.imageToWindow(wave_img, 0, 0);
 	MLXSetup.keyHook(keyhook, this);
 	MLXSetup.mouseHook(moosehook, this);
 	MLXSetup.loopHook(process, this);
@@ -34,7 +30,7 @@ void Program::run() {
 
 //Unused
 
-Program::Program(Program const &src) : MLXSetup(WIDTH, HEIGHT, false), gameLife()  {
+Program::Program(Program const &src) : MLXSetup(WIDTH, HEIGHT, false) {
 	std::cout << "Program copy constructor called" << std::endl;
 	*this = src;
 }

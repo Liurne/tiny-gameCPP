@@ -26,9 +26,65 @@ void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT]) {
 	}
 	_placeMapStart();
 	_placeMapEnemy();
-	_placeMapElement();
+	_placeMapCollectible();
 	_verifyMapElement();
-	_copyMap(newMap, _map);
+	_copyMap(newMap);
+}
+
+void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT], float density) {
+	GameLife gameLife(MAP_WIDTH, MAP_HEIGHT, density);
+	gameLife.generateGrid();
+	for (int i = 0; i < 15; i++) {
+		gameLife.updateLife();
+	}
+
+	for (int32_t i = 0; i < MAP_WIDTH; i++) {
+		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
+			_map[i][j] = gameLife.getCell(i, j);
+		}
+	}
+	_placeMapStart();
+	_placeMapEnemy();
+	_placeMapCollectible();
+	_verifyMapElement();
+	_copyMap(newMap);
+}
+
+void	MapGenerator::generateMapElement(char map[MAP_WIDTH][MAP_HEIGHT]) {
+	_clearMapElement();
+	_placeMapStart();
+	_placeMapEnemy();
+	_placeMapCollectible();
+	_verifyMapElement();
+	_copyMap(map);
+}
+
+void	MapGenerator::generateCollectible(char map[MAP_WIDTH][MAP_HEIGHT]) {
+	_clearMapCollectible();
+	_placeMapCollectible();
+	_verifyMapElement();
+	_copyMap(map);
+}
+
+void	MapGenerator::generateCollectible(char map[MAP_WIDTH][MAP_HEIGHT], uint32_t nbCollectible) {
+	_clearMapCollectible();
+	_placeMapCollectible(nbCollectible);
+	_verifyMapElement();
+	_copyMap(map);
+}
+
+void	MapGenerator::generateStart(char map[MAP_WIDTH][MAP_HEIGHT]) {
+	_map[_start.x][_start.y] = '1';
+	_placeMapStart();
+	_verifyMapElement();
+	_copyMap(map);
+}
+
+void	MapGenerator::generateEnemy(char map[MAP_WIDTH][MAP_HEIGHT]) {
+	_map[_enemy.x][_enemy.y] = '1';
+	_placeMapEnemy();
+	_verifyMapElement();
+	_copyMap(map);
 }
 
 //Private
@@ -62,9 +118,20 @@ void MapGenerator::_placeMapEnemy() {
 	_enemy = vec;
 }
 
-void MapGenerator::_placeMapElement() {
+void MapGenerator::_placeMapCollectible() {
 	_nbCollectible = NB_MAX_COLLECTIBLE;
 	_nbCollectible = (rand() % (int)(_nbCollectible - NB_MIN_COLLECTIBLE)) + NB_MIN_COLLECTIBLE;
+	for (uint32_t i = 0; i < _nbCollectible; i++) {
+		t_veci vec;
+		do {
+			vec = (t_veci){.x = rand() % MAP_WIDTH, .y = rand() % MAP_HEIGHT};
+		} while (_map[vec.x][vec.y] != '1');
+		_map[vec.x][vec.y] = 'C';
+	}
+}
+
+void MapGenerator::_placeMapCollectible(uint32_t nbCollectible) {
+	_nbCollectible = nbCollectible;
 	for (uint32_t i = 0; i < _nbCollectible; i++) {
 		t_veci vec;
 		do {
@@ -78,14 +145,14 @@ void MapGenerator::_placeMapElement() {
 void MapGenerator::_verifyMapElement() {
 	char tmp[MAP_WIDTH][MAP_HEIGHT];
 	do {
-		_copyMap(tmp, _map);
+		_copyMap(tmp);
 		_isEnemyValid = false;
 		_isAtLeastOneCollectible = false;
 		_spreadingVerifAlgorithm(tmp, _start);
 		if (! _isEnemyValid)
 			_placeMapEnemy();
 		if (! _isAtLeastOneCollectible)
-			_placeMapElement();
+			_placeMapCollectible();
 	} while (!_isEnemyValid || !_isAtLeastOneCollectible);
 	_clearWrongMapElement(tmp);
 }
@@ -135,10 +202,10 @@ void MapGenerator::_spreadingVerifAlgorithm(char map[MAP_WIDTH][MAP_HEIGHT], t_v
 	_spreadingVerifAlgorithm(map, (t_veci){.x = vec.x, .y = vec.y - 1});
 }
 
-void MapGenerator::_copyMap(char dst[MAP_WIDTH][MAP_HEIGHT], char src[MAP_WIDTH][MAP_HEIGHT]) {
+void MapGenerator::_copyMap(char dst[MAP_WIDTH][MAP_HEIGHT]) {
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
-			dst[i][j] = src[i][j];
+			dst[i][j] = _map[i][j];
 		}
 	}
 }
@@ -148,6 +215,24 @@ void MapGenerator::_clearWrongMapElement(char mapVerified[MAP_WIDTH][MAP_HEIGHT]
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
 
 			if (mapVerified[i][j] == 'C' || mapVerified[i][j] == 'E')
+				_map[i][j] = '1';
+		}
+	}
+}
+
+void MapGenerator::_clearMapElement() {
+	for (int32_t i = 0; i < MAP_WIDTH; i++) {
+		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
+			if (_map[i][j] == 'C' || _map[i][j] == 'E' || _map[i][j] == 'S')
+				_map[i][j] = '1';
+		}
+	}
+}
+
+void MapGenerator::_clearMapCollectible() {
+	for (int32_t i = 0; i < MAP_WIDTH; i++) {
+		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
+			if (_map[i][j] == 'C')
 				_map[i][j] = '1';
 		}
 	}
