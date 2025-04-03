@@ -61,7 +61,24 @@ void GameLife::updateLife() {
 			}
 		}
 	}
-	usleep(5000);
+}
+
+void GameLife::updateLife(uint32_t iterations) {
+	if (_isGenerating) {
+		return ;
+	}
+	for (uint32_t k = 0; k < iterations; k++) {
+		for (uint32_t i = 0; i < _width; i++) {
+			for (uint32_t j = 0; j < _height; j++) {
+				if (_grid[i][j] == '1' && _isDead(i, j)) {
+					_grid[i][j] = '0';
+				}
+				else if (_grid[i][j] == '0' && _isAlive(i, j)) {
+					_grid[i][j] = '1';
+				}
+			}
+		}
+	}
 }
 
 void GameLife::displayAliveCell(mlx_image_t *renderer,uint32_t cell_size) const {
