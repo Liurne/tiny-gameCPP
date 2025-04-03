@@ -74,7 +74,7 @@ void Map::generateEnemy() {
 }
 
 void Map::generateMapGrass() {
-	GameLife gameLife(MAP_WIDTH, MAP_HEIGHT, MAP_DENSITY);
+	GameLife gameLife(MAP_WIDTH, MAP_HEIGHT, MAP_GRASS_DENSITY);
 	gameLife.generateGrid();
 	for (int i = 0; i < 15; i++) {
 		gameLife.updateLife();
@@ -197,7 +197,7 @@ void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay) {
 					if (mapDisplay->displayMapGrassBig) {
 						for (int k = 0; k < 2; k++) {
 							for (int l = 0; l < 2; l++) {
-								if (map.getCellGrassBig(i * 2 + k, j * 2 + l) == '1') {
+								if (map.getCellGrassBig(i * 2 + k, j * 2 + l) == '0') {
 									draw_rect(map_img, i * MAP_TILE_SIZE + k * MAP_GRASS_TILE_SIZE, j * MAP_TILE_SIZE + l * MAP_GRASS_TILE_SIZE, MAP_GRASS_TILE_SIZE, MAP_GRASS_TILE_SIZE, SHORT_GRASS_COLOR);
 								}
 								else {
@@ -207,7 +207,7 @@ void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay) {
 						}
 					}
 					else {
-						if (map.getCellGrass(i, j) == '1') {
+						if (map.getCellGrass(i, j) == '0') {
 							draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, SHORT_GRASS_COLOR);
 						}
 						else {
