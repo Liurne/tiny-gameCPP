@@ -15,9 +15,7 @@ MapGenerator::~MapGenerator() {
 void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT]) {
 	GameLife gameLife;
 	gameLife.generateGrid();
-	for (int i = 0; i < 12; i++) {
-		gameLife.updateLife();
-	}
+	gameLife.updateLife(12);
 
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
@@ -34,17 +32,11 @@ void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT]) {
 void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT], float density) {
 	GameLife gameLife(MAP_WIDTH, MAP_HEIGHT, density);
 	gameLife.generateGrid();
-	for (int i = 0; i < 15; i++) {
-		gameLife.updateLife();
-	}
-	for (int32_t i = 0; i < MAP_WIDTH; i++) {
-		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
-			_map[i][j] = gameLife.getCell(i, j);
-		}
-	}
+	gameLife.updateLife(15);
 	uint32_t nbGroundTile = 0;
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
+			_map[i][j] = gameLife.getCell(i, j);
 			if (_map[i][j] == '1')
 				nbGroundTile++;
 		}

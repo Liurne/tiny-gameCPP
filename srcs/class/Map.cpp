@@ -76,9 +76,7 @@ void Map::generateEnemy() {
 void Map::generateMapGrass() {
 	GameLife gameLife(MAP_WIDTH, MAP_HEIGHT, MAP_GRASS_DENSITY);
 	gameLife.generateGrid();
-	for (int i = 0; i < 15; i++) {
-		gameLife.updateLife();
-	}
+	gameLife.updateLife(15);
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
 			_mapGrass[i][j] = gameLife.getCell(i, j);
@@ -89,9 +87,7 @@ void Map::generateMapGrass() {
 void Map::generateMapGrass(float density) {
 	GameLife gameLife(MAP_WIDTH, MAP_HEIGHT, density);
 	gameLife.generateGrid();
-	for (int i = 0; i < 12; i++) {
-		gameLife.updateLife();
-	}
+	gameLife.updateLife(12);
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
 			_mapGrass[i][j] = gameLife.getCell(i, j);
@@ -102,9 +98,7 @@ void Map::generateMapGrass(float density) {
 void Map::generateMapGrassBig() {
 	GameLife gameLife(MAP_GRASS_WIDTH, MAP_GRASS_HEIGHT, MAP_GRASS_DENSITY);
 	gameLife.generateGrid();
-	for (int i = 0; i < 50; i++) {
-		gameLife.updateLife();
-	}
+	gameLife.updateLife(50);
 	for (int32_t i = 0; i < MAP_GRASS_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_GRASS_HEIGHT; j++) {
 			_mapGrassBig[i][j] = gameLife.getCell(i, j);
@@ -115,9 +109,7 @@ void Map::generateMapGrassBig() {
 void Map::generateMapGrassBig(float density) {
 	GameLife gameLife(MAP_GRASS_WIDTH, MAP_GRASS_HEIGHT, density);
 	gameLife.generateGrid();
-	for (int i = 0; i < 50; i++) {
-		gameLife.updateLife();
-	}
+	gameLife.updateLife(50);
 	for (int32_t i = 0; i < MAP_GRASS_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_GRASS_HEIGHT; j++) {
 			_mapGrassBig[i][j] = gameLife.getCell(i, j);
