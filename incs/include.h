@@ -33,9 +33,9 @@ typedef struct u_mapDisplay {
 	bool displayCollectible;
 	bool displayEnemy;
 	bool displaySpawn;
-	bool displayMapGrass;
-	bool displayMapGrassBig;
 }	t_mapDisplay;
+
+typedef std::vector<int> t_vectori;
 
 void exit_error(const std::string &msg);
 void put_pixel(mlx_image_t *img, int32_t x, int32_t y, uint32_t color);

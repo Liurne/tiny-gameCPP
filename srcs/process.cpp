@@ -11,17 +11,12 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 	Program		*prgm = static_cast<Program *>(program);
 	MLXWrapper	*mlx = &prgm->MLXSetup;
 	Map			*map = &prgm->map;
-	t_mapDisplay *mapDisplay = &prgm->mapDisplay;
 	std::string density;
 
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 		mlx->close();
 	if (keydata.key == MLX_KEY_Q && keydata.action == MLX_PRESS)
 		mlx_image_to_png(prgm->renderer, "screenshot.png");
-	if (keydata.key == MLX_KEY_1 && keydata.action == MLX_PRESS)
-		mapDisplay->displayMapGrassBig = 0;
-	if (keydata.key == MLX_KEY_2 && keydata.action == MLX_PRESS)
-		mapDisplay->displayMapGrassBig = 1;
 	if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS) {
 		map->generateMap();
 	}

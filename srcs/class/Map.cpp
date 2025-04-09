@@ -36,7 +36,13 @@ Map &Map::operator=(Map const &rhs) {
 }
 
 void Map::generateMap() {
-	_mapGenerator.generateMap(_map);
+	uint32_t width = (rand() % (int)(MAP_WIDTH - MAP_WIDTH_MIN)) + MAP_WIDTH_MIN;
+	uint32_t height = (rand() % (int)(MAP_HEIGHT - MAP_HEIGHT_MIN)) + MAP_HEIGHT_MIN;
+	// width = 30;
+	// height = 30;
+	std::cout << "Map generated (Size: " << width << ", " << height << ")" << std::endl;
+	_mapGenerator.generateMap(_map, width, height, MAP_DENSITY);
+	// _mapGenerator.generateMap(_map);
 	_parseMapElement();
 	generateMapGrass();
 	generateMapGrassBig();
@@ -45,8 +51,10 @@ void Map::generateMap() {
 
 void Map::generateMap(float density) {
 	std::cout << "Generating map with density: " << density << std::endl;
-	_mapGenerator.generateMap(_map, density);
-	std::cout << "Map generated" << std::endl;
+	uint32_t width = (rand() % (int)(MAP_WIDTH - MAP_WIDTH_MIN)) + MAP_WIDTH_MIN;
+	uint32_t height = (rand() % (int)(MAP_HEIGHT - MAP_HEIGHT_MIN)) + MAP_HEIGHT_MIN;
+	std::cout << "Map generated (Size: " << width << ", " << height << ")" << std::endl;
+	_mapGenerator.generateMap(_map, width, height, density);
 	_parseMapElement();
 	generateMapGrass();
 	generateMapGrassBig();
@@ -96,23 +104,23 @@ void Map::generateMapGrass(float density) {
 }
 
 void Map::generateMapGrassBig() {
-	GameLife gameLife(MAP_GRASS_WIDTH, MAP_GRASS_HEIGHT, MAP_GRASS_DENSITY);
+	GameLife gameLife(MAP_FLOWER_WIDTH, MAP_FLOWER_HEIGHT, MAP_GRASS_DENSITY);
 	gameLife.generateGrid();
 	gameLife.updateLife(50);
-	for (int32_t i = 0; i < MAP_GRASS_WIDTH; i++) {
-		for (int32_t j = 0; j < MAP_GRASS_HEIGHT; j++) {
-			_mapGrassBig[i][j] = gameLife.getCell(i, j);
+	for (int32_t i = 0; i < MAP_FLOWER_WIDTH; i++) {
+		for (int32_t j = 0; j < MAP_FLOWER_HEIGHT; j++) {
+			_mapFlower[i][j] = gameLife.getCell(i, j);
 		}
 	}
 }
 
 void Map::generateMapGrassBig(float density) {
-	GameLife gameLife(MAP_GRASS_WIDTH, MAP_GRASS_HEIGHT, density);
+	GameLife gameLife(MAP_FLOWER_WIDTH, MAP_FLOWER_HEIGHT, density);
 	gameLife.generateGrid();
 	gameLife.updateLife(50);
-	for (int32_t i = 0; i < MAP_GRASS_WIDTH; i++) {
-		for (int32_t j = 0; j < MAP_GRASS_HEIGHT; j++) {
-			_mapGrassBig[i][j] = gameLife.getCell(i, j);
+	for (int32_t i = 0; i < MAP_FLOWER_WIDTH; i++) {
+		for (int32_t j = 0; j < MAP_FLOWER_HEIGHT; j++) {
+			_mapFlower[i][j] = gameLife.getCell(i, j);
 		}
 	}
 }
@@ -138,10 +146,10 @@ char Map::getCellGrass(int x, int y) {
 }
 
 char Map::getCellGrassBig(int x, int y) {
-	if (x < 0 || x >= MAP_GRASS_WIDTH || y < 0 || y >= MAP_GRASS_HEIGHT) {
+	if (x < 0 || x >= MAP_FLOWER_WIDTH || y < 0 || y >= MAP_FLOWER_HEIGHT) {
 		return '0';
 	}
-	return _mapGrassBig[x][y];
+	return _mapFlower[x][y];
 }
 
 void Map::_parseMapElement() {
@@ -184,32 +192,11 @@ void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay) {
 			else if (cell == 'E' && (mapDisplay->displayElement || mapDisplay->displayEnemy)){
 				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, ENEMY_COLOR);
 			}
+			else if (map.getCellGrass(i, j) == '1') {
+				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, LONG_GRASS_COLOR);
+			}
 			else {
-				if (mapDisplay->displayMapGrass) {
-					if (mapDisplay->displayMapGrassBig) {
-						for (int k = 0; k < 2; k++) {
-							for (int l = 0; l < 2; l++) {
-								if (map.getCellGrassBig(i * 2 + k, j * 2 + l) == '0') {
-									draw_rect(map_img, i * MAP_TILE_SIZE + k * MAP_GRASS_TILE_SIZE, j * MAP_TILE_SIZE + l * MAP_GRASS_TILE_SIZE, MAP_GRASS_TILE_SIZE, MAP_GRASS_TILE_SIZE, SHORT_GRASS_COLOR);
-								}
-								else {
-									draw_rect(map_img, i * MAP_TILE_SIZE + k * MAP_GRASS_TILE_SIZE, j * MAP_TILE_SIZE + l * MAP_GRASS_TILE_SIZE, MAP_GRASS_TILE_SIZE, MAP_GRASS_TILE_SIZE, LONG_GRASS_COLOR);
-								}
-							}
-						}
-					}
-					else {
-						if (map.getCellGrass(i, j) == '0') {
-							draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, SHORT_GRASS_COLOR);
-						}
-						else {
-							draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, LONG_GRASS_COLOR);
-						}
-					}
-				}
-				else {
-					draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, SHORT_GRASS_COLOR);
-				}
+				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, SHORT_GRASS_COLOR);
 			}
 		}
 	}

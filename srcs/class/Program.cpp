@@ -10,7 +10,7 @@ Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0), isWritingIsleDe
 		exit_error(e.what());
 	}
 
-	mapDisplay = (t_mapDisplay){.displayElement = true, .displayCollectible = true, .displayEnemy = true, .displaySpawn = true, .displayMapGrass = true, .displayMapGrassBig = true};
+	mapDisplay = (t_mapDisplay){.displayElement = true, .displayCollectible = true, .displayEnemy = true, .displaySpawn = true};
 
 	fill_img(renderer, 0x000000FF);
 	map.generateMap();

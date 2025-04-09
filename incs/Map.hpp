@@ -36,7 +36,8 @@ public:
 private:
 	char			_map[MAP_WIDTH][MAP_HEIGHT];
 	char			_mapGrass[MAP_WIDTH][MAP_HEIGHT];
-	char			_mapGrassBig[MAP_GRASS_WIDTH][MAP_GRASS_HEIGHT];
+	char			_mapFlower[MAP_FLOWER_WIDTH][MAP_FLOWER_HEIGHT];
+	char			_mapRandomFlower[MAP_FLOWER_WIDTH][MAP_FLOWER_HEIGHT];
 	MapGenerator	_mapGenerator;
 	uint32_t		_nbCollectible;
 	int				_nbCollectibleLeft;
