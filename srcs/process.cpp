@@ -43,7 +43,7 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 		if (prgm->isWritingGrassDensity) {
 			std::cout << "Grass Density: " << prgm->density << std::endl;
 			map->generateMapGrass(num);
-			map->generateMapGrassBig(num);
+			map->generateMapFlower(num);
 			std::cout << "Grass Generated" << std::endl;
 			prgm->isWritingGrassDensity = false;
 		}

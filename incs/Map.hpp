@@ -21,8 +21,8 @@ public:
 	void	generateEnemy();
 	void	generateMapGrass();
 	void	generateMapGrass(float density);
-	void	generateMapGrassBig();
-	void	generateMapGrassBig(float density);
+	void	generateMapFlower();
+	void	generateMapFlower(float density);
 
 	int		getNbCollectible() const { return _nbCollectible; }
 	void	setNbCollectible(uint32_t nbCollectible);
@@ -31,7 +31,7 @@ public:
 	t_veci	getEnemy() const { return _enemy; }
 	char	getCell(int x, int y);
 	char	getCellGrass(int x, int y);
-	char	getCellGrassBig(int x, int y);
+	char	getCellFlower(int x, int y);
 
 private:
 	char			_map[MAP_WIDTH][MAP_HEIGHT];
