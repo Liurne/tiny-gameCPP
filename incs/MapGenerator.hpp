@@ -38,12 +38,15 @@ private:
 	int			_getSumSurfaces();
 
 	void		_placeMapStart();
+	void		_placeBridge(int island1, int island2);
 	void		_placeMapEnemy();
 	void		_placeMapCollectible();
 	void		_placeMapCollectible(uint32_t nbCollectible);
 	void		_verifyMapElement();
 
 	t_veci		_findLandFromBorder(int side, int pos, int dir);
+	t_veci		_findLandFromIsland(int island);
+	int			_isSimilarIsland();
 	void		_spreadingVerifAlgorithm(char map[MAP_WIDTH][MAP_HEIGHT], t_veci vec);
 	void		_copyMap(char dst[MAP_WIDTH][MAP_HEIGHT]);
 	void		_copyMapping(char dst[MAP_WIDTH][MAP_HEIGHT]);

@@ -15,7 +15,7 @@ MapGenerator::~MapGenerator() {
 void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT]) {
 	GameLife gameLife;
 	gameLife.generateGrid();
-	gameLife.updateLife(12);
+	gameLife.updateLife(15);
 
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
@@ -27,8 +27,12 @@ void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT]) {
 	_nbCollectibleMin = NB_MIN_COLLECTIBLE(MAP_WIDTH, MAP_HEIGHT);
 
 	_findIsland();
-	std::cout << "Number of island: " << _nbIsland << std::endl;
 	_placeMapStart();
+	if (_nbIsland > 1 && _playerIsland != _mainIsland)
+		_placeBridge(_playerIsland, _mainIsland);
+	int similarIsland = _isSimilarIsland();
+	if (similarIsland)
+		_placeBridge(_mainIsland, similarIsland);
 	_placeMapEnemy();
 	_placeMapCollectible();
 	_verifyMapElement();
@@ -60,8 +64,12 @@ void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT], uint32_t widt
 	_nbCollectibleMin = NB_MIN_COLLECTIBLE(width, height);
 
 	_findIsland();
-	std::cout << "Number of island: " << _nbIsland << std::endl;
 	_placeMapStart();
+	if (_nbIsland > 1 && _playerIsland != _mainIsland)
+		_placeBridge(_playerIsland, _mainIsland);
+	int similarIsland = _isSimilarIsland();
+	if (similarIsland)
+		_placeBridge(_mainIsland, similarIsland);
 	_placeMapEnemy();
 	_placeMapCollectible();
 	_verifyMapElement();
@@ -107,20 +115,14 @@ void	MapGenerator::generateEnemy(char map[MAP_WIDTH][MAP_HEIGHT]) {
 
 //Private
 
-#include <fstream>
-
 void MapGenerator::_findIsland() {
 	_nbIsland = 0;
+	_mainIsland = 0;
+	_playerIsland = 0;
 	_surfaces.clear();
 	_surfaces.push_back(_mapIslandSurface(0, 0, '0'));
 	int totalSurface = MAP_WIDTH * MAP_HEIGHT;
 	if (_surfaces[0] == totalSurface) return;
-
-	std::ofstream file("test.txt", std::ios::out | std::ios::trunc);  //déclaration du flux et ouverture du fichier
-    if (!file) {
-    	std::cerr << "Erreur à l'ouverture !" << std::endl;
-        return ;
-	}
 
 	for (int i = 0; i < MAP_WIDTH; i++) {
 		for (int j = 0; j < MAP_HEIGHT; j++) {
@@ -130,37 +132,16 @@ void MapGenerator::_findIsland() {
 				else {
 					_nbIsland++;
 					_surfaces.push_back(_mapIslandSurface(i, j, '1'));
+					if (_nbIsland == 1)
+						_mainIsland = 1;
+					else if (_surfaces[_nbIsland] > _surfaces[_mainIsland])
+						_mainIsland = _nbIsland;
 				}
-				file << std::endl;
-				file << "Map" << std::endl;
-				file << std::endl;
-				for (int i = 0; i < MAP_WIDTH; i++) {
-					for (int j = 0; j < MAP_HEIGHT; j++) {
-						file << _map[i][j];
-					}
-					file << std::endl;
-				}
-				file << std::endl;
-				file << "Mapped" << std::endl;
-				file << std::endl;
-				for (int i = 0; i < MAP_WIDTH; i++) {
-					for (int j = 0; j < MAP_HEIGHT; j++) {
-						file << _mapping[i][j];
-					}
-					file << std::endl;
-				}
-				file << std::endl;
-				std::cout << "Maped surface: " << _getSumSurfaces() << " total: " << totalSurface << std::endl;
-				
 				if (_getSumSurfaces() >= totalSurface)
 					return;
-				
 			}
 		}
 	}
-
-	if (file)
-		file.close();
 }
 
 int MapGenerator::_mapIslandSurface(int x, int y, char depth) {
@@ -180,11 +161,9 @@ int MapGenerator::_mapIslandSurface(int x, int y, char depth) {
 
 int MapGenerator::_getSumSurfaces() {
 	int sum = 0;
-	
-	int biggestSurface = _surfaces[1];
+
 	for (long unsigned int i = 0; i < _surfaces.size(); i++) {
 		sum += _surfaces[i];
-		std::cout << "Surface " << i << ": " << _surfaces[i] << std::endl;
 	}
 	return sum;
 }
@@ -206,10 +185,41 @@ void MapGenerator::_placeMapStart() {
 		_start = _findLandFromBorder(side, pos, dir);
 		if (_start.x != -1) {
 			_map[_start.x][_start.y] = 'S';
-			_playerIsland = _mapping[_start.x][_start.y];
+			_playerIsland = _mapping[_start.x][_start.y] - 1;
 		}
 	} while (_start.x == -1);
 }
+
+void MapGenerator::_placeBridge(int island1, int island2) {
+	t_veci island1Point = _findLandFromIsland(island1);
+	t_veci island2Point = _findLandFromIsland(island2);
+
+	int dx = abs(island1Point.x - island2Point.x);
+	int dy = abs(island1Point.y - island2Point.y);
+	int sx = (island2Point.x < island1Point.x) ? 1 : -1;
+	int sy = (island2Point.y < island1Point.y) ? 1 : -1;
+	
+	int x = island2Point.x;
+	int y = island2Point.y;
+	
+	int errX = 0;
+	int errY = 0;
+
+	int steps = dx + dy;
+
+	for (int i = 0; i <= steps; i++) {
+		if (_map[x][y] == '0')
+			_map[x][y] = '2';
+		if ((errX + 1) * dy < (errY + 1) * dx) {
+			x += sx;
+			errX += 1;
+		} else {
+			y += sy;
+			errY += 1;
+		}
+	}
+}
+	
 
 void MapGenerator::_placeMapEnemy() {
 	t_veci vec;
@@ -287,6 +297,24 @@ t_veci MapGenerator::_findLandFromBorder(int side, int pos, int dir) {
 	} while (_map[vec.x][vec.y] != '1');
 
 	return vec;
+}
+
+t_veci MapGenerator::_findLandFromIsland(int island) {
+	t_veci vec;
+	do {
+		vec = (t_veci){.x = rand() % MAP_WIDTH, .y = rand() % MAP_HEIGHT};
+	} while (_mapping[vec.x][vec.y] != island + 1);
+	return vec;
+}
+
+int MapGenerator::_isSimilarIsland() {
+	if (_nbIsland < 3)
+		return 0;
+	for (int i = 0; i < _nbIsland; i++) {
+		if (_surfaces[i] >= _surfaces[_mainIsland] * 0.6 && i != _mainIsland && i != _playerIsland)
+			return i;
+	}
+	return 0;
 }
 
 void MapGenerator::_spreadingVerifAlgorithm(char map[MAP_WIDTH][MAP_HEIGHT], t_veci vec) {
