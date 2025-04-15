@@ -9,6 +9,15 @@ Map::Map() : _nbCollectible(0), _nbCollectibleLeft(0), _start((t_veci){.x = 0, .
 	}
 }
 
+Map::Map(MLXWrapper &mlx) : _nbCollectible(0), _nbCollectibleLeft(0), _start((t_veci){.x = 0, .y = 0}), _enemy((t_veci){.x = 0, .y = 0}), _mapCreated(false), _mapView(mlx.newImage(MAP_WIDTH * TEXTURE_SIZE, MAP_HEIGHT * TEXTURE_SIZE)) {
+	std::cout << "Map constructor called, generating map" << std::endl;
+	for (int32_t i = 0; i < MAP_WIDTH; i++) {
+		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
+			_map[i][j] = '0';
+		}
+	}
+}
+
 Map::~Map() {
 	std::cout << "Map destructor called" << std::endl;
 }
@@ -139,6 +148,15 @@ void Map::_parseMapElement() {
 		}
 	}
 	_nbCollectibleLeft = _nbCollectible;
+}
+
+void Map::_createMapView() {
+	if (_mapView) {
+		std::cout << "Map view created" << std::endl;
+	}
+	else {
+		std::cout << "Map view not created" << std::endl;
+	}
 }
 
 void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay) {

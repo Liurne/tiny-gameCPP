@@ -3,6 +3,7 @@
 
 # define WIDTH 500//1280
 # define HEIGHT 500//768
+# define TEXTURE_SIZE 32
 # define TILE_SIZE 10
 # define MAP_MARGING 3
 # define MAP_WIDTH 50
@@ -15,7 +16,7 @@
 # define MAP_FLOWER_HEIGHT 100
 # define MAP_FLOWER_TILE_SIZE 5
 # define MAP_GRASS_DENSITY 0.50
-# define MAP_FLOWER_DENSITY 0.45
+# define MAP_FLOWER_DENSITY 0.475
 # define MAP_FLOWER_RANDOM_DENSITY 0.35
 # define NB_MAX_COLLECTIBLE(width, height) (width - MAP_MARGING * 2) * (height - MAP_MARGING * 2) * 0.04
 # define NB_MIN_COLLECTIBLE(width, height) (width - MAP_MARGING * 2) * (height - MAP_MARGING * 2) * 0.01

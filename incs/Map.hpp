@@ -7,7 +7,7 @@
 
 class Map {
 public:
-	Map();
+	Map(MLXWrapper &mlx);
 	~Map();
 	Map(Map const &src);
 	Map &operator=(Map const &rhs);
@@ -39,7 +39,11 @@ private:
 
 	bool			_mapCreated;
 
+	mlx_image_t		*_mapView;
+
 	void			_parseMapElement();
+	void			_createMapView();
+	Map();
 };
 
 void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay);
