@@ -28,11 +28,16 @@ void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT]) {
 
 	_findIsland();
 	_placeMapStart();
-	if (_nbIsland > 1 && _playerIsland != _mainIsland)
+	if (_nbIsland > 1 && _playerIsland != _mainIsland) {
+		std::cout << "Placing bridge between player island and main island" << std::endl;
 		_placeBridge(_playerIsland, _mainIsland);
+	}
 	int similarIsland = _isSimilarIsland();
 	if (similarIsland)
+	{
+		std::cout << "Placing bridge between main island and similar island" << std::endl;
 		_placeBridge(_mainIsland, similarIsland);
+	}
 	_placeMapEnemy();
 	_placeMapCollectible();
 	_verifyMapElement();
@@ -65,11 +70,15 @@ void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT], uint32_t widt
 
 	_findIsland();
 	_placeMapStart();
-	if (_nbIsland > 1 && _playerIsland != _mainIsland)
+	if (_nbIsland > 1 && _playerIsland != _mainIsland) {
+		std::cout << "Placing bridge between player island and main island" << std::endl;
 		_placeBridge(_playerIsland, _mainIsland);
+	}
 	int similarIsland = _isSimilarIsland();
-	if (similarIsland)
-		_placeBridge(_mainIsland, similarIsland);
+	if (similarIsland) {
+		std::cout << "Placing bridge between main island and similar island" << std::endl;
+		_placeBridge(similarIsland, _mainIsland);
+	}
 	_placeMapEnemy();
 	_placeMapCollectible();
 	_verifyMapElement();
@@ -210,6 +219,8 @@ void MapGenerator::_placeBridge(int island1, int island2) {
 	for (int i = 0; i <= steps; i++) {
 		if (_map[x][y] == '0')
 			_map[x][y] = '2';
+		if (_mapping[x][y] == island1 + 1)
+			return ;
 		if ((errX + 1) * dy < (errY + 1) * dx) {
 			x += sx;
 			errX += 1;
@@ -308,11 +319,16 @@ t_veci MapGenerator::_findLandFromIsland(int island) {
 }
 
 int MapGenerator::_isSimilarIsland() {
-	if (_nbIsland < 3)
+	if (_nbIsland < 2)
 		return 0;
-	for (int i = 0; i < _nbIsland; i++) {
-		if (_surfaces[i] >= _surfaces[_mainIsland] * 0.6 && i != _mainIsland && i != _playerIsland)
+	for (int i = 1; i < _nbIsland; i++) {
+		std::cout << "Island " << i << ": " << _surfaces[i] << std::endl;
+		std::cout << "Main Island: " << _surfaces[_mainIsland] << std::endl;
+		std::cout << _surfaces[_mainIsland] * 0.3 << std::endl;
+		if (_surfaces[i] >= _surfaces[_mainIsland] * 0.3 && i != _mainIsland && i != _playerIsland) {
+			std::cout << "Similar island found: " << i << std::endl;
 			return i;
+		}
 	}
 	return 0;
 }
