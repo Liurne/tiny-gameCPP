@@ -20,48 +20,6 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 	if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS) {
 		map->generateMap();
 	}
-	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS && !prgm->isWritingGrassDensity) {
-		std::cout << "Enter Map Density: ";
-		prgm->isWritingIsleDensity = true;
-	}
-	if (keydata.key == MLX_KEY_G && keydata.action == MLX_PRESS && !prgm->isWritingIsleDensity) {
-		std::cout << "Enter Grass Density: ";
-		prgm->isWritingGrassDensity = true;
-	}
-	if (keydata.key == MLX_KEY_ENTER && keydata.action == MLX_PRESS && (prgm->isWritingIsleDensity || prgm->isWritingGrassDensity)) {
-		float num;
-		std::stringstream ss(prgm->density);
-    	ss >> num;
-		if (num > 1.0f)
-			prgm->density = "0.55";
-		if (prgm->isWritingIsleDensity) {
-			std::cout << "Map Density: " << prgm->density << std::endl;
-			map->generateMap(num);
-			std::cout << "Map Generated" << std::endl;
-			prgm->isWritingIsleDensity = false;
-		}
-		if (prgm->isWritingGrassDensity) {
-			std::cout << "Grass Density: " << prgm->density << std::endl;
-			map->generateMapGrass(num);
-			map->generateMapFlower(num);
-			std::cout << "Grass Generated" << std::endl;
-			prgm->isWritingGrassDensity = false;
-		}
-		prgm->density = "";
-	}
-	if (prgm->isWritingIsleDensity || prgm->isWritingGrassDensity) {
-		if (keydata.key == MLX_KEY_BACKSPACE && keydata.action == MLX_PRESS) {
-			if (!density.empty()) {
-				density.resize(density.size() - 1);  // Resize the string to remove the last character
-			}
-		}
-		else if (keydata.key >= MLX_KEY_KP_0 && keydata.key <= MLX_KEY_KP_9 && keydata.action == MLX_PRESS) {
-			prgm->density += '0' + (keydata.key - MLX_KEY_KP_0);
-		}
-		else if (keydata.key == MLX_KEY_KP_DECIMAL && keydata.action == MLX_PRESS) {
-			prgm->density += '.';
-		}
-	}
 }
 
 void moosehook(mouse_key_t button, action_t action, modifier_key_t mods, void* program) {

@@ -1,6 +1,6 @@
 #include "Program.hpp"
 
-Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0), isWritingIsleDensity(false), isWritingGrassDensity(false), density("") {
+Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0) {
 	std::cout << "Program constructor called" << std::endl;
 	try {
 		MLXSetup.init();

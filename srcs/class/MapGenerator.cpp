@@ -12,47 +12,26 @@ MapGenerator::~MapGenerator() {
 
 //Public
 
-void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT]) {
-	GameLife gameLife;
-	gameLife.generateGrid();
-	gameLife.updateLife(15);
-
-	for (int32_t i = 0; i < MAP_WIDTH; i++) {
-		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
-			_map[i][j] = gameLife.getCell(i, j);
-			_mapping[i][j] = 0;
-		}
-	}
-	_nbCollectibleMax = NB_MAX_COLLECTIBLE(MAP_WIDTH, MAP_HEIGHT);
-	_nbCollectibleMin = NB_MIN_COLLECTIBLE(MAP_WIDTH, MAP_HEIGHT);
-
-	_findIsland();
-	_placeMapStart();
-	if (_nbIsland > 1 && _playerIsland != _mainIsland) {
-		std::cout << "Placing bridge between player island and main island" << std::endl;
-		_placeBridge(_playerIsland, _mainIsland);
-	}
-	int similarIsland = _isSimilarIsland();
-	if (similarIsland)
-	{
-		std::cout << "Placing bridge between main island and similar island" << std::endl;
-		_placeBridge(_mainIsland, similarIsland);
-	}
-	_placeMapEnemy();
-	_placeMapCollectible();
-	_verifyMapElement();
+void MapGenerator::getNewMap(char newMap[MAP_WIDTH][MAP_HEIGHT]){
+	_generateMap();
 	_copyMap(newMap);
 }
 
-void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT], uint32_t width, uint32_t height,  float density) {
-	if ( width < MAP_WIDTH_MIN || width > MAP_WIDTH || height < MAP_HEIGHT_MIN || height > MAP_HEIGHT) {
-		std::cout << "Map size is not valid" << std::endl;
-		return ;
-	}
+// Private
+
+void	MapGenerator::_generateMap() {
+	uint32_t width = (rand() % (int)(MAP_WIDTH - MAP_WIDTH_MIN)) + MAP_WIDTH_MIN;
+	uint32_t height = (rand() % (int)(MAP_HEIGHT - MAP_HEIGHT_MIN)) + MAP_HEIGHT_MIN;
+
+	_nbCollectibleMax = NB_MAX_COLLECTIBLE(width, height);
+	_nbCollectibleMin = NB_MIN_COLLECTIBLE(width, height);
+
 	_clearMap();
-	GameLife gameLife(width, height, density);
+
+	GameLife gameLife(width, height, MAP_DENSITY);
 	gameLife.generateGrid();
 	gameLife.updateLife(15);
+
 	uint32_t nbGroundTile = 0;
 	for (int32_t i = MAP_WIDTH * 0.5 - width * 0.5; i < MAP_WIDTH * 0.5 + width * 0.5; i++) {
 		for (int32_t j = MAP_HEIGHT * 0.5 - height * 0.5; j < MAP_HEIGHT * 0.5 + height * 0.5; j++) {
@@ -61,70 +40,19 @@ void	MapGenerator::generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT], uint32_t widt
 				nbGroundTile++;
 		}
 	}
+
 	if (nbGroundTile < width * height / 8) {
 		std::cout << "Not enough ground tile, generating new map" << std::endl;
 		return ;
 	}
-	_nbCollectibleMax = NB_MAX_COLLECTIBLE(width, height);
-	_nbCollectibleMin = NB_MIN_COLLECTIBLE(width, height);
 
-	_findIsland();
-	_placeMapStart();
-	if (_nbIsland > 1 && _playerIsland != _mainIsland) {
-		std::cout << "Placing bridge between player island and main island" << std::endl;
-		_placeBridge(_playerIsland, _mainIsland);
-	}
-	int similarIsland = _isSimilarIsland();
-	if (similarIsland) {
-		std::cout << "Placing bridge between main island and similar island" << std::endl;
-		_placeBridge(similarIsland, _mainIsland);
-	}
-	_placeMapEnemy();
-	_placeMapCollectible();
-	_verifyMapElement();
-	_copyMap(newMap);
+	_mapIslands();
+	_placeMapElements();
+	std::cout << "Map generated (Size: " << width << ", " << height << ")" << std::endl;
 }
 
-void	MapGenerator::generateMapElement(char map[MAP_WIDTH][MAP_HEIGHT]) {
-	_clearMapElement();
-	_placeMapStart();
-	_placeMapEnemy();
-	_placeMapCollectible();
-	_verifyMapElement();
-	_copyMap(map);
-}
 
-void	MapGenerator::generateCollectible(char map[MAP_WIDTH][MAP_HEIGHT]) {
-	_clearMapCollectible();
-	_placeMapCollectible();
-	_verifyMapElement();
-	_copyMap(map);
-}
-
-void	MapGenerator::generateCollectible(char map[MAP_WIDTH][MAP_HEIGHT], uint32_t nbCollectible) {
-	_clearMapCollectible();
-	_placeMapCollectible(nbCollectible);
-	_verifyMapElement();
-	_copyMap(map);
-}
-
-void	MapGenerator::generateStart(char map[MAP_WIDTH][MAP_HEIGHT]) {
-	_map[_start.x][_start.y] = '1';
-	_placeMapStart();
-	_verifyMapElement();
-	_copyMap(map);
-}
-
-void	MapGenerator::generateEnemy(char map[MAP_WIDTH][MAP_HEIGHT]) {
-	_map[_enemy.x][_enemy.y] = '1';
-	_placeMapEnemy();
-	_verifyMapElement();
-	_copyMap(map);
-}
-
-//Private
-
-void MapGenerator::_findIsland() {
+void MapGenerator::_mapIslands() {
 	_nbIsland = 0;
 	_mainIsland = 0;
 	_playerIsland = 0;
@@ -153,28 +81,21 @@ void MapGenerator::_findIsland() {
 	}
 }
 
-int MapGenerator::_mapIslandSurface(int x, int y, char depth) {
-	if (_map[x][y] != depth || _mapping[x][y])
-		return 0;
-	if (depth == '0')
-		_mapping[x][y] = 1;
-	else 
-		_mapping[x][y] = _nbIsland + 1;
-	int nbGroundTile = 1;
-	nbGroundTile += _mapIslandSurface(x + 1, y, depth);
-	nbGroundTile += _mapIslandSurface(x - 1, y, depth);
-	nbGroundTile += _mapIslandSurface(x, y + 1, depth);
-	nbGroundTile += _mapIslandSurface(x, y - 1, depth);
-	return nbGroundTile;
-}
-
-int MapGenerator::_getSumSurfaces() {
-	int sum = 0;
-
-	for (long unsigned int i = 0; i < _surfaces.size(); i++) {
-		sum += _surfaces[i];
+void MapGenerator::_placeMapElements() {
+	_placeMapStart();
+	if (_nbIsland > 1 && _playerIsland != _mainIsland) {
+		std::cout << "Placing bridge between player island and main island" << std::endl;
+		_placeBridge(_mainIsland, _playerIsland);
 	}
-	return sum;
+	int similarIsland = _isSimilarIsland();
+	if (similarIsland)
+	{
+		std::cout << "Placing bridge between main island and similar island" << std::endl;
+		_placeBridge(similarIsland, _mainIsland);
+	}
+	_placeMapEnemy();
+	_placeMapCollectible();
+	_verifyMapElement();
 }
 
 void MapGenerator::_placeMapStart() {
@@ -203,6 +124,9 @@ void MapGenerator::_placeBridge(int island1, int island2) {
 	t_veci island1Point = _findLandFromIsland(island1);
 	t_veci island2Point = _findLandFromIsland(island2);
 
+	std::cout << "Island 1: " << island1 << " point: " << island1Point.x << ", " << island1Point.y << std::endl;
+	std::cout << "Island 2: " << island2 << " point: " << island2Point.x << ", " << island2Point.y << std::endl;
+
 	int dx = abs(island1Point.x - island2Point.x);
 	int dy = abs(island1Point.y - island2Point.y);
 	int sx = (island2Point.x < island1Point.x) ? 1 : -1;
@@ -216,6 +140,30 @@ void MapGenerator::_placeBridge(int island1, int island2) {
 
 	int steps = dx + dy;
 
+	for (int i = 0; i < MAP_WIDTH; i++) {
+		for (int j = 0; j < MAP_HEIGHT; j++) {
+			if (j == island1Point.y && i == island1Point.x)
+				std::cout << "O";
+			else if (j == island2Point.y && i == island2Point.x)
+				std::cout << "X";
+			else if (_map[i][j] == '0')
+				std::cout << " ";
+			else if (_map[i][j] == '1')
+				std::cout << "1";
+			else if (_map[i][j] == '2')
+				std::cout << "#";
+			else
+				std::cout << _map[i][j];
+			
+		}
+		std::cout << std::endl;
+	}
+	for (int i = 0; i < MAP_WIDTH; i++) {
+		for (int j = 0; j < MAP_HEIGHT; j++) {
+			std::cout << _mapping[i][j];
+		}
+		std::cout << std::endl;
+	}
 	for (int i = 0; i <= steps; i++) {
 		if (_map[x][y] == '0')
 			_map[x][y] = '2';
@@ -279,6 +227,30 @@ void MapGenerator::_verifyMapElement() {
 	_clearWrongMapElement(tmp);
 }
 
+int MapGenerator::_mapIslandSurface(int x, int y, char depth) {
+	if (_map[x][y] != depth || _mapping[x][y])
+		return 0;
+	if (depth == '0')
+		_mapping[x][y] = 1;
+	else 
+		_mapping[x][y] = _nbIsland + 1;
+	int nbGroundTile = 1;
+	nbGroundTile += _mapIslandSurface(x + 1, y, depth);
+	nbGroundTile += _mapIslandSurface(x - 1, y, depth);
+	nbGroundTile += _mapIslandSurface(x, y + 1, depth);
+	nbGroundTile += _mapIslandSurface(x, y - 1, depth);
+	return nbGroundTile;
+}
+
+int MapGenerator::_getSumSurfaces() {
+	int sum = 0;
+
+	for (long unsigned int i = 0; i < _surfaces.size(); i++) {
+		sum += _surfaces[i];
+	}
+	return sum;
+}
+
 t_veci MapGenerator::_findLandFromBorder(int side, int pos, int dir) {
 	t_veci vec;
 	if (side % 2) {
@@ -321,12 +293,8 @@ t_veci MapGenerator::_findLandFromIsland(int island) {
 int MapGenerator::_isSimilarIsland() {
 	if (_nbIsland < 2)
 		return 0;
-	for (int i = 1; i < _nbIsland; i++) {
-		std::cout << "Island " << i << ": " << _surfaces[i] << std::endl;
-		std::cout << "Main Island: " << _surfaces[_mainIsland] << std::endl;
-		std::cout << _surfaces[_mainIsland] * 0.3 << std::endl;
+	for (int i = 1; i <= _nbIsland; i++) {
 		if (_surfaces[i] >= _surfaces[_mainIsland] * 0.3 && i != _mainIsland && i != _playerIsland) {
-			std::cout << "Similar island found: " << i << std::endl;
 			return i;
 		}
 	}

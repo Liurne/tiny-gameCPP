@@ -36,49 +36,11 @@ Map &Map::operator=(Map const &rhs) {
 }
 
 void Map::generateMap() {
-	uint32_t width = (rand() % (int)(MAP_WIDTH - MAP_WIDTH_MIN)) + MAP_WIDTH_MIN;
-	uint32_t height = (rand() % (int)(MAP_HEIGHT - MAP_HEIGHT_MIN)) + MAP_HEIGHT_MIN;
-	// width = 30;
-	// height = 30;
-	std::cout << "Map generated (Size: " << width << ", " << height << ")" << std::endl;
-	_mapGenerator.generateMap(_map, width, height, MAP_DENSITY);
-	// _mapGenerator.generateMap(_map);
+	_mapGenerator.getNewMap(_map);
 	_parseMapElement();
 	generateMapGrass();
 	generateMapFlower();
 	_mapCreated = true;
-}
-
-void Map::generateMap(float density) {
-	std::cout << "Generating map with density: " << density << std::endl;
-	uint32_t width = (rand() % (int)(MAP_WIDTH - MAP_WIDTH_MIN)) + MAP_WIDTH_MIN;
-	uint32_t height = (rand() % (int)(MAP_HEIGHT - MAP_HEIGHT_MIN)) + MAP_HEIGHT_MIN;
-	std::cout << "Map generated (Size: " << width << ", " << height << ")" << std::endl;
-	_mapGenerator.generateMap(_map, width, height, density);
-	_parseMapElement();
-	generateMapGrass();
-	generateMapFlower();
-	_mapCreated = true;
-}
-
-void Map::generateMapElement() {
-	_mapGenerator.generateMapElement(_map);
-	_parseMapElement();
-}
-
-void Map::generateCollectible() {
-	_mapGenerator.generateCollectible(_map);
-	_parseMapElement();
-}
-
-void Map::genrateStart() {
-	_mapGenerator.generateStart(_map);
-	_parseMapElement();
-}
-
-void Map::generateEnemy() {
-	_mapGenerator.generateEnemy(_map);
-	_parseMapElement();
 }
 
 void Map::generateMapGrass() {
@@ -136,27 +98,21 @@ void Map::generateMapFlower(float density) {
 	}
 }
 
-void Map::setNbCollectible(uint32_t nbCollectible) {
-	_nbCollectible = nbCollectible;
-	_mapGenerator.generateCollectible(_map, nbCollectible);
-	_parseMapElement();
-}
-
-char Map::getCell(int x, int y) {
+char Map::getCell(int x, int y) const {
 	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) {
 		return '0';
 	}
 	return _map[x][y];
 }
 
-char Map::getCellGrass(int x, int y) {
+char Map::getCellGrass(int x, int y) const {
 	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) {
 		return '0';
 	}
 	return _mapGrass[x][y];
 }
 
-char Map::getCellFlower(int x, int y) {
+char Map::getCellFlower(int x, int y) const {
 	if (x < 0 || x >= MAP_FLOWER_WIDTH || y < 0 || y >= MAP_FLOWER_HEIGHT) {
 		return '0';
 	}

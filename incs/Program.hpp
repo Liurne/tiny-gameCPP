@@ -23,10 +23,6 @@ public:
 	t_mapDisplay mapDisplay;
 
 	int display;
-	bool isWritingIsleDensity;
-	bool isWritingGrassDensity;
-	std::string density;
-
 
 private:
 	Program(Program const &src);

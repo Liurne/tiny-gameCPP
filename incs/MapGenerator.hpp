@@ -8,13 +8,8 @@ public:
 	MapGenerator();
 	~MapGenerator();
 
-	void		generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT]);
-	void		generateMap(char newMap[MAP_WIDTH][MAP_HEIGHT],uint32_t width, uint32_t height, float density);
-	void		generateMapElement(char map[MAP_WIDTH][MAP_HEIGHT]);
-	void		generateCollectible(char map[MAP_WIDTH][MAP_HEIGHT]);
-	void		generateCollectible(char map[MAP_WIDTH][MAP_HEIGHT], uint32_t nbCollectible);
-	void		generateStart(char map[MAP_WIDTH][MAP_HEIGHT]);
-	void		generateEnemy(char map[MAP_WIDTH][MAP_HEIGHT]);
+	void		getNewMap(char newMap[MAP_WIDTH][MAP_HEIGHT]);
+
 
 private:
 	char		_map[MAP_WIDTH][MAP_HEIGHT];
@@ -33,10 +28,10 @@ private:
 	bool		_isEnemyValid;
 	bool		_isAtLeastOneCollectible;
 
-	void		_findIsland();
-	int			_mapIslandSurface(int x, int y, char depth = 0);
-	int			_getSumSurfaces();
+	void		_generateMap();
+	void		_mapIslands();
 
+	void		_placeMapElements();
 	void		_placeMapStart();
 	void		_placeBridge(int island1, int island2);
 	void		_placeMapEnemy();
@@ -44,6 +39,8 @@ private:
 	void		_placeMapCollectible(uint32_t nbCollectible);
 	void		_verifyMapElement();
 
+	int			_mapIslandSurface(int x, int y, char depth = 0);
+	int			_getSumSurfaces();
 	t_veci		_findLandFromBorder(int side, int pos, int dir);
 	t_veci		_findLandFromIsland(int island);
 	int			_isSimilarIsland();

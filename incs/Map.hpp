@@ -13,25 +13,18 @@ public:
 	Map &operator=(Map const &rhs);
 
 	void	generateMap();
-	void	generateMap(float density);
 
-	void	generateMapElement();
-	void	generateCollectible();
-	void	genrateStart();
-	void	generateEnemy();
 	void	generateMapGrass();
 	void	generateMapGrass(float density);
 	void	generateMapFlower();
 	void	generateMapFlower(float density);
 
 	int		getNbCollectible() const { return _nbCollectible; }
-	void	setNbCollectible(uint32_t nbCollectible);
-	int		getNbCollectibleLeft() { return _nbCollectible; }
 	t_veci	getSpawn() const { return _start; }
 	t_veci	getEnemy() const { return _enemy; }
-	char	getCell(int x, int y);
-	char	getCellGrass(int x, int y);
-	char	getCellFlower(int x, int y);
+	char	getCell(int x, int y) const;
+	char	getCellGrass(int x, int y) const;
+	char	getCellFlower(int x, int y) const;
 
 private:
 	char			_map[MAP_WIDTH][MAP_HEIGHT];
