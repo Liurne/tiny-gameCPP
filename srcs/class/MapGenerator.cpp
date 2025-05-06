@@ -30,7 +30,7 @@ void	MapGenerator::_generateMap() {
 
 	GameLife gameLife(width, height, MAP_DENSITY);
 	gameLife.generateGrid();
-	gameLife.updateLife(15);
+	gameLife.updateLife(25);
 
 	uint32_t nbGroundTile = 0;
 	for (int32_t i = MAP_WIDTH * 0.5 - width * 0.5; i < MAP_WIDTH * 0.5 + width * 0.5; i++) {
@@ -65,7 +65,7 @@ void MapGenerator::_mapIslands() {
 		for (int j = 0; j < MAP_HEIGHT; j++) {
 			if (!_mapping[i][j]) {
 				if (_map[i][j] == '0')
-					_surfaces[0] += _mapIslandSurface(i, j, '0');
+					_surfaces[0] += _mapIslandSurface(i, j, '3');
 				else {
 					_nbIsland++;
 					_surfaces.push_back(_mapIslandSurface(i, j, '1'));
@@ -120,65 +120,53 @@ void MapGenerator::_placeMapStart() {
 	} while (_start.x == -1);
 }
 
-void MapGenerator::_placeBridge(int island1, int island2) {
-	t_veci island1Point = _findLandFromIsland(island1);
-	t_veci island2Point = _findLandFromIsland(island2);
+void MapGenerator::_placeBridge(int islandStart, int islandEnd) {
+	std::vector<t_veci> bridge;
+	t_veci pointA = _findLandFromIsland(islandStart); // Starting island
+	t_veci pointB = _findLandFromIsland(islandEnd);   // Target island
 
-	std::cout << "Island 1: " << island1 << " point: " << island1Point.x << ", " << island1Point.y << std::endl;
-	std::cout << "Island 2: " << island2 << " point: " << island2Point.x << ", " << island2Point.y << std::endl;
+	int dx = abs(pointA.x - pointB.x);
+	int dy = abs(pointA.y - pointB.y);
+	int sx = (pointB.x < pointA.x) ? 1 : -1;
+	int sy = (pointB.y < pointA.y) ? 1 : -1;
 
-	int dx = abs(island1Point.x - island2Point.x);
-	int dy = abs(island1Point.y - island2Point.y);
-	int sx = (island2Point.x < island1Point.x) ? 1 : -1;
-	int sy = (island2Point.y < island1Point.y) ? 1 : -1;
-	
-	int x = island2Point.x;
-	int y = island2Point.y;
-	
+	int x = pointB.x;
+	int y = pointB.y;
 	int errX = 0;
 	int errY = 0;
+	int bridgeStart = 0;  // Walk from pointA toward pointB
+	int bridgeEnd = dx + dy;
 
-	int steps = dx + dy;
-
-	for (int i = 0; i < MAP_WIDTH; i++) {
-		for (int j = 0; j < MAP_HEIGHT; j++) {
-			if (j == island1Point.y && i == island1Point.x)
-				std::cout << "O";
-			else if (j == island2Point.y && i == island2Point.x)
-				std::cout << "X";
-			else if (_map[i][j] == '0')
-				std::cout << " ";
-			else if (_map[i][j] == '1')
-				std::cout << "1";
-			else if (_map[i][j] == '2')
-				std::cout << "#";
-			else
-				std::cout << _map[i][j];
-			
+	for (int i = 0; i <= dx + dy; i++) {
+		// _map[x][y] = 'X'; // Mark bridge
+		bridge.push_back((t_veci){.x = x, .y = y});
+		if (_isOtherLandNear(x, y, islandStart)){
+			bridgeEnd = i + 1;
+			break;
+			// std::cout << "bridgestart update " << y << " " << x << std::endl;
 		}
-		std::cout << std::endl;
-	}
-	for (int i = 0; i < MAP_WIDTH; i++) {
-		for (int j = 0; j < MAP_HEIGHT; j++) {
-			std::cout << _mapping[i][j];
+		if (_isOtherLandNear(x, y, islandEnd)) {
+			bridgeStart = i;
 		}
-		std::cout << std::endl;
-	}
-	for (int i = 0; i <= steps; i++) {
-		if (_map[x][y] == '0')
-			_map[x][y] = '2';
-		if (_mapping[x][y] == island1 + 1)
-			return ;
 		if ((errX + 1) * dy < (errY + 1) * dx) {
 			x += sx;
-			errX += 1;
+			errX++;
 		} else {
 			y += sy;
-			errY += 1;
+			errY++;
 		}
 	}
+	std::cout << "Bridge start: " << bridgeStart << " Bridge end: " << bridgeEnd << std::endl;
+	for (int i = bridgeStart; i < bridgeEnd; i++) {
+		if (_map[bridge[i].x][bridge[i].y] == '0')
+			_map[bridge[i].x][bridge[i].y] = '2'; // Mark bridge
+	}
+
+	// _drawBridge(bridgeStart, bridgeEnd);
+	// _map[bridgeStart.x][bridgeStart.y] = 'O'; // Mark bridge start
+	// _map[bridgeEnd.x][bridgeEnd.y] = 'X';     // Mark bridge end
 }
-	
+
 
 void MapGenerator::_placeMapEnemy() {
 	t_veci vec;
@@ -228,11 +216,13 @@ void MapGenerator::_verifyMapElement() {
 }
 
 int MapGenerator::_mapIslandSurface(int x, int y, char depth) {
+	if (depth == '3' && _map[x][y] == '0')
+		_map[x][y] = '3';
 	if (_map[x][y] != depth || _mapping[x][y])
 		return 0;
 	if (depth == '0')
 		_mapping[x][y] = 1;
-	else 
+	else
 		_mapping[x][y] = _nbIsland + 1;
 	int nbGroundTile = 1;
 	nbGroundTile += _mapIslandSurface(x + 1, y, depth);
@@ -265,7 +255,7 @@ t_veci MapGenerator::_findLandFromBorder(int side, int pos, int dir) {
 		else
 			vec = (t_veci){.x = MAP_WIDTH, .y = pos};
 	}
-	
+
 	do {
 		if (side % 2) {
 			vec.y += dir;
@@ -290,6 +280,31 @@ t_veci MapGenerator::_findLandFromIsland(int island) {
 	return vec;
 }
 
+void MapGenerator::_drawBridge(t_veci from, t_veci to) {
+	int dx = abs(to.x - from.x);
+	int dy = abs(to.y - from.y);
+	int sx = (from.x < to.x) ? 1 : -1;
+	int sy = (from.y < to.y) ? 1 : -1;
+
+	int x = from.x;
+	int y = from.y;
+	int errX = 0;
+	int errY = 0;
+
+	for (int i = 0; i <= dx + dy; i++) {
+		if (_map[x][y] == '0') {
+			_map[x][y] = '2'; // Mark bridge
+		}
+		if ((errX + 1) * dy < (errY + 1) * dx) {
+			x += sx;
+			errX++;
+		} else {
+			y += sy;
+			errY++;
+		}
+	}
+}
+
 int MapGenerator::_isSimilarIsland() {
 	if (_nbIsland < 2)
 		return 0;
@@ -299,6 +314,27 @@ int MapGenerator::_isSimilarIsland() {
 		}
 	}
 	return 0;
+}
+
+bool MapGenerator::_isOtherLandNear(int x, int y, int island) {
+	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT)
+		return false;
+	// if (_mapping[x][y] != 1)
+	// 	return false;
+
+	int sum = 0;
+	island++;
+
+	if (x + 1 < MAP_WIDTH && _map[x + 1][y] == '1' && _mapping[x + 1][y] == island)
+		sum++;
+	if (x - 1 >= 0 && _map[x - 1][y] == '1' && _mapping[x - 1][y] == island)
+		sum++;
+	if (y + 1 < MAP_HEIGHT && _map[x][y + 1] == '1' && _mapping[x][y + 1] == island)
+		sum++;
+	if (y - 1 >= 0 && _map[x][y - 1] == '1' && _mapping[x][y - 1] == island)
+		sum++;
+	std::cout << "sum: " << sum << " x: " << x << " Y:" << y << " Island:" << island << std::endl;
+	return sum > 0;
 }
 
 void MapGenerator::_spreadingVerifAlgorithm(char map[MAP_WIDTH][MAP_HEIGHT], t_veci vec) {

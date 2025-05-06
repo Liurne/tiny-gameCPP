@@ -43,7 +43,9 @@ private:
 	int			_getSumSurfaces();
 	t_veci		_findLandFromBorder(int side, int pos, int dir);
 	t_veci		_findLandFromIsland(int island);
+	void		_drawBridge(t_veci island1, t_veci island2);
 	int			_isSimilarIsland();
+	bool		_isOtherLandNear(int x, int y, int island);
 	void		_spreadingVerifAlgorithm(char map[MAP_WIDTH][MAP_HEIGHT], t_veci vec);
 	void		_copyMap(char dst[MAP_WIDTH][MAP_HEIGHT]);
 	void		_copyMapping(char dst[MAP_WIDTH][MAP_HEIGHT]);
