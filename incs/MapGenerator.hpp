@@ -34,6 +34,7 @@ private:
 	void		_placeMapElements();
 	void		_placeMapStart();
 	void		_placeBridge(int island1, int island2);
+	bool		_verifyMapAccessibility();
 	void		_placeMapEnemy();
 	void		_placeMapCollectible();
 	void		_placeMapCollectible(uint32_t nbCollectible);
@@ -43,6 +44,7 @@ private:
 	int			_getSumSurfaces();
 	t_veci		_findLandFromBorder(int side, int pos, int dir);
 	t_veci		_findLandFromIsland(int island);
+	void		_findBridgePoint(t_veci &bridgeStart, t_veci &bridgeEnd, int islandStart, int islandEnd);
 	void		_drawBridge(t_veci island1, t_veci island2);
 	int			_isSimilarIsland();
 	bool		_isOtherLandNear(int x, int y, int island);

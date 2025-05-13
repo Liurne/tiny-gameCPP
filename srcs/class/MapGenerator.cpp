@@ -93,6 +93,11 @@ void MapGenerator::_placeMapElements() {
 		std::cout << "Placing bridge between main island and similar island" << std::endl;
 		_placeBridge(similarIsland, _mainIsland);
 	}
+	while (!_verifyMapAccessibility()) {
+		std::cout << "Map not accessible" << std::endl;
+		_map[_start.x][_start.y] = '1';
+		_placeMapStart();
+	}
 	_placeMapEnemy();
 	_placeMapCollectible();
 	_verifyMapElement();
@@ -121,9 +126,11 @@ void MapGenerator::_placeMapStart() {
 }
 
 void MapGenerator::_placeBridge(int islandStart, int islandEnd) {
-	std::vector<t_veci> bridge;
 	t_veci pointA = _findLandFromIsland(islandStart); // Starting island
 	t_veci pointB = _findLandFromIsland(islandEnd);   // Target island
+	_findBridgePoint(pointA, pointB, islandStart, islandEnd);
+
+	std::vector<t_veci> bridge;
 
 	int dx = abs(pointA.x - pointB.x);
 	int dy = abs(pointA.y - pointB.y);
@@ -134,16 +141,14 @@ void MapGenerator::_placeBridge(int islandStart, int islandEnd) {
 	int y = pointB.y;
 	int errX = 0;
 	int errY = 0;
-	int bridgeStart = 0;  // Walk from pointA toward pointB
+	int bridgeStart = 0;
 	int bridgeEnd = dx + dy;
 
 	for (int i = 0; i <= dx + dy; i++) {
-		// _map[x][y] = 'X'; // Mark bridge
 		bridge.push_back((t_veci){.x = x, .y = y});
 		if (_isOtherLandNear(x, y, islandStart)){
 			bridgeEnd = i + 1;
 			break;
-			// std::cout << "bridgestart update " << y << " " << x << std::endl;
 		}
 		if (_isOtherLandNear(x, y, islandEnd)) {
 			bridgeStart = i;
@@ -156,17 +161,49 @@ void MapGenerator::_placeBridge(int islandStart, int islandEnd) {
 			errY++;
 		}
 	}
-	std::cout << "Bridge start: " << bridgeStart << " Bridge end: " << bridgeEnd << std::endl;
 	for (int i = bridgeStart; i < bridgeEnd; i++) {
 		if (_map[bridge[i].x][bridge[i].y] == '0')
-			_map[bridge[i].x][bridge[i].y] = '2'; // Mark bridge
+			_map[bridge[i].x][bridge[i].y] = '2';
 	}
-
-	// _drawBridge(bridgeStart, bridgeEnd);
-	// _map[bridgeStart.x][bridgeStart.y] = 'O'; // Mark bridge start
-	// _map[bridgeEnd.x][bridgeEnd.y] = 'X';     // Mark bridge end
 }
 
+bool MapGenerator::_verifyMapAccessibility() {
+	int x = _start.x;
+	int y = 0;
+	while (y != _start.y + 1) {
+		if (_map[x][y] == '1')
+			break;
+		if (_map[x][y] == 'S')
+			return true;
+		y++;
+	}
+	y = MAP_HEIGHT - 1;
+	while (y != _start.y - 1) {
+		if (_map[x][y] == '1')
+			break;
+		if (_map[x][y] == 'S')
+			return true;
+		y--;
+	}
+	y = _start.y;
+	x = 0;
+	while (x != _start.x + 1) {
+		if (_map[x][y] == '1')
+			break;
+		if (_map[x][y] == 'S')
+			return true;
+		x++;
+	}
+	x = MAP_WIDTH - 1;
+	while (x!= _start.x - 1) {
+		if (_map[x][y] == '1')
+			break;
+		if (_map[x][y] == 'S')
+			return true;
+		x--;
+	}
+	return false;
+}
 
 void MapGenerator::_placeMapEnemy() {
 	t_veci vec;
@@ -280,6 +317,34 @@ t_veci MapGenerator::_findLandFromIsland(int island) {
 	return vec;
 }
 
+void MapGenerator::_findBridgePoint(t_veci &bridgeStart, t_veci &bridgeEnd, int islandStart, int islandEnd) {
+	int dx = abs(bridgeEnd.x - bridgeStart.x);
+	int dy = abs(bridgeEnd.y - bridgeStart.y);
+	int sx = (bridgeStart.x < bridgeEnd.x) ? 1 : -1;
+	int sy = (bridgeStart.y < bridgeEnd.y) ? 1 : -1;
+
+	int x = bridgeStart.x;
+	int y = bridgeStart.y;
+	int errX = 0;
+	int errY = 0;
+
+	for (int i = 0; i <= dx + dy; i++) {
+		if (_isOtherLandNear(x, y, islandStart))
+			bridgeStart = (t_veci){x, y};
+		if (_isOtherLandNear(x, y, islandEnd)) {
+			bridgeEnd = (t_veci){x, y};
+			break;
+		}
+		if ((errX + 1) * dy < (errY + 1) * dx) {
+			x += sx;
+			errX++;
+		} else {
+			y += sy;
+			errY++;
+		}
+	}
+}
+
 void MapGenerator::_drawBridge(t_veci from, t_veci to) {
 	int dx = abs(to.x - from.x);
 	int dy = abs(to.y - from.y);
@@ -293,7 +358,7 @@ void MapGenerator::_drawBridge(t_veci from, t_veci to) {
 
 	for (int i = 0; i <= dx + dy; i++) {
 		if (_map[x][y] == '0') {
-			_map[x][y] = '2'; // Mark bridge
+			_map[x][y] = '2';
 		}
 		if ((errX + 1) * dy < (errY + 1) * dx) {
 			x += sx;
