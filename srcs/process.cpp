@@ -17,8 +17,15 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 		mlx->close();
 	if (keydata.key == MLX_KEY_Q && keydata.action == MLX_PRESS)
 		mlx_image_to_png(prgm->renderer, "screenshot.png");
+	if (keydata.key == MLX_KEY_ENTER && keydata.action == MLX_PRESS) {
+		for (int i = 0; i < 81; i++) {
+			map->generateMap();
+		}
+	}
 	if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS) {
 		map->generateMap();
+		prgm->nbGeneratedMap++;
+		std::cout << "Map generated: " << prgm->nbGeneratedMap << std::endl;
 	}
 }
 

@@ -14,8 +14,10 @@ public:
 	Program();
 	~Program();
 
+	int nbGeneratedMap;
+
 	void		run();
-	
+
 	MLXWrapper	MLXSetup;
 	mlx_image_t	*renderer;
 

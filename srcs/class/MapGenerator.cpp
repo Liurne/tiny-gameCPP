@@ -40,11 +40,8 @@ void	MapGenerator::_generateMap() {
 				nbGroundTile++;
 		}
 	}
-
-	if (nbGroundTile < width * height / 8) {
-		std::cout << "Not enough ground tile, generating new map" << std::endl;
+	if (nbGroundTile < width * height / 8)
 		return ;
-	}
 
 	_mapIslands();
 	_placeMapElements();
@@ -83,18 +80,12 @@ void MapGenerator::_mapIslands() {
 
 void MapGenerator::_placeMapElements() {
 	_placeMapStart();
-	if (_nbIsland > 1 && _playerIsland != _mainIsland) {
-		std::cout << "Placing bridge between player island and main island" << std::endl;
+	if (_nbIsland > 1 && _playerIsland != _mainIsland)
 		_placeBridge(_mainIsland, _playerIsland);
-	}
 	int similarIsland = _isSimilarIsland();
 	if (similarIsland)
-	{
-		std::cout << "Placing bridge between main island and similar island" << std::endl;
 		_placeBridge(similarIsland, _mainIsland);
-	}
 	while (!_verifyMapAccessibility()) {
-		std::cout << "Map not accessible" << std::endl;
 		_map[_start.x][_start.y] = '1';
 		_placeMapStart();
 	}
@@ -126,8 +117,9 @@ void MapGenerator::_placeMapStart() {
 }
 
 void MapGenerator::_placeBridge(int islandStart, int islandEnd) {
-	t_veci pointA = _findLandFromIsland(islandStart); // Starting island
-	t_veci pointB = _findLandFromIsland(islandEnd);   // Target island
+	t_veci pointA = _findLandFromIsland(islandStart);
+	t_veci pointB = _findLandFromIsland(islandEnd);
+
 	_findBridgePoint(pointA, pointB, islandStart, islandEnd);
 
 	std::vector<t_veci> bridge;
@@ -257,7 +249,7 @@ int MapGenerator::_mapIslandSurface(int x, int y, char depth) {
 		_map[x][y] = '3';
 	if (_map[x][y] != depth || _mapping[x][y])
 		return 0;
-	if (depth == '0')
+	if (depth == '0' || depth == '3')
 		_mapping[x][y] = 1;
 	else
 		_mapping[x][y] = _nbIsland + 1;
@@ -329,6 +321,7 @@ void MapGenerator::_findBridgePoint(t_veci &bridgeStart, t_veci &bridgeEnd, int 
 	int errY = 0;
 
 	for (int i = 0; i <= dx + dy; i++) {
+		// _map[x][y] = 'X';
 		if (_isOtherLandNear(x, y, islandStart))
 			bridgeStart = (t_veci){x, y};
 		if (_isOtherLandNear(x, y, islandEnd)) {
@@ -398,7 +391,6 @@ bool MapGenerator::_isOtherLandNear(int x, int y, int island) {
 		sum++;
 	if (y - 1 >= 0 && _map[x][y - 1] == '1' && _mapping[x][y - 1] == island)
 		sum++;
-	std::cout << "sum: " << sum << " x: " << x << " Y:" << y << " Island:" << island << std::endl;
 	return sum > 0;
 }
 

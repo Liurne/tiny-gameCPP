@@ -6,6 +6,7 @@ int main(int ac, char **av) {
 	args.push_back(0);
 	args.push_back(0);
 	args.push_back(0);
+	// srand(59865778);
 	std::cout << "Size : " << args.size() << std::endl;
 	args.clear();
 	std::cout << "Size : " << args.size() << std::endl;

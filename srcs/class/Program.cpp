@@ -2,6 +2,7 @@
 
 Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0) {
 	std::cout << "Program constructor called" << std::endl;
+	nbGeneratedMap = 0;
 	try {
 		MLXSetup.init();
 		renderer = MLXSetup.newImage(WIDTH, HEIGHT);
