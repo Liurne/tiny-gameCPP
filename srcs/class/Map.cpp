@@ -1,7 +1,9 @@
 #include "Map.hpp"
+# include "MapVisualGenerator.hpp"
 
 Map::Map() : _nbCollectible(0), _nbCollectibleLeft(0), _start((t_veci){.x = 0, .y = 0}), _enemy((t_veci){.x = 0, .y = 0}), _mapCreated(false) {
 	std::cout << "Map constructor called, generating map" << std::endl;
+	_mapView = NULL;
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
 			_map[i][j] = '0';
@@ -50,6 +52,11 @@ void Map::generateMap() {
 	generateMapDeep();
 	generateMapGrass();
 	generateMapFlower();
+	if (_mapView) {
+		MapVisualGenerator mapVisual;
+		_mapView = mapVisual.generateMapImage(_mapView, *this);
+		mlx_image_to_png(_mapView, "mapView.png");
+	}
 	_mapCreated = true;
 }
 
@@ -122,6 +129,13 @@ char Map::getCellFlower(int x, int y) const {
 	// 	return '1';
 	// }
 	// return '0';
+}
+
+char Map::getCellRandom(int x, int y) const {
+	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT) {
+		return '0';
+	}
+	return _mapRandom[x][y];
 }
 
 void Map::_parseMapElement() {

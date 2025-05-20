@@ -7,6 +7,7 @@
 # include "MLXWrapper.hpp"
 # include "GameLife.hpp"
 # include "Map.hpp"
+# include "MapVisualGenerator.hpp"
 # include "WaveEquation.hpp"
 
 class Program {

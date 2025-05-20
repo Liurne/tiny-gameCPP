@@ -10,21 +10,25 @@ public:
     MapVisualGenerator(MapVisualGenerator const &src);
     MapVisualGenerator &operator=(MapVisualGenerator const &rhs);
 
-    mlx_image_t *generateMapImage(MLXWrapper &mlx, Map &map);
+    mlx_image_t *generateMapImage(mlx_image_t *view, Map &map);
 
 private:
     mlx_image_t *_mapView;
 
+    void _drawMap(Map &map);
     void _drawCell(Map &map, int x, int y);
 
-    void _drawMap(Map &map);
-    void _drawDeep(Map &map);
-    void _drawGrass(Map &map);
-    void _drawFlower(Map &map);
-    void _drawBridge(Map &map);
+    void _drawWater(Map &map, int x, int y);
+    void _drawBridge(Map &map, int x, int y);
+    void _drawLake(Map &map, int x, int y);
+    void _drawGrass(Map &map, int x, int y);
+    void _drawFlower(Map &map, int x, int y);
+    void _drawCollectible(Map &map, int x, int y);
+    void _drawSpawn(Map &map, int x, int y);
+    void _drawEnemy(Map &map, int x, int y);
 
-};
-    void
+    bool _isCellBridgeOrGround(char cell);
+
 };
 
 #endif

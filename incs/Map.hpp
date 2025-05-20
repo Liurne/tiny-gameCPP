@@ -27,6 +27,7 @@ public:
 	char	getCellDeep(int x, int y) const;
 	char	getCellGrass(int x, int y) const;
 	char	getCellFlower(int x, int y) const;
+	char	getCellRandom(int x, int y) const;
 
 private:
 	char			_map[MAP_WIDTH][MAP_HEIGHT];
