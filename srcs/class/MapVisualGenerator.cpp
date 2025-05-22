@@ -105,6 +105,14 @@ void MapVisualGenerator::_drawBridge(Map &map, int x, int y) {
     } else if (cellDown && cellRight) {
         draw_rect(_mapView, (x * TEXTURE_SIZE) + TEXTURE_SIZE * 0.25, (y * TEXTURE_SIZE) + TEXTURE_SIZE * 0.25, TEXTURE_SIZE * 0.75, TEXTURE_SIZE * 0.5, BRIDGE_COLOR);
         draw_rect(_mapView, (x * TEXTURE_SIZE) + TEXTURE_SIZE * 0.25, (y * TEXTURE_SIZE) + TEXTURE_SIZE * 0.25, TEXTURE_SIZE * 0.5, TEXTURE_SIZE * 0.75, BRIDGE_COLOR);
+    } else if (cellUp) {
+        draw_rect(_mapView, (x * TEXTURE_SIZE) + TEXTURE_SIZE * 0.25, y * TEXTURE_SIZE, TEXTURE_SIZE * 0.5, TEXTURE_SIZE, BRIDGE_COLOR);
+    } else if (cellDown) {
+        draw_rect(_mapView, (x * TEXTURE_SIZE) + TEXTURE_SIZE * 0.25, (y * TEXTURE_SIZE) + TEXTURE_SIZE * 0.25, TEXTURE_SIZE * 0.5, TEXTURE_SIZE, BRIDGE_COLOR);
+    } else if (cellLeft) {
+        draw_rect(_mapView, x * TEXTURE_SIZE, (y * TEXTURE_SIZE) + TEXTURE_SIZE * 0.25, TEXTURE_SIZE, TEXTURE_SIZE * 0.5, BRIDGE_COLOR);
+    } else if (cellRight) {
+        draw_rect(_mapView, (x * TEXTURE_SIZE) + TEXTURE_SIZE * 0.25, (y * TEXTURE_SIZE) + TEXTURE_SIZE * 0.25, TEXTURE_SIZE * 0.5, TEXTURE_SIZE * 0.5, BRIDGE_COLOR);
     }
 }
 
@@ -151,5 +159,5 @@ void MapVisualGenerator::_drawEnemy(Map &map, int x, int y) {
 }
 
 bool MapVisualGenerator::_isCellBridgeOrGround(char cell) {
-    return (cell == '1' || cell == '2');
+    return (cell == '1' || cell == '2' || cell == 'S' || cell == 'E' || cell == 'C');
 }

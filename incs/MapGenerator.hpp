@@ -16,6 +16,7 @@ private:
 	uint32_t	_nbCollectible;
 	t_veci		_start;
 	t_veci		_enemy;
+	int			_startAcces;
 
 	int			_mapping[MAP_WIDTH][MAP_HEIGHT];
 	t_vectori	_surfaces;
@@ -34,6 +35,7 @@ private:
 	void		_placeMapElements();
 	void		_placeMapStart();
 	void		_placeBridge(int island1, int island2);
+	void		_placeStartBridge();
 	bool		_verifyMapAccessibility();
 	void		_placeMapEnemy();
 	void		_placeMapCollectible();

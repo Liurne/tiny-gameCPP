@@ -89,6 +89,7 @@ void MapGenerator::_placeMapElements() {
 		_map[_start.x][_start.y] = '1';
 		_placeMapStart();
 	}
+	_placeStartBridge();
 	_placeMapEnemy();
 	_placeMapCollectible();
 	_verifyMapElement();
@@ -159,9 +160,22 @@ void MapGenerator::_placeBridge(int islandStart, int islandEnd) {
 	}
 }
 
+void MapGenerator::_placeStartBridge() {
+	if (_startAcces == 0) {
+		_map[_start.x + 1][_start.y] = '2';
+	} else if (_startAcces == 1) {
+		_map[_start.x][_start.y + 1] = '2';
+	} else if (_startAcces == 2) {
+		_map[_start.x - 1][_start.y] = '2';
+	} else if (_startAcces == 3) {
+		_map[_start.x][_start.y - 1] = '2';
+	}
+}
+
 bool MapGenerator::_verifyMapAccessibility() {
 	int x = _start.x;
 	int y = 0;
+	_startAcces = 3;
 	while (y != _start.y + 1) {
 		if (_map[x][y] == '1')
 			break;
@@ -170,6 +184,7 @@ bool MapGenerator::_verifyMapAccessibility() {
 		y++;
 	}
 	y = MAP_HEIGHT - 1;
+	_startAcces = 1;
 	while (y != _start.y - 1) {
 		if (_map[x][y] == '1')
 			break;
@@ -179,6 +194,7 @@ bool MapGenerator::_verifyMapAccessibility() {
 	}
 	y = _start.y;
 	x = 0;
+	_startAcces = 2;
 	while (x != _start.x + 1) {
 		if (_map[x][y] == '1')
 			break;
@@ -187,6 +203,7 @@ bool MapGenerator::_verifyMapAccessibility() {
 		x++;
 	}
 	x = MAP_WIDTH - 1;
+	_startAcces = 0;
 	while (x!= _start.x - 1) {
 		if (_map[x][y] == '1')
 			break;
