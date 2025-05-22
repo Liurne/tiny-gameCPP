@@ -46,7 +46,6 @@ private:
 	mlx_image_t		*_mapView;
 
 	void			_parseMapElement();
-	void			_createMapView();
 };
 
 void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay);

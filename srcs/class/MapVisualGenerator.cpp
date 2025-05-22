@@ -32,7 +32,6 @@ mlx_image_t *MapVisualGenerator::generateMapImage(mlx_image_t *view, Map &map) {
 void MapVisualGenerator::_drawMap(Map &map) {
     for (int x = 0; x < MAP_WIDTH; x++) {
         for (int y = 0; y < MAP_HEIGHT; y++) {
-            std::cout << "Drawing cell at (" << x << ", " << y << ")" << std::endl;
             _drawCell(map, x, y);
         }
     }

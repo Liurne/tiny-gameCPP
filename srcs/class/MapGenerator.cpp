@@ -45,7 +45,7 @@ void	MapGenerator::_generateMap() {
 
 	_mapIslands();
 	_placeMapElements();
-	std::cout << "Map generated (Size: " << width << ", " << height << ")" << std::endl;
+	// std::cout << "Map generated (Size: " << width << ", " << height << ")" << std::endl;
 }
 
 

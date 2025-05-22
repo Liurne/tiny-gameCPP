@@ -157,15 +157,6 @@ void Map::_parseMapElement() {
 	_nbCollectibleLeft = _nbCollectible;
 }
 
-void Map::_createMapView() {
-	if (_mapView) {
-		std::cout << "Map view created" << std::endl;
-	}
-	else {
-		std::cout << "Map view not created" << std::endl;
-	}
-}
-
 void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay) {
 	if (map_img->width != MAP_WIDTH * MAP_TILE_SIZE || map_img->height != MAP_HEIGHT * MAP_TILE_SIZE) {
 		if (!resize_image(map_img, MAP_WIDTH * MAP_TILE_SIZE, MAP_HEIGHT * MAP_TILE_SIZE)) {

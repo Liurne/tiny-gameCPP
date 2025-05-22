@@ -25,7 +25,7 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 	if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS) {
 		map->generateMap();
 		prgm->nbGeneratedMap++;
-		std::cout << "Map generated: " << prgm->nbGeneratedMap << std::endl;
+		// std::cout << "Map generated: " << prgm->nbGeneratedMap << std::endl;
 	}
 }
 
