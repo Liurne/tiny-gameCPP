@@ -5,6 +5,7 @@ INCS		:=	\
 				MLXWrapper.hpp\
 				GameLife.hpp\
 				MapGenerator.hpp\
+				MapVisualGenerator.hpp\
 				Map.hpp\
 				WaveEquation.hpp\
 				Program.hpp\
@@ -15,6 +16,7 @@ SRCS		:=	\
 				class/MLXWrapper.cpp\
 				class/GameLife.cpp\
 				class/MapGenerator.cpp\
+				class/MapVisualGenerator.cpp\
 				class/Map.cpp\
 				class/WaveEquation.cpp\
 				class/Program.cpp\

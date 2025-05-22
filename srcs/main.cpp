@@ -5,7 +5,6 @@ int main(int ac, char **av) {
 	if (!ac)
 		exit_error(ERR_ARGS);
 	std::cout << "You entered: " << av[0] << std::endl;
-
 	Program prgm;
 
 	prgm.run();

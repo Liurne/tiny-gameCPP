@@ -2,7 +2,7 @@
 
 //Public
 
-GameLife::GameLife() : _width(MAP_WIDTH), _height(MAP_HEIGHT), _density(0.55), _isGenerating(false) {
+GameLife::GameLife() : _width(MAP_WIDTH), _height(MAP_HEIGHT), _density(MAP_DENSITY), _isGenerating(false) {
 	std::cout << "GameLife constructor called" << std::endl;
 	for (uint32_t i = 0; i < MAP_WIDTH; i++) {
 		_grid.push_back(std::vector<char>());
@@ -45,6 +45,26 @@ void GameLife::generateGrid() {
 	_isGenerating = false;
 }
 
+void GameLife::generateGrid(uint32_t width, uint32_t height, float density) {
+	_isGenerating = true;
+	_createGrid(width, height, density);
+	for (uint32_t i = 0; i < _width; i++) {
+		for (uint32_t j = 0; j < _height; j++) {
+			_grid[i][j] = '0';
+		}
+	}
+	int nbCellToPlace = ((_width - MAP_MARGING * 2) * (_height - MAP_MARGING * 2)) * _density;
+	for (int i = 0; i < nbCellToPlace; i++) {
+		t_veci vec;
+		do {
+			vec.x = (rand() % (_width - MAP_MARGING * 2)) + MAP_MARGING;
+			vec.y = (rand() % (_height - MAP_MARGING * 2)) + MAP_MARGING;
+		} while (_grid[vec.x][vec.y] == '1');
+		_grid[vec.x][vec.y] = '1';
+	}
+	_isGenerating = false;
+}
+
 void GameLife::updateLife() {
 	if (_isGenerating) {
 		return ;
@@ -59,7 +79,24 @@ void GameLife::updateLife() {
 			}
 		}
 	}
-	usleep(5000);
+}
+
+void GameLife::updateLife(uint32_t iterations) {
+	if (_isGenerating) {
+		return ;
+	}
+	for (uint32_t k = 0; k < iterations; k++) {
+		for (uint32_t i = 0; i < _width; i++) {
+			for (uint32_t j = 0; j < _height; j++) {
+				if (_grid[i][j] == '1' && _isDead(i, j)) {
+					_grid[i][j] = '0';
+				}
+				else if (_grid[i][j] == '0' && _isAlive(i, j)) {
+					_grid[i][j] = '1';
+				}
+			}
+		}
+	}
 }
 
 void GameLife::displayAliveCell(mlx_image_t *renderer,uint32_t cell_size) const {
@@ -101,6 +138,18 @@ bool GameLife::_isDead(int32_t x, int32_t y) const {
 	return (_countAliveNeighbours(x, y) < 4);
 }
 
+void GameLife::_createGrid(uint32_t width, uint32_t height, float density) {
+	_width = width;
+	_height = height;
+	_density = density;
+	_grid.clear();
+	for (uint32_t i = 0; i < _width; i++) {
+		_grid.push_back(std::vector<char>());
+		for (uint32_t j = 0; j < _height; j++) {
+			_grid[i].push_back('0');
+		}
+	}
+}
 //Unused
 
 GameLife::GameLife(GameLife const &src) {

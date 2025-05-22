@@ -7,6 +7,7 @@
 # include "MLXWrapper.hpp"
 # include "GameLife.hpp"
 # include "Map.hpp"
+# include "MapVisualGenerator.hpp"
 # include "WaveEquation.hpp"
 
 class Program {
@@ -14,25 +15,23 @@ public:
 	Program();
 	~Program();
 
+	int nbGeneratedMap;
+
 	void		run();
-	
+
 	MLXWrapper	MLXSetup;
 	mlx_image_t	*renderer;
 
-	GameLife	gameLife;
-
 	Map map;
-	mlx_image_t	*map_img;
-
-	WaveEquation waveEquation;
-	mlx_image_t	*wave_img;
-
+	t_mapDisplay mapDisplay;
 
 	int display;
 
 private:
 	Program(Program const &src);
 	Program &operator=(Program const &rhs);
+
+
 
 };
 
