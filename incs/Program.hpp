@@ -15,17 +15,13 @@ public:
 	Program();
 	~Program();
 
-	int nbGeneratedMap;
-
+	void 		init();
 	void		run();
 
 	MLXWrapper	MLXSetup;
 	mlx_image_t	*renderer;
 
 	Map map;
-	t_mapDisplay mapDisplay;
-
-	int display;
 
 private:
 	Program(Program const &src);

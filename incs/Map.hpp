@@ -43,11 +43,13 @@ private:
 
 	bool			_mapCreated;
 
+	MLXWrapper		*_mlx;
 	mlx_image_t		*_mapView;
+	mlx_image_t		*_mapPreview;
 
 	void			_parseMapElement();
 };
 
-void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay);
+void displayMapPreview(mlx_image_t *map_img, Map &map);
 
 #endif

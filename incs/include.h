@@ -28,20 +28,19 @@ typedef struct u_veci {
 	int y;
 }	t_veci;
 
-typedef struct u_mapDisplay {
-	bool displayElement;
-	bool displayCollectible;
-	bool displayEnemy;
-	bool displaySpawn;
-}	t_mapDisplay;
+typedef struct u_rect {
+	t_veci pos;
+	int width;
+	int height;
+}	t_rect;
 
 typedef std::vector<int> t_vectori;
 
 void exit_error(const std::string &msg);
 void put_pixel(mlx_image_t *img, int32_t x, int32_t y, uint32_t color);
 void fill_img(mlx_image_t *img, uint32_t color);
+void put_img_to_img(mlx_image_t *img1, mlx_image_t *img2, t_rect *src, t_rect *dst);
 void draw_rect(mlx_image_t *img, int32_t x, int32_t y, int32_t width, int32_t height, uint32_t color);
-void draw_image(mlx_image_t *dst, mlx_image_t *src, int32_t x, int32_t y);
 bool resize_image(mlx_image_t *img, int32_t nwidth, int32_t nheight);
 void gradiant(mlx_image_t *img, int32_t width, int32_t height);
 

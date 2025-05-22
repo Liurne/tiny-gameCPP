@@ -4,6 +4,7 @@
 Map::Map() : _nbCollectible(0), _nbCollectibleLeft(0), _start((t_veci){.x = 0, .y = 0}), _enemy((t_veci){.x = 0, .y = 0}), _mapCreated(false) {
 	std::cout << "Map constructor called, generating map" << std::endl;
 	_mapView = NULL;
+	_mapPreview = NULL;
 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
 			_map[i][j] = '0';
@@ -12,6 +13,12 @@ Map::Map() : _nbCollectible(0), _nbCollectibleLeft(0), _start((t_veci){.x = 0, .
 }
 
 Map::~Map() {
+	if (_mapView) {
+		mlx_delete_image(_mlx->getMlx(), _mapView);
+	}
+	if (_mapPreview) {
+		mlx_delete_image(_mlx->getMlx(), _mapPreview);
+	}
 	std::cout << "Map destructor called" << std::endl;
 }
 
@@ -38,12 +45,16 @@ Map &Map::operator=(Map const &rhs) {
 }
 
 void Map::initView(MLXWrapper &mlx) {
-	if (_mapView) {
-		std::cout << "Map view already created" << std::endl;
+	_mlx = &mlx;
+	if (_mapView)
 		return ;
-	}
-	std::cout << "Creating map view" << std::endl;
 	_mapView = mlx.newImage(MAP_WIDTH * TEXTURE_SIZE, MAP_HEIGHT * TEXTURE_SIZE);
+	if (_mapPreview)
+		return ;
+	_mapPreview = mlx.newImage(MAP_WIDTH * MAP_TILE_SIZE, MAP_HEIGHT * MAP_TILE_SIZE);
+	if (!_mapView || !_mapPreview) {
+		exit_error(ERR_MLX_IMAGE);
+	}
 }
 
 void Map::generateMap() {
@@ -57,6 +68,8 @@ void Map::generateMap() {
 		_mapView = mapVisual.generateMapImage(_mapView, *this);
 		mlx_image_to_png(_mapView, "mapView.png");
 	}
+	displayMapPreview(_mapPreview, *this);
+	mlx_image_to_png(_mapPreview, "mapPreview.png");
 	_mapCreated = true;
 }
 
@@ -125,10 +138,6 @@ char Map::getCellFlower(int x, int y) const {
 		return '0';
 	}
 	return _mapFlower[x][y];
-	// if (_mapRandom[x][y] == '1' && _mapFlower[x][y] == '1') {
-	// 	return '1';
-	// }
-	// return '0';
 }
 
 char Map::getCellRandom(int x, int y) const {
@@ -157,55 +166,55 @@ void Map::_parseMapElement() {
 	_nbCollectibleLeft = _nbCollectible;
 }
 
-void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay) {
-	if (map_img->width != MAP_WIDTH * MAP_TILE_SIZE || map_img->height != MAP_HEIGHT * MAP_TILE_SIZE) {
+void draw_map_cell(mlx_image_t *img, int x, int y, uint32_t color) {
+	draw_rect(img, x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, color);
+}
+
+void displayMapPreview(mlx_image_t *map_img, Map &map) {
+	if (map_img->width < MAP_WIDTH * MAP_TILE_SIZE || map_img->height < MAP_HEIGHT * MAP_TILE_SIZE) {
 		if (!resize_image(map_img, MAP_WIDTH * MAP_TILE_SIZE, MAP_HEIGHT * MAP_TILE_SIZE)) {
 			exit_error("Failed to resize image");
 		}
 	}
 	for (uint32_t i = 0; i < MAP_WIDTH; i++) {
 		for (uint32_t j = 0; j < MAP_HEIGHT; j++) {
-			char cell = map.getCell(i, j);
-			if (cell == '0') {
+			if (map.getCell(i, j) == '0') {
 				if (map.getCellDeep(i, j) == '1')
-					draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, WATER_COLOR);
+					draw_map_cell(map_img, i, j, WATER_COLOR);
 				else
-					draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, DEEP_WATER_COLOR);
+					draw_map_cell(map_img, i, j, DEEP_WATER_COLOR);
 			}
-			else if (cell == 'X')
-				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, 0xFF0000FF);
-			else if (cell == 'O')
-				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, 0x00FF00FF);
-			else if (cell == 'U')
-				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, 0x0000FFFF);
-			else if (cell == '3')
-				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, WATER_COLOR);
-			else if (cell == '2')
-				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, BRIDGE_COLOR);
-			else if (cell == 'C' && (mapDisplay->displayElement || mapDisplay->displayCollectible)){
+			else if (map.getCell(i, j) == '3')
+				draw_map_cell(map_img, i, j, WATER_COLOR);
+			else if (map.getCell(i, j) == '1' || map.getCell(i, j) == 'C' || map.getCell(i, j) == 'S' || map.getCell(i, j) == 'E') {
 				if (map.getCellGrass(i, j) == '1')
-					draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, LONG_GRASS_COLOR);
+					draw_map_cell(map_img, i, j, LONG_GRASS_COLOR);
 				else
-					draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, SHORT_GRASS_COLOR);
-				draw_rect(map_img, (i * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, (j * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, MAP_TILE_SIZE * 0.5, MAP_TILE_SIZE * 0.5, COLLECTIBLE_COLOR);
+					draw_map_cell(map_img, i, j, SHORT_GRASS_COLOR);
 			}
-			else if (cell == 'S' && (mapDisplay->displayElement || mapDisplay->displaySpawn))
-				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, SPAWN_COLOR);
-			else if (cell == 'E' && (mapDisplay->displayElement || mapDisplay->displayEnemy))
-				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, ENEMY_COLOR);
-			else if (map.getCellGrass(i, j) == '1')
-				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, LONG_GRASS_COLOR);
+			else if (map.getCell(i, j) == '2')
+				draw_map_cell(map_img, i, j, BRIDGE_COLOR);
 			else
-				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, SHORT_GRASS_COLOR);
+				draw_map_cell(map_img, i, j, 0xFF0000FF);
 		}
 	}
 	for (uint32_t i = 0; i < MAP_WIDTH; i++) {
 		for (uint32_t j = 0; j < MAP_HEIGHT; j++) {
-			if (map.getCellFlower(i, j) == '1' && map.getCell(i, j) == '1') {
-				draw_rect(map_img, (i * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, (j * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, MAP_FLOWER_TILE_SIZE, MAP_FLOWER_TILE_SIZE, FLOWER_COLOR);
+			if (map.getCell(i, j) == 'S') {
+				draw_rect(map_img, (i * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.125, (j * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.125, MAP_TILE_SIZE * 0.75, MAP_TILE_SIZE * 0.75, SPAWN_COLOR);
+			}
+			else if (map.getCell(i, j) == 'E') {
+				draw_rect(map_img, (i * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.125, (j * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.125, MAP_TILE_SIZE * 0.75, MAP_TILE_SIZE * 0.75, ENEMY_COLOR);
+			}
+			else if (map.getCell(i, j) == 'C') {
+				draw_rect(map_img, (i * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.125, (j * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.125, MAP_TILE_SIZE * 0.75, MAP_TILE_SIZE * 0.75, COLLECTIBLE_COLOR);
+			}
+			if (map.getCellFlower(i, j) == '1' && (map.getCell(i, j) == '1' || map.getCell(i, j) == 'C')) {
+				draw_rect(map_img, (i * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, (j * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, MAP_TILE_SIZE * 0.5, MAP_TILE_SIZE * 0.5, FLOWER_COLOR);
+			}
+			if (map.getCell(i, j) == '3' && map.getCellRandom(i, j) == '1') {
+				draw_rect(map_img, (i * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, (j * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, MAP_TILE_SIZE * 0.5, MAP_TILE_SIZE * 0.5, LONG_GRASS_COLOR);
 			}
 		}
 	}
-	mlx_image_to_png(map_img, "map.png");
 }
-

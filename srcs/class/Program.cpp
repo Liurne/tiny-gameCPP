@@ -1,8 +1,7 @@
 #include "Program.hpp"
 
-Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0) {
+Program::Program() : MLXSetup(WIDTH, HEIGHT, false) {
 	std::cout << "Program constructor called" << std::endl;
-	nbGeneratedMap = 0;
 	try {
 		MLXSetup.init();
 		renderer = MLXSetup.newImage(WIDTH, HEIGHT);
@@ -12,14 +11,15 @@ Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0) {
 	}
 	map.initView(MLXSetup);
 
-	mapDisplay = (t_mapDisplay){.displayElement = true, .displayCollectible = true, .displayEnemy = true, .displaySpawn = true};
-
-	fill_img(renderer, 0x000000FF);
+	fill_img(renderer, DEEP_WATER_COLOR);
 	std::cout << "Map generated" << std::endl;
 	map.generateMap();
 }
 
 Program::~Program() {
+	if (renderer) {
+		mlx_delete_image(MLXSetup.getMlx(), renderer);
+	}
 	std::cout << "Program destructor called" << std::endl;
 }
 
@@ -50,10 +50,9 @@ Program &Program::operator=(Program const &rhs) {
 
 void process(void *program) {
 	Program		*prgm = static_cast<Program *>(program);
-	// Map			*map = &prgm->map;
-	(void)prgm;
+	Map			*map = &prgm->map;
 
-	// displayMapImage(prgm->renderer, *map, &prgm->mapDisplay);
+	displayMapPreview(prgm->renderer, *map);
 }
 
 void keyhook(mlx_key_data_t keydata, void *program) {
@@ -66,6 +65,9 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 		mlx->close();
 	if (keydata.key == MLX_KEY_Q && keydata.action == MLX_PRESS)
 		mlx_image_to_png(prgm->renderer, "screenshot.png");
+	if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS) {
+		map->generateMap();
+	}
 }
 
 void moosehook(mouse_key_t button, action_t action, modifier_key_t mods, void* program) {
