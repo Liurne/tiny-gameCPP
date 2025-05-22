@@ -21,7 +21,6 @@ SRCS		:=	\
 				class/WaveEquation.cpp\
 				class/Program.cpp\
 				utils.cpp\
-				process.cpp\
 				main.cpp\
 
 INCS_D		:=	incs/
