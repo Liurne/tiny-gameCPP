@@ -171,10 +171,6 @@ void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay) {
 					draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, WATER_COLOR);
 				else
 					draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, DEEP_WATER_COLOR);
-				// if (map.getCellGrass(i, j) == '1' || map.getCellFlower(i, j) == '1')
-				// 	draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, WATER_COLOR);
-				// else
-				// 	draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, DEEP_WATER_COLOR);
 			}
 			else if (cell == 'X')
 				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, 0xFF0000FF);
@@ -186,8 +182,13 @@ void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay) {
 				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, WATER_COLOR);
 			else if (cell == '2')
 				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, BRIDGE_COLOR);
-			else if (cell == 'C' && (mapDisplay->displayElement || mapDisplay->displayCollectible))
-				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, COLLECTIBLE_COLOR);
+			else if (cell == 'C' && (mapDisplay->displayElement || mapDisplay->displayCollectible)){
+				if (map.getCellGrass(i, j) == '1')
+					draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, LONG_GRASS_COLOR);
+				else
+					draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, SHORT_GRASS_COLOR);
+				draw_rect(map_img, (i * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, (j * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, MAP_TILE_SIZE * 0.5, MAP_TILE_SIZE * 0.5, COLLECTIBLE_COLOR);
+			}
 			else if (cell == 'S' && (mapDisplay->displayElement || mapDisplay->displaySpawn))
 				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, SPAWN_COLOR);
 			else if (cell == 'E' && (mapDisplay->displayElement || mapDisplay->displayEnemy))
@@ -201,7 +202,7 @@ void displayMapImage(mlx_image_t *map_img, Map &map, t_mapDisplay *mapDisplay) {
 	for (uint32_t i = 0; i < MAP_WIDTH; i++) {
 		for (uint32_t j = 0; j < MAP_HEIGHT; j++) {
 			if (map.getCellFlower(i, j) == '1' && map.getCell(i, j) == '1') {
-				draw_rect(map_img, i * MAP_TILE_SIZE, j * MAP_TILE_SIZE, MAP_FLOWER_TILE_SIZE, MAP_FLOWER_TILE_SIZE, FLOWER_COLOR);
+				draw_rect(map_img, (i * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, (j * MAP_TILE_SIZE) + MAP_TILE_SIZE * 0.25, MAP_FLOWER_TILE_SIZE, MAP_FLOWER_TILE_SIZE, FLOWER_COLOR);
 			}
 		}
 	}
