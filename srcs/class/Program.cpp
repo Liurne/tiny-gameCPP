@@ -5,15 +5,17 @@ Program::Program() : MLXSetup(WIDTH, HEIGHT, false) {
 	try {
 		MLXSetup.init();
 		renderer = MLXSetup.newImage(WIDTH, HEIGHT);
-		player = MLXSetup.newImage(TEXTURE_SIZE, TEXTURE_SIZE);
+		mapView = MLXSetup.newImage(MAP_WIDTH * TEXTURE_SIZE, MAP_HEIGHT * TEXTURE_SIZE);
+		mapPreview = MLXSetup.newImage(MAP_WIDTH * MAP_TILE_SIZE, MAP_HEIGHT * MAP_TILE_SIZE);
+		playerView = MLXSetup.newImage(TEXTURE_SIZE, TEXTURE_SIZE);
 	}
 	catch (const std::exception &e) {
 		exit_error(e.what());
 	}
-	map.initView(MLXSetup);
+	map.setView(mapView, mapPreview);
 
 	fill_img(renderer, DEEP_WATER_COLOR);
-	fill_img(player, 0xFF0000FF);
+	fill_img(playerView, 0xFF000099);
 	map.generateMap();
 }
 
@@ -21,11 +23,21 @@ Program::~Program() {
 	if (renderer) {
 		mlx_delete_image(MLXSetup.getMlx(), renderer);
 	}
+	if (mapView) {
+		mlx_delete_image(MLXSetup.getMlx(), mapView);
+	}
+	if (mapPreview) {
+		mlx_delete_image(MLXSetup.getMlx(), mapPreview);
+	}
+	if (playerView) {
+		mlx_delete_image(MLXSetup.getMlx(), playerView);
+	}
 	std::cout << "Program destructor called" << std::endl;
 }
 
 void Program::run() {
 	MLXSetup.imageToWindow(renderer, 0, 0);
+	MLXSetup.imageToWindow(playerView, WIDTH * 0.5 - (TEXTURE_SIZE * 0.5), HEIGHT * 0.5 - (TEXTURE_SIZE * 0.5));
 	MLXSetup.keyHook(keyhook, this);
 	MLXSetup.mouseHook(moosehook, this);
 	MLXSetup.loopHook(process, this);
@@ -54,6 +66,7 @@ void process(void *program) {
 	Map			*map = &prgm->map;
 
 	displayMapPreview(prgm->renderer, *map);
+	// put_img_to_img(prgm->renderer, prgm->mapView, NULL, NULL);
 }
 
 void keyhook(mlx_key_data_t keydata, void *program) {
@@ -68,6 +81,18 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 		mlx_image_to_png(prgm->renderer, "screenshot.png");
 	if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS) {
 		map->generateMap();
+	}
+	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS) {
+		prgm->playerView->instances[0].y -= 5;
+	}
+	if (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS) {
+		prgm->playerView->instances[0].y += 5;
+	}
+	if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS) {
+		prgm->playerView->instances[0].x -= 5;
+	}
+	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS) {
+		prgm->playerView->instances[0].x += 5;
 	}
 }
 

@@ -12,7 +12,7 @@ public:
 	Map(Map const &src);
 	Map &operator=(Map const &rhs);
 
-	void	initView(MLXWrapper &mlx);
+	void	setView(mlx_image_t	*mapView, mlx_image_t	*mapPreview);
 
 	void	generateMap();
 
@@ -43,7 +43,6 @@ private:
 
 	bool			_mapCreated;
 
-	MLXWrapper		*_mlx;
 	mlx_image_t		*_mapView;
 	mlx_image_t		*_mapPreview;
 

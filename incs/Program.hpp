@@ -23,7 +23,9 @@ public:
 
 	Map map;
 
-	mlx_image_t	*player;
+	mlx_image_t	*mapView;
+	mlx_image_t	*mapPreview;
+	mlx_image_t	*playerView;
 
 private:
 	Program(Program const &src);

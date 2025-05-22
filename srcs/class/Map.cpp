@@ -13,12 +13,6 @@ Map::Map() : _nbCollectible(0), _nbCollectibleLeft(0), _start((t_veci){.x = 0, .
 }
 
 Map::~Map() {
-	if (_mapView) {
-		mlx_delete_image(_mlx->getMlx(), _mapView);
-	}
-	if (_mapPreview) {
-		mlx_delete_image(_mlx->getMlx(), _mapPreview);
-	}
 	std::cout << "Map destructor called" << std::endl;
 }
 
@@ -44,17 +38,12 @@ Map &Map::operator=(Map const &rhs) {
 	return (*this);
 }
 
-void Map::initView(MLXWrapper &mlx) {
-	_mlx = &mlx;
-	if (_mapView)
-		return ;
-	_mapView = mlx.newImage(MAP_WIDTH * TEXTURE_SIZE, MAP_HEIGHT * TEXTURE_SIZE);
-	if (_mapPreview)
-		return ;
-	_mapPreview = mlx.newImage(MAP_WIDTH * MAP_TILE_SIZE, MAP_HEIGHT * MAP_TILE_SIZE);
-	if (!_mapView || !_mapPreview) {
+void Map::setView(mlx_image_t *mapView, mlx_image_t *mapPreview) {
+	if (!mapView || !mapPreview) {
 		exit_error(ERR_MLX_IMAGE);
 	}
+	_mapView = mapView;
+	_mapPreview = mapPreview;
 }
 
 void Map::generateMap() {
@@ -68,8 +57,10 @@ void Map::generateMap() {
 		_mapView = mapVisual.generateMapImage(_mapView, *this);
 		mlx_image_to_png(_mapView, "mapView.png");
 	}
-	displayMapPreview(_mapPreview, *this);
-	mlx_image_to_png(_mapPreview, "mapPreview.png");
+	if (_mapPreview) {
+		displayMapPreview(_mapPreview, *this);
+		mlx_image_to_png(_mapPreview, "mapPreview.png");
+	}
 	_mapCreated = true;
 }
 
