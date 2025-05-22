@@ -23,6 +23,8 @@ public:
 
 	Map map;
 
+	mlx_image_t	*player;
+
 private:
 	Program(Program const &src);
 	Program &operator=(Program const &rhs);

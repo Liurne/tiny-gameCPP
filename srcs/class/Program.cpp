@@ -5,6 +5,7 @@ Program::Program() : MLXSetup(WIDTH, HEIGHT, false) {
 	try {
 		MLXSetup.init();
 		renderer = MLXSetup.newImage(WIDTH, HEIGHT);
+		player = MLXSetup.newImage(TEXTURE_SIZE, TEXTURE_SIZE);
 	}
 	catch (const std::exception &e) {
 		exit_error(e.what());
@@ -12,7 +13,7 @@ Program::Program() : MLXSetup(WIDTH, HEIGHT, false) {
 	map.initView(MLXSetup);
 
 	fill_img(renderer, DEEP_WATER_COLOR);
-	std::cout << "Map generated" << std::endl;
+	fill_img(player, 0xFF0000FF);
 	map.generateMap();
 }
 
