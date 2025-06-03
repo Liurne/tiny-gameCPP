@@ -5,7 +5,7 @@
 # include "error.h"
 # include "game_rule.h"
 # include "MLXWrapper.hpp"
-# include "GameLife.hpp"
+# include "Keyboard.hpp"
 # include "Map.hpp"
 # include "MapVisualGenerator.hpp"
 # include "WaveEquation.hpp"
@@ -20,6 +20,8 @@ public:
 
 	MLXWrapper	MLXSetup;
 	mlx_image_t	*renderer;
+
+	Keyboard	keyboard;
 
 	Map map;
 

@@ -63,37 +63,41 @@ Program &Program::operator=(Program const &rhs) {
 
 void process(void *program) {
 	Program		*prgm = static_cast<Program *>(program);
+	Keyboard	*keyboard = &prgm->keyboard;
+	MLXWrapper	*mlx = &prgm->MLXSetup;
 	Map			*map = &prgm->map;
 
+	//Basic actions
+	if (keyboard->isActionActive(KEY_QUIT)) {
+		mlx->close();
+	}
+	if (prgm->keyboard.isActionActive(KEY_SCREENSHOT)) {
+		mlx_image_to_png(prgm->renderer, "screenshot.png");
+	}
+	if (prgm->keyboard.isActionActive(KEY_GENERATE_MAP)) {
+		map->generateMap();
+	}
+
+	//Player movement
+	if (prgm->keyboard.isActionActive(KEY_UP)) {
+		prgm->playerView->instances[0].y -= 5;
+	}
+	if (prgm->keyboard.isActionActive(KEY_DOWN)) {
+		prgm->playerView->instances[0].y += 5;
+	}
+	if (prgm->keyboard.isActionActive(KEY_LEFT)) {
+		prgm->playerView->instances[0].x -= 5;
+	}
+	if (prgm->keyboard.isActionActive(KEY_RIGHT)) {
+		prgm->playerView->instances[0].x += 5;
+	}
 	displayMapPreview(prgm->renderer, *map);
-	// put_img_to_img(prgm->renderer, prgm->mapView, NULL, NULL);
 }
 
 void keyhook(mlx_key_data_t keydata, void *program) {
 	Program		*prgm = static_cast<Program *>(program);
-	MLXWrapper	*mlx = &prgm->MLXSetup;
-	Map			*map = &prgm->map;
-	(void)map;
 
-	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-		mlx->close();
-	if (keydata.key == MLX_KEY_Q && keydata.action == MLX_PRESS)
-		mlx_image_to_png(prgm->renderer, "screenshot.png");
-	if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS) {
-		map->generateMap();
-	}
-	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS) {
-		prgm->playerView->instances[0].y -= 5;
-	}
-	if (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS) {
-		prgm->playerView->instances[0].y += 5;
-	}
-	if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS) {
-		prgm->playerView->instances[0].x -= 5;
-	}
-	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS) {
-		prgm->playerView->instances[0].x += 5;
-	}
+	prgm->keyboard.update(keydata);
 }
 
 void moosehook(mouse_key_t button, action_t action, modifier_key_t mods, void* program) {

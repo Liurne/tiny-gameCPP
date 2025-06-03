@@ -28,6 +28,11 @@ typedef struct u_veci {
 	int y;
 }	t_veci;
 
+typedef struct u_vecf {
+	float x;
+	float y;
+}	t_vecf;
+
 typedef struct u_rect {
 	t_veci pos;
 	int width;

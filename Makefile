@@ -8,6 +8,7 @@ INCS		:=	\
 				MapVisualGenerator.hpp\
 				Map.hpp\
 				WaveEquation.hpp\
+				Keyboard.hpp\
 				Program.hpp\
 
 
@@ -19,6 +20,7 @@ SRCS		:=	\
 				class/MapVisualGenerator.cpp\
 				class/Map.cpp\
 				class/WaveEquation.cpp\
+				class/Keyboard.cpp\
 				class/Program.cpp\
 				utils.cpp\
 				main.cpp\
