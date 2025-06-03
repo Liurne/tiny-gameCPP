@@ -3,7 +3,7 @@
 
 # define WIDTH 1280//500//1280
 # define HEIGHT 768//500//768
-# define TEXTURE_SIZE 32
+# define TEXTURE_SIZE 128
 # define TILE_SIZE 10
 # define MAP_MARGING 3
 # define MAP_WIDTH 50

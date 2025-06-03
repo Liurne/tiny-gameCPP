@@ -10,7 +10,7 @@ class AEntity {
     AEntity(const AEntity&);
     AEntity& operator=(const AEntity&);
 
-    virtual void    update() const = 0;`
+    virtual void    update() const = 0;
 
     int     getId() const;
 
@@ -21,9 +21,7 @@ class AEntity {
     int     getDirection() const;
     int     getFrame() const;
 
-    private:
-    AEntity();
-
+    protected:
     int     id;
 
     t_vecf  position;
@@ -33,6 +31,9 @@ class AEntity {
 
     int     direction; // 0: up, 1: right, 2: down, 3: left
     int     frame;
+
+    private:
+    AEntity();
 
 };
 
