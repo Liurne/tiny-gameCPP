@@ -1,7 +1,7 @@
 #include "MLXWrapper.hpp"
 
 MLXWrapper::MLXWrapper(int32_t width, int32_t height, bool resize) : _width(width), _height(height), _resize(resize), _mlx(NULL) {
-	std::cout << "MLXSetup parametric constructor called" << std::endl;
+
 }
 
 MLXWrapper *MLXWrapper::operator()() { return (this); }
@@ -78,8 +78,6 @@ mlx_image_t *MLXWrapper::getImage(size_t i) const {
 }
 
 MLXWrapper::~MLXWrapper() {
-	std::cout << "MLXSetup destructor called" << std::endl;
-
 	if (_images.empty()) {
 		for (size_t i = 0; i < _images.size(); ++i)
 			mlx_delete_image(_mlx, _images[i]);
@@ -91,19 +89,14 @@ MLXWrapper::~MLXWrapper() {
 //Unused
 
 MLXWrapper::MLXWrapper() : _width(0), _height(0), _resize(false), _mlx(NULL), _images(0) {
-	std::cout << "MLXSetup default constructor called" << std::endl;
 }
 
 MLXWrapper::MLXWrapper(MLXWrapper const &src) : _width(src._width), _height(src._height), _resize(src._resize), _mlx(src._mlx), _images(src._images) {
-	std::cout << "MLXSetup default copy constructor called" << std::endl;
-
 	(void)src;
 }
 
 
 MLXWrapper &MLXWrapper::operator=(MLXWrapper const &rhs) {
-	std::cout << "MLXSetup assignment operator called" << std::endl;
-
 	(void)rhs;
 	return (*this);
 }

@@ -13,6 +13,7 @@
 class Program {
 public:
 	Program();
+	Program(int run_mode);
 	~Program();
 
 	void 		init();
@@ -29,9 +30,12 @@ public:
 	mlx_image_t	*mapPreview;
 	mlx_image_t	*playerView;
 
+	int runMode;
+
 private:
 	Program(Program const &src);
 	Program &operator=(Program const &rhs);
+
 };
 
 void process(void *program);

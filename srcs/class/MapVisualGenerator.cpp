@@ -1,19 +1,17 @@
 #include "MapVisualGenerator.hpp"
 
 MapVisualGenerator::MapVisualGenerator() : _mapView(NULL) {
-    std::cout << "MapVisualGenerator constructor called" << std::endl;
+
 }
 MapVisualGenerator::~MapVisualGenerator() {
-    std::cout << "MapVisualGenerator destructor called" << std::endl;
+
 }
 
 MapVisualGenerator::MapVisualGenerator(MapVisualGenerator const &src) {
-    std::cout << "MapVisualGenerator copy constructor called" << std::endl;
     *this = src;
 }
 
 MapVisualGenerator &MapVisualGenerator::operator=(MapVisualGenerator const &rhs) {
-    std::cout << "MapVisualGenerator assignment operator called" << std::endl;
     if (this != &rhs) {
         _mapView = rhs._mapView;
     }

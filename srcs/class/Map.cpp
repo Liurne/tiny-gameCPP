@@ -13,16 +13,13 @@ Map::Map() : _nbCollectible(0), _nbCollectibleLeft(0), _start((t_veci){.x = 0, .
 }
 
 Map::~Map() {
-	std::cout << "Map destructor called" << std::endl;
 }
 
 Map::Map(Map const &src) {
-	std::cout << "Map copy constructor called" << std::endl;
 	*this = src;
 }
 
 Map &Map::operator=(Map const &rhs) {
-	std::cout << "Map assignment operator called" << std::endl;
 	if (this != &rhs) {
 		for (int32_t i = 0; i < MAP_WIDTH; i++) {
 			for (int32_t j = 0; j < MAP_HEIGHT; j++) {
