@@ -3,7 +3,6 @@
 //Public
 
 WaveEquation::WaveEquation() : width(WIDTH/TILE_SIZE), height(HEIGHT/TILE_SIZE) {
-	std::cout << "WaveEquation constructor called" << std::endl;
 	for (int i = 0; i < width; i++) {
 		std::vector<float> row;
 		for (int j = 0; j < height; j++) {
@@ -15,11 +14,10 @@ WaveEquation::WaveEquation() : width(WIDTH/TILE_SIZE), height(HEIGHT/TILE_SIZE) 
 }
 
 WaveEquation::~WaveEquation() {
-	std::cout << "WaveEquation destructor called" << std::endl;
+
 }
 
 void WaveEquation::init() {
-	std::cout << "WaveEquation init called" << std::endl;
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			grid[i][j] = 0.0f;
@@ -102,12 +100,10 @@ void WaveEquation::display(mlx_image_t *renderer) {
 //Unused
 
 WaveEquation::WaveEquation(WaveEquation const &src) {
-	std::cout << "WaveEquation copy constructor called" << std::endl;
 	*this = src;
 }
 
 WaveEquation &WaveEquation::operator=(WaveEquation const &rhs) {
-	std::cout << "WaveEquation assignation operator called" << std::endl;
 	if (this != &rhs) {
 		(void)rhs;
 	}

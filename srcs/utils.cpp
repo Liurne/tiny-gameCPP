@@ -38,19 +38,33 @@ void fill_img(mlx_image_t *img, uint32_t color) {
 	}
 }
 
+void	put_img_to_img(mlx_image_t *img1, mlx_image_t *img2, t_rect *src, t_rect *dst)
+{
+	int	i;
+	int	j;
+	int	tmp_x;
+	int	tmp_y;
+
+	i = 0;
+	while (i < dst->width)
+	{
+		j = 0;
+		tmp_x = src->pos.x + (i * src->width) / dst->width;
+		while (j < dst->height)
+		{
+			tmp_y = src->pos.y + (j * src->height) / dst->height;
+			put_pixel(img1, i + dst->pos.x, j + dst->pos.y,
+				get_pixel(img2, tmp_x, tmp_y));
+			j++;
+		}
+		i++;
+	}
+}
+
 void draw_rect(mlx_image_t *img, int32_t x, int32_t y, int32_t width, int32_t height, uint32_t color) {
 	for (int32_t i = 0; i < width; ++i) {
 		for (int32_t j = 0; j < height; ++j) {
 			put_pixel(img, x + i, y + j, color);
-		}
-	}
-}
-
-void draw_image(mlx_image_t *dst, mlx_image_t *src, int32_t x, int32_t y) {
-
-	for (uint32_t i = 0; i < src->width; ++i) {
-		for (uint32_t j = 0; j < src->height; ++j) {
-			put_pixel(dst, x + i, y + j, get_pixel(src, i, j));
 		}
 	}
 }
@@ -63,7 +77,7 @@ bool resize_image(mlx_image_t *img, int32_t nwidth, int32_t nheight) {
 }
 
 void gradiant(mlx_image *img, int32_t width, int32_t height) {
-	
+
 	for (int i = 0; i < width; ++i) {
 		for (int j = 0; j < height; ++j) {
 			t_color color = {.a = 0xFF, .b = 0xFF, .g = 0x88, .r = 0x00};
@@ -72,25 +86,3 @@ void gradiant(mlx_image *img, int32_t width, int32_t height) {
 		}
 	}
 }
-
-// void Map::displayMap(mlx_image_t *renderer) const {
-// 	for (int32_t i = 0; i < MAP_WIDTH; i++) {
-// 		for (int32_t j = 0; j < MAP_HEIGHT; j++) {
-// 			if (_map[i][j] == '1') {
-// 				draw_rect(renderer, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE, 0x00FF00FF);
-// 			}
-// 			else if (_map[i][j] == 'S') {
-// 				draw_rect(renderer, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE, 0x00FFFFFF);
-// 			}
-// 			else if (_map[i][j] == 'E') {
-// 				draw_rect(renderer, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE, 0xFF00FFFF);
-// 			}
-// 			else if (_map[i][j] == 'C') {
-// 				draw_rect(renderer, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE, 0xFFFF00FF);
-// 			}
-// 			else {
-// 				draw_rect(renderer, i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE, 0x0000FFFF);
-// 			}
-// 		}
-// 	}
-// }

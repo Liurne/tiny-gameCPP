@@ -7,7 +7,10 @@ INCS		:=	\
 				MapGenerator.hpp\
 				MapVisualGenerator.hpp\
 				Map.hpp\
+				Player.hpp\
+				Entity.hpp\
 				WaveEquation.hpp\
+				Keyboard.hpp\
 				Program.hpp\
 
 
@@ -18,10 +21,12 @@ SRCS		:=	\
 				class/MapGenerator.cpp\
 				class/MapVisualGenerator.cpp\
 				class/Map.cpp\
+				class/Player.cpp\
+				class/Entity.cpp\
 				class/WaveEquation.cpp\
+				class/Keyboard.cpp\
 				class/Program.cpp\
 				utils.cpp\
-				process.cpp\
 				main.cpp\
 
 INCS_D		:=	incs/

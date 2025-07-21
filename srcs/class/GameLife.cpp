@@ -3,7 +3,6 @@
 //Public
 
 GameLife::GameLife() : _width(MAP_WIDTH), _height(MAP_HEIGHT), _density(MAP_DENSITY), _isGenerating(false) {
-	std::cout << "GameLife constructor called" << std::endl;
 	for (uint32_t i = 0; i < MAP_WIDTH; i++) {
 		_grid.push_back(std::vector<char>());
 		for (uint32_t j = 0; j < MAP_HEIGHT; j++) {
@@ -13,7 +12,6 @@ GameLife::GameLife() : _width(MAP_WIDTH), _height(MAP_HEIGHT), _density(MAP_DENS
 }
 
 GameLife::GameLife(uint32_t width, uint32_t height, float density) : _width(width), _height(height), _density(density), _isGenerating(false) {
-	std::cout << "GameLife constructor called" << std::endl;
 	for (uint32_t i = 0; i < width; i++) {
 		_grid.push_back(std::vector<char>());
 		for (uint32_t j = 0; j < height; j++) {
@@ -23,7 +21,7 @@ GameLife::GameLife(uint32_t width, uint32_t height, float density) : _width(widt
 }
 
 GameLife::~GameLife() {
-	std::cout << "GameLife destructor called" << std::endl;
+
 }
 
 void GameLife::generateGrid() {
