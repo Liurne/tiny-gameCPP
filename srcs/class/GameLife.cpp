@@ -2,68 +2,84 @@
 
 //Public
 
-GameLife::GameLife() : _width(MAP_WIDTH), _height(MAP_HEIGHT), _density(MAP_DENSITY), _isGenerating(false) {
+GameLife::GameLife() : _width(GRID_WIDTH), _height(GRID_HEIGHT), _density(GRID_DENSITY), _isGenerating(false) {
 	std::cout << "GameLife constructor called" << std::endl;
-	for (uint32_t i = 0; i < MAP_WIDTH; i++) {
-		_grid.push_back(std::vector<char>());
-		for (uint32_t j = 0; j < MAP_HEIGHT; j++) {
-			_grid[i].push_back('0');
-		}
-	}
-}
-
-GameLife::GameLife(uint32_t width, uint32_t height, float density) : _width(width), _height(height), _density(density), _isGenerating(false) {
-	std::cout << "GameLife constructor called" << std::endl;
-	for (uint32_t i = 0; i < width; i++) {
-		_grid.push_back(std::vector<char>());
-		for (uint32_t j = 0; j < height; j++) {
-			_grid[i].push_back('0');
-		}
-	}
+	_createGrid(_width, _height, _density);
+	generateGrid(_width, _height, _density);
 }
 
 GameLife::~GameLife() {
 	std::cout << "GameLife destructor called" << std::endl;
 }
 
-void GameLife::generateGrid() {
+void GameLife::generateGrid(uint32_t width, uint32_t height, float density) {
 	_isGenerating = true;
-	for (uint32_t i = 0; i < _width; i++) {
-		for (uint32_t j = 0; j < _height; j++) {
-			_grid[i][j] = '0';
-		}
-	}
-	int nbCellToPlace = ((_width - MAP_MARGING * 2) * (_height - MAP_MARGING * 2)) * _density;
+	_createGrid(width, height, density);
+
+	int nbCellToPlace = ((_width - GRID_MARGING * 2) * (_height - GRID_MARGING * 2)) * _density;
+	std::cout << "nbCellToPlace: " << nbCellToPlace << std::endl;
 	for (int i = 0; i < nbCellToPlace; i++) {
 		t_veci vec;
 		do {
-			vec.x = (rand() % (_width - MAP_MARGING * 2)) + MAP_MARGING;
-			vec.y = (rand() % (_height - MAP_MARGING * 2)) + MAP_MARGING;
+			vec.x = (rand() % (_width - GRID_MARGING * 2)) + GRID_MARGING;
+			vec.y = (rand() % (_height - GRID_MARGING * 2)) + GRID_MARGING;
 		} while (_grid[vec.x][vec.y] == '1');
 		_grid[vec.x][vec.y] = '1';
 	}
 	_isGenerating = false;
 }
 
-void GameLife::generateGrid(uint32_t width, uint32_t height, float density) {
+void GameLife::generateFragGrid(uint32_t width, uint32_t height, float densityMin, float densityMax) {
 	_isGenerating = true;
-	_createGrid(width, height, density);
-	for (uint32_t i = 0; i < _width; i++) {
-		for (uint32_t j = 0; j < _height; j++) {
+	_createGrid(width, height, densityMax);
+
+	(void)densityMin; // densityMin is not used in this function, but kept for compatibility with the original code
+
+	float density = 0.0f;
+
+	std::cout << "densityMax: " << densityMax << std::endl;
+	std::cout << "densityMin: " << densityMin << std::endl;
+
+	density = ((rand() % (int)((densityMax - densityMin) * 100)) + (densityMin * 100)) / 100.0f;
+	std::cout << "Density: " << density << std::endl;
+	// _FillZone(GRID_MARGING, GRID_MARGING, (width / 2) - GRID_MARGING, (height / 2) - GRID_MARGING, density);
+	// // _FillZone(0, 0, (width / 2), (height / 2), density, GRID_MARGING);
+
+	// density = ((rand() % (int)((densityMax - densityMin) * 100)) + (densityMin * 100)) / 100.0f;
+	// std::cout << "Density: " << density << std::endl;
+	// _FillZone((width / 2), GRID_MARGING, (width / 2) - GRID_MARGING, (height / 2) - GRID_MARGING, density);
+	// // _FillZone((width / 2), 0, (width / 2), (height / 2), density, GRID_MARGING);
+
+	// density = ((rand() % (int)((densityMax - densityMin) * 100)) + (densityMin * 100)) / 100.0f;
+	// std::cout << "Density: " << density << std::endl;
+	// _FillZone(GRID_MARGING, (height / 2), (width / 2) - GRID_MARGING, (height / 2) - GRID_MARGING, density);
+	// // _FillZone(0, (height / 2), (width / 2), (height / 2), density, GRID_MARGING);
+
+	// densityMin = 0.4f;
+	// densityMax = 0.5f;
+	// density = ((rand() % (int)((densityMax - densityMin) * 100)) + (densityMin * 100)) / 100.0f;
+	// std::cout << "Density: " << density << std::endl;
+	// // _FillZone((width / 2), (height / 2), (width / 2) - GRID_MARGING, (height / 2) - GRID_MARGING, density);
+	// _FillZone((width / 2), (height / 2), (width / 2), (height / 2), density, GRID_MARGING);
+
+	_FillZone(0, 0, width, height, density, GRID_MARGING);
+	_ClearZone((width / 2) - (width / 8), (height / 2) - (height / 8), width/4, height/4);
+	_FillZone((width / 2) - (width / 8), (height / 2) - (height / 8), width/4, height/4, densityMin);
+
+
+	_isGenerating = false;
+}
+
+void GameLife::_ClearZone(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+	if (x >= _width || y >= _height || x + width > _width || y + height > _height)
+		throw std::out_of_range("ClearZone: Out of grid bounds");
+	for (uint32_t i = x; i < x + width; i++) {
+		for (uint32_t j = y; j < y + height; j++) {
 			_grid[i][j] = '0';
 		}
 	}
-	int nbCellToPlace = ((_width - MAP_MARGING * 2) * (_height - MAP_MARGING * 2)) * _density;
-	for (int i = 0; i < nbCellToPlace; i++) {
-		t_veci vec;
-		do {
-			vec.x = (rand() % (_width - MAP_MARGING * 2)) + MAP_MARGING;
-			vec.y = (rand() % (_height - MAP_MARGING * 2)) + MAP_MARGING;
-		} while (_grid[vec.x][vec.y] == '1');
-		_grid[vec.x][vec.y] = '1';
-	}
-	_isGenerating = false;
 }
+
 
 void GameLife::updateLife() {
 	if (_isGenerating) {
@@ -150,6 +166,37 @@ void GameLife::_createGrid(uint32_t width, uint32_t height, float density) {
 		}
 	}
 }
+
+void GameLife::_FillZone(uint32_t x, uint32_t y, uint32_t width, uint32_t height, float density) {
+	if (x > _width - GRID_MARGING || y > _height - GRID_MARGING || x + width > _width - GRID_MARGING || y + height > _height - GRID_MARGING)
+		throw std::out_of_range("FillZone: Out of grid bounds");
+	int nbCellToPlace = (width * height) * density;
+	std::cout << "nbCellToPlace: " << nbCellToPlace << std::endl;
+	for (int i = 0; i < nbCellToPlace; i++) {
+		t_veci vec;
+		do {
+			vec.x = (rand() % width) + x;
+			vec.y = (rand() % height) + y;
+		} while (_grid[vec.x][vec.y] == '1');
+		_grid[vec.x][vec.y] = '1';
+	}
+}
+
+void GameLife::_FillZone(uint32_t x, uint32_t y, uint32_t width, uint32_t height, float density, uint32_t marging) {
+	if (x >= _width || y >= _height || x + width > _width || y + height > _height)
+		throw std::out_of_range("FillZone: Out of grid bounds");
+	int nbCellToPlace = ((width - marging * 2) * (height - marging * 2)) * density;
+	std::cout << "nbCellToPlace: " << nbCellToPlace << std::endl;
+	for (int i = 0; i < nbCellToPlace; i++) {
+		t_veci vec;
+		do {
+			vec.x = (rand() % (width - marging * 2)) + x + marging;
+			vec.y = (rand() % (height - marging * 2)) + y + marging;
+		} while (_grid[vec.x][vec.y] == '1');
+		_grid[vec.x][vec.y] = '1';
+	}
+}
+
 //Unused
 
 GameLife::GameLife(GameLife const &src) {

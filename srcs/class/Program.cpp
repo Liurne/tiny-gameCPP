@@ -1,8 +1,7 @@
 #include "Program.hpp"
 
-Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0) {
+Program::Program() : nbGeneratedGrids(0), MLXSetup(WIDTH, HEIGHT, false) {
 	std::cout << "Program constructor called" << std::endl;
-	nbGeneratedMap = 0;
 	try {
 		MLXSetup.init();
 		renderer = MLXSetup.newImage(WIDTH, HEIGHT);
@@ -10,17 +9,13 @@ Program::Program() : MLXSetup(WIDTH, HEIGHT, false), display(0) {
 	catch (const std::exception &e) {
 		exit_error(e.what());
 	}
-	map.initView(MLXSetup);
-
-	mapDisplay = (t_mapDisplay){.displayElement = true, .displayCollectible = true, .displayEnemy = true, .displaySpawn = true};
-
 	fill_img(renderer, 0x000000FF);
-	std::cout << "Map generated" << std::endl;
-	map.generateMap();
+	gameLife.displayAliveCell(renderer, TILE_SIZE);
 }
 
 Program::~Program() {
 	std::cout << "Program destructor called" << std::endl;
+	MLXSetup.close();
 }
 
 void Program::run() {

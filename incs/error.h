@@ -11,5 +11,6 @@
 # define ERR_MLX_RESIZE_IMAGE "Failed to resize image"
 # define ERR_MLX_IMAGE_TO_WINDOW "Failed to put image to window"
 # define ERR_MLX_LOOP_HOOK "Failed to add loop hook"
+# define ERR_OUT_OF_RANGE "Data out of range"
 
 #endif

@@ -3,31 +3,10 @@
 
 # define WIDTH 500//1280
 # define HEIGHT 500//768
-# define TEXTURE_SIZE 32
 # define TILE_SIZE 10
-# define MAP_MARGING 3
-# define MAP_WIDTH 50
-# define MAP_HEIGHT 50
-# define MAP_WIDTH_MIN 38
-# define MAP_HEIGHT_MIN 40
-# define MAP_TILE_SIZE 10
-# define MAP_FLOWER_TILE_SIZE 5
-# define MAP_DENSITY 0.55
-# define MAP_DEEP_DENSITY 0.60
-# define MAP_GRASS_DENSITY 0.50
-# define MAP_FLOWER_DENSITY 0.45
-# define MAP_RANDOM_DENSITY 0.30
-# define NB_MAX_COLLECTIBLE(width, height) (width - MAP_MARGING * 2) * (height - MAP_MARGING * 2) * 0.04
-# define NB_MIN_COLLECTIBLE(width, height) (width - MAP_MARGING * 2) * (height - MAP_MARGING * 2) * 0.01
-# define WATER_COLOR 0x3580C8FF
-# define DEEP_WATER_COLOR 0x0D59A2FF
-# define SHORT_GRASS_COLOR 0x99FF99FF
-# define LONG_GRASS_COLOR 0x00BB00FF
-# define GROUND_COLOR 0xEBC6A4FF
-# define FLOWER_COLOR 0xFFFFFFFF
-# define BRIDGE_COLOR 0x776153FF
-# define COLLECTIBLE_COLOR 0xFFFF00FF
-# define SPAWN_COLOR 0x00FFFFFF
-# define ENEMY_COLOR 0xFF00FFFF
+# define GRID_MARGING 3
+# define GRID_WIDTH 50 // max for tile size 10
+# define GRID_HEIGHT 50 // max for tile size 10
+# define GRID_DENSITY 0.45f
 
 #endif

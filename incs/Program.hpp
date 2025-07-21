@@ -6,26 +6,20 @@
 # include "game_rule.h"
 # include "MLXWrapper.hpp"
 # include "GameLife.hpp"
-# include "Map.hpp"
-# include "MapVisualGenerator.hpp"
-# include "WaveEquation.hpp"
 
 class Program {
 public:
 	Program();
 	~Program();
 
-	int nbGeneratedMap;
+	int nbGeneratedGrids;
 
 	void		run();
 
 	MLXWrapper	MLXSetup;
 	mlx_image_t	*renderer;
 
-	Map map;
-	t_mapDisplay mapDisplay;
-
-	int display;
+	GameLife	gameLife;
 
 private:
 	Program(Program const &src);
