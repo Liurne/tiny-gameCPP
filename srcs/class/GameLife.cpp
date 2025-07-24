@@ -2,26 +2,26 @@
 
 //Public
 
-GameLife::GameLife() : _width(MAP_WIDTH), _height(MAP_HEIGHT), _density(MAP_DENSITY) {
+GameLife::GameLife() {
 	std::cout << "GameLife constructor called" << std::endl;
-	_createGrid(_width, _height, _density);
-	generateGrid(_width, _height, _density);
 }
 
 GameLife::~GameLife() {
 	std::cout << "GameLife destructor called" << std::endl;
 }
 
-void GameLife::generateGrid(uint32_t width, uint32_t height, float density) {
+void GameLife::generateGrid(uint32_t width, uint32_t height, uint32_t marging, float density) {
+	if (marging * 2 >= width || marging * 2 >= height)
+		throw std::out_of_range("GenerateGrid: Marging is too big for the grid size");
 	_createGrid(width, height, density);
 
-	int nbCellToPlace = ((_width - MAP_MARGING * 2) * (_height - MAP_MARGING * 2)) * _density;
+	int nbCellToPlace = ((_width - marging * 2) * (_height - marging * 2)) * _density;
 	std::cout << "nbCellToPlace: " << nbCellToPlace << std::endl;
 	for (int i = 0; i < nbCellToPlace; i++) {
 		t_veci vec;
 		do {
-			vec.x = (rand() % (_width - MAP_MARGING * 2)) + MAP_MARGING;
-			vec.y = (rand() % (_height - MAP_MARGING * 2)) + MAP_MARGING;
+			vec.x = (rand() % (_width - marging * 2)) + marging;
+			vec.y = (rand() % (_height - marging * 2)) + marging;
 		} while (_grid[vec.x][vec.y] == '1');
 		_grid[vec.x][vec.y] = '1';
 	}
@@ -95,30 +95,26 @@ void GameLife::fillZone(uint32_t x, uint32_t y, uint32_t width, uint32_t height,
 
 
 void GameLife::updateLife() {
+	std::vector<std::vector<char> > tmp = _createGrid(_width, _height);
 	for (uint32_t i = 0; i < _width; i++) {
 		for (uint32_t j = 0; j < _height; j++) {
 			if (_grid[i][j] == '1' && _isDead(i, j)) {
-				_grid[i][j] = '0';
+				tmp[i][j] = '0';
 			}
 			else if (_grid[i][j] == '0' && _isAlive(i, j)) {
-				_grid[i][j] = '1';
+				tmp[i][j] = '1';
+			}
+			else {
+				tmp[i][j] = _grid[i][j];
 			}
 		}
 	}
+	_grid = tmp;
 }
 
 void GameLife::updateLife(uint32_t iterations) {
 	for (uint32_t k = 0; k < iterations; k++) {
-		for (uint32_t i = 0; i < _width; i++) {
-			for (uint32_t j = 0; j < _height; j++) {
-				if (_grid[i][j] == '1' && _isDead(i, j)) {
-					_grid[i][j] = '0';
-				}
-				else if (_grid[i][j] == '0' && _isAlive(i, j)) {
-					_grid[i][j] = '1';
-				}
-			}
-		}
+		updateLife();
 	}
 }
 
@@ -159,6 +155,15 @@ bool GameLife::_isAlive(int32_t x, int32_t y) const {
 
 bool GameLife::_isDead(int32_t x, int32_t y) const {
 	return (_countAliveNeighbours(x, y) < 4);
+}
+
+std::vector<std::vector<char> > GameLife::_createGrid(uint32_t width, uint32_t height) {
+	std::vector<std::vector<char> > grid;
+	grid.resize(width);
+	for (uint32_t i = 0; i < width; i++) {
+		grid[i].resize(height, '0');
+	}
+	return grid;
 }
 
 void GameLife::_createGrid(uint32_t width, uint32_t height, float density) {
