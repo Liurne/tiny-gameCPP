@@ -3,11 +3,9 @@
 //Constructor
 
 MapGenerator::MapGenerator() {
-	std::cout << "MapGenerator constructor called" << std::endl;
 }
 
 MapGenerator::~MapGenerator() {
-	std::cout << "MapGenerator destructor called" << std::endl;
 }
 
 //Public

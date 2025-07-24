@@ -3,11 +3,11 @@
 //Public
 
 GameLife::GameLife() {
-	std::cout << "GameLife constructor called" << std::endl;
+
 }
 
 GameLife::~GameLife() {
-	std::cout << "GameLife destructor called" << std::endl;
+
 }
 
 void GameLife::generateGrid(uint32_t width, uint32_t height, uint32_t marging, float density) {
