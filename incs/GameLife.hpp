@@ -27,10 +27,11 @@ private:
 	float							_density;
 	bool							_isGenerating;
 
-	int		_countAliveNeighbours(int32_t x, int32_t y) const;
-	bool	_isAlive(int32_t x, int32_t y) const;
-	bool	_isDead(int32_t x, int32_t y) const;
-	void	_createGrid(uint32_t width, uint32_t height, float density);
+	int								_countAliveNeighbours(int32_t x, int32_t y) const;
+	bool							_isAlive(int32_t x, int32_t y) const;
+	bool							_isDead(int32_t x, int32_t y) const;
+	std::vector<std::vector<char> >	_createGrid(uint32_t width, uint32_t height);
+	void							_createGrid(uint32_t width, uint32_t height, float density);
 
 	GameLife(GameLife const &src);
 	GameLife &operator=(GameLife const &rhs);

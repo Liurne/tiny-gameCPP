@@ -19,8 +19,8 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 		gol->displayAliveCell(prgm->renderer, TILE_SIZE);
 	}
 	if (keydata.key == MLX_KEY_ENTER && keydata.action == MLX_PRESS) {
-		// gol->generateGrid(GRID_WIDTH, GRID_HEIGHT, GRID_DENSITY);
-		gol->generateFragGrid(GRID_WIDTH, GRID_HEIGHT, 0.45f, 0.5f);
+		gol->generateGrid(GRID_WIDTH, GRID_HEIGHT, GRID_DENSITY);
+		// gol->generateFragGrid(GRID_WIDTH, GRID_HEIGHT, 0.45f, 0.5f);
 		fill_img(prgm->renderer, 0x000000FF);
 		gol->displayAliveCell(prgm->renderer, TILE_SIZE);
 		prgm->nbGeneratedGrids++;
