@@ -1,24 +1,30 @@
 #ifndef GAME_RULE_H
 # define GAME_RULE_H
 
-# define WIDTH 500//1280
-# define HEIGHT 500//768
+//WINDOW RULES
+# define WIN_WIDTH 500//1280
+# define WIN_HEIGHT 500//768
 # define TEXTURE_SIZE 32
 # define TILE_SIZE 10
+
+//MAP RULES
 # define MAP_MARGING 3
 # define MAP_WIDTH 50
 # define MAP_HEIGHT 50
-# define MAP_WIDTH_MIN 38
-# define MAP_HEIGHT_MIN 40
-# define MAP_TILE_SIZE 10
-# define MAP_FLOWER_TILE_SIZE 5
-# define MAP_DENSITY 0.55
+# define NB_MAX_COLLECTIBLE(width, height) (width - MAP_MARGING * 2) * (height - MAP_MARGING * 2) * 0.04
+# define NB_MIN_COLLECTIBLE(width, height) (width - MAP_MARGING * 2) * (height - MAP_MARGING * 2) * 0.01
+
+
+# define MAP_BASIC_DENSITY 0.55
+# define MAP_LAKE_DENSITY 0.20
 # define MAP_DEEP_DENSITY 0.60
 # define MAP_GRASS_DENSITY 0.50
 # define MAP_FLOWER_DENSITY 0.45
 # define MAP_RANDOM_DENSITY 0.30
-# define NB_MAX_COLLECTIBLE(width, height) (width - MAP_MARGING * 2) * (height - MAP_MARGING * 2) * 0.04
-# define NB_MIN_COLLECTIBLE(width, height) (width - MAP_MARGING * 2) * (height - MAP_MARGING * 2) * 0.01
+
+
+
+//COLORS
 # define WATER_COLOR 0x3580C8FF
 # define DEEP_WATER_COLOR 0x0D59A2FF
 # define SHORT_GRASS_COLOR 0x99FF99FF
