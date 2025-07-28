@@ -1,16 +1,16 @@
 #ifndef ENTITY_HPP
-#define ENTITY_HPP
+# define ENTITY_HPP
 
-#include "include.h"
+# include "include.h"
 
 class AEntity {
-    public:
+public:
     AEntity(int id, float x, float y, t_rect hitbox ,float speed = 1.0f);
     ~AEntity();
     AEntity(const AEntity&);
     AEntity& operator=(const AEntity&);
 
-    virtual void    update() const = 0;
+    virtual void    update() = 0;
 
     int     getId() const;
 
@@ -21,7 +21,7 @@ class AEntity {
     int     getDirection() const;
     int     getFrame() const;
 
-    protected:
+protected:
     int     id;
 
     t_vecf  position;
@@ -32,10 +32,9 @@ class AEntity {
     int     direction; // 0: up, 1: right, 2: down, 3: left
     int     frame;
 
-    private:
+private:
     AEntity();
 
 };
-
 
 #endif

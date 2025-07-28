@@ -1,4 +1,4 @@
-#include "MLXWrapper.hpp"
+#include "core/MLXWrapper.hpp"
 
 MLXWrapper::MLXWrapper(int32_t width, int32_t height, bool resize) : _width(width), _height(height), _resize(resize), _mlx(NULL) {
 

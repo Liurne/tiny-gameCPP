@@ -1,14 +1,8 @@
 #ifndef PROGRAM_HPP
 # define PROGRAM_HPP
 
-# include "include.h"
-# include "error.h"
-# include "game_rule.h"
-# include "MLXWrapper.hpp"
-# include "Keyboard.hpp"
-# include "Map.hpp"
-# include "MapVisualGenerator.hpp"
-# include "WaveEquation.hpp"
+# include "core/MLXWrapper.hpp"
+# include "map/MapTools.hpp"
 
 class Program {
 public:
@@ -24,7 +18,7 @@ public:
 
 	Keyboard	keyboard;
 
-	Map map;
+	Map *map;
 
 	mlx_image_t	*mapView;
 	mlx_image_t	*mapPreview;

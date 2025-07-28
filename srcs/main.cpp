@@ -1,4 +1,4 @@
-#include "Program.hpp"
+#include "core/Program.hpp"
 
 int main(int ac, char **av) {
 	int	run = 0;

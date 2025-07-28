@@ -2,7 +2,7 @@
 # define GAMELIFE_HPP
 
 #include "game_rule.h"
-#include "MLXWrapper.hpp"
+#include "core/MLXWrapper.hpp"
 
 class GameLife {
 public:
@@ -32,6 +32,7 @@ private:
 
 	GameLife(GameLife const &src);
 	GameLife &operator=(GameLife const &rhs);
+
 };
 
 #endif

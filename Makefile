@@ -2,32 +2,42 @@
 #                                                       VARIABLE                                                       #
 ########################################################################################################################
 INCS		:=	\
-				MLXWrapper.hpp\
-				GameLife.hpp\
-				MapTool.hpp\
-				MapVisualGenerator.hpp\
-				Map.hpp\
-				Player.hpp\
-				Entity.hpp\
-				WaveEquation.hpp\
-				Keyboard.hpp\
-				Program.hpp\
+				core/MLXWrapper.hpp\
+				core/Program.hpp\
+				core/Keyboard.hpp\
+				map/Map.hpp\
+				map/tiles/Tile.hpp\
+				map/tiles/Grass.hpp\
+				map/tiles/Ocean.hpp\
+				map/tiles/Lake.hpp\
+				map/tiles/Sand.hpp\
+				map/tiles/Dock.hpp\
+				map/GameLife.hpp\
+				map/MapTool.hpp\
+				entities/Entity.hpp\
+				entities/Player.hpp\
 
 
 
 SRCS		:=	\
-				class/MLXWrapper.cpp\
-				class/GameLife.cpp\
-				class/MapTool.cpp\
-				class/MapVisualGenerator.cpp\
-				class/Map.cpp\
-				class/Player.cpp\
-				class/Entity.cpp\
-				class/WaveEquation.cpp\
-				class/Keyboard.cpp\
-				class/Program.cpp\
+				core/MLXWrapper.cpp\
+				core/Program.cpp\
+				core/Keyboard.cpp\
+				map/Map.cpp\
+				map/tiles/Tile.cpp\
+				map/tiles/Grass.cpp\
+				map/tiles/Ocean.cpp\
+				map/tiles/Lake.cpp\
+				map/tiles/Sand.cpp\
+				map/tiles/Dock.cpp\
+				map/MapTool.cpp\
+				map/GameLife.cpp\
 				utils.cpp\
 				main.cpp\
+				# entities/Entity.cpp\
+				# entities/Player.cpp\
+
+
 
 INCS_D		:=	incs/
 
@@ -121,10 +131,14 @@ $(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.cpp | $(OBJS_D) $(DEPS_D)
 			$(CC) $(CFLAGS) $(OFLAGS) $(DFLAGS) -c $< -o $@
 
 $(OBJS_D)	:
-			mkdir -p $(OBJS_D)/class
+			mkdir -p $(OBJS_D)core
+			mkdir -p $(OBJS_D)map/tiles
+			mkdir -p $(OBJS_D)entities
 
 $(DEPS_D)	:
-			mkdir -p $(DEPS_D)/class
+			mkdir -p $(DEPS_D)core
+			mkdir -p $(DEPS_D)map/tiles
+			mkdir -p $(DEPS_D)entities
 
 mlx			:
 			cmake $(MLX_D) -B $(MLX_D)/build && make -C $(MLX_D)/build -j4

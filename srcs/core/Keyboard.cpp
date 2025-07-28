@@ -1,4 +1,4 @@
-#include "Keyboard.hpp"
+#include "core/Keyboard.hpp"
 
 Keyboard::Keyboard() {
     _actions[0] = (t_key){KEY_QUIT, MLX_KEY_ESCAPE, MLX_RELEASE};

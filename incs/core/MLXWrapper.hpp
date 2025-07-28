@@ -3,6 +3,7 @@
 
 # include "include.h"
 # include "error.h"
+# include "core/Keyboard.hpp"
 
 typedef std::vector<mlx_image_t *>	vecMLXImages;
 

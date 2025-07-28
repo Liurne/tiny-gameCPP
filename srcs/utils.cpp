@@ -1,4 +1,4 @@
-#include "Program.hpp"
+#include "core/Program.hpp"
 
 void exit_error(const std::string &msg) {
 	std::cerr << "Error: " << msg << std::endl;

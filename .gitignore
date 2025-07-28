@@ -32,7 +32,8 @@
 *.app
 
 # Debug files
-old/
+.old/
 .vscode/
+.tmp/
 MLX/build
 tiny-gameCPP

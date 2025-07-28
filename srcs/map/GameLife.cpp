@@ -1,4 +1,4 @@
-#include "GameLife.hpp"
+#include "map/GameLife.hpp"
 
 //Public
 

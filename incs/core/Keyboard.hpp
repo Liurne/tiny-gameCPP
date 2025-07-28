@@ -1,6 +1,7 @@
 #ifndef KEYBOARD_HPP
-#define KEYBOARD_HPP
-#include "include.h"
+# define KEYBOARD_HPP
+
+# include "include.h"
 
 const int KEY_COUNT = 7;
 
@@ -30,7 +31,7 @@ public:
     bool isActionActive(t_action action) const;
 
 
-    private:
+private:
     Keyboard(const Keyboard&);
     Keyboard& operator=(const Keyboard&);
 

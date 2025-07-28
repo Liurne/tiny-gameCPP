@@ -1,4 +1,4 @@
-#include "Player.hpp"
+#include "entities/Player.hpp"
 
 Player::Player(int id, float x, float y, Keyboard *keyboard)
     : AEntity(id, x, y, (t_rect){.pos = {0, 0}, .width = 32, .height = 32}), _keyboard(keyboard) {
@@ -7,7 +7,7 @@ Player::Player(int id, float x, float y, Keyboard *keyboard)
 Player::~Player() {
 }
 
-void Player::update() const{
+void Player::update(){
     if (_keyboard->isActionActive(KEY_UP)) {
         setPosition(getPosition().x, getPosition().y - speed);
         direction = 0;

@@ -1,9 +1,9 @@
-#include "Program.hpp"
+#include "core/Program.hpp"
 
-Program::Program() : MLXSetup(WIDTH, HEIGHT, false) {
+Program::Program() : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false) {
 	try {
 		MLXSetup.init();
-		renderer = MLXSetup.newImage(WIDTH, HEIGHT);
+		renderer = MLXSetup.newImage(WIN_WIDTH, WIN_HEIGHT);
 		mapView = MLXSetup.newImage(MAP_WIDTH * TEXTURE_SIZE, MAP_HEIGHT * TEXTURE_SIZE);
 		mapPreview = MLXSetup.newImage(MAP_WIDTH * MAP_TILE_SIZE, MAP_HEIGHT * MAP_TILE_SIZE);
 		playerView = MLXSetup.newImage(TEXTURE_SIZE, TEXTURE_SIZE);
@@ -11,17 +11,17 @@ Program::Program() : MLXSetup(WIDTH, HEIGHT, false) {
 	catch (const std::exception &e) {
 		exit_error(e.what());
 	}
-	map.setView(mapView, mapPreview);
+
+	map = NULL;
 
 	fill_img(renderer, DEEP_WATER_COLOR);
 	fill_img(playerView, 0xFF000099);
-	map.generateMap();
 }
 
-Program::Program(int run_mode) : MLXSetup(WIDTH, HEIGHT, false), runMode(run_mode) {
+Program::Program(int run_mode) : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false), runMode(run_mode) {
 	try {
 		MLXSetup.init();
-		renderer = MLXSetup.newImage(WIDTH, HEIGHT);
+		renderer = MLXSetup.newImage(WIN_WIDTH, WIN_HEIGHT);
 		mapView = MLXSetup.newImage(MAP_WIDTH * TEXTURE_SIZE, MAP_HEIGHT * TEXTURE_SIZE);
 		mapPreview = MLXSetup.newImage(MAP_WIDTH * MAP_TILE_SIZE, MAP_HEIGHT * MAP_TILE_SIZE);
 		playerView = MLXSetup.newImage(TEXTURE_SIZE, TEXTURE_SIZE);
@@ -29,16 +29,19 @@ Program::Program(int run_mode) : MLXSetup(WIDTH, HEIGHT, false), runMode(run_mod
 	catch (const std::exception &e) {
 		exit_error(e.what());
 	}
-	map.setView(mapView, mapPreview);
+
+	map = NULL;
 
 	fill_img(renderer, DEEP_WATER_COLOR);
 	fill_img(playerView, 0xFF000099);
-	map.generateMap();
 }
 
 Program::~Program() {
 	if (renderer) {
 		mlx_delete_image(MLXSetup.getMlx(), renderer);
+	}
+	if (map) {
+		delete map;
 	}
 	if (mapView) {
 		mlx_delete_image(MLXSetup.getMlx(), mapView);
@@ -49,7 +52,6 @@ Program::~Program() {
 	if (playerView) {
 		mlx_delete_image(MLXSetup.getMlx(), playerView);
 	}
-	std::cout << "Program destructor called" << std::endl;
 }
 
 void Program::run() {
@@ -60,8 +62,8 @@ void Program::run() {
 	}
 	if (runMode == 0) {
 		std::cout << "Running in release mode" << std::endl;
-		MLXSetup.imageToWindow(mapView, WIDTH * 0.5 - (MAP_WIDTH * TEXTURE_SIZE * 0.5), HEIGHT * 0.5 - (MAP_HEIGHT * TEXTURE_SIZE * 0.5));
-		MLXSetup.imageToWindow(playerView, WIDTH * 0.5 - (TEXTURE_SIZE * 0.5), HEIGHT * 0.5 - (TEXTURE_SIZE * 0.5));
+		MLXSetup.imageToWindow(mapView, WIN_WIDTH * 0.5 - (MAP_WIDTH * TEXTURE_SIZE * 0.5), WIN_HEIGHT * 0.5 - (MAP_HEIGHT * TEXTURE_SIZE * 0.5));
+		MLXSetup.imageToWindow(playerView, WIN_WIDTH * 0.5 - (TEXTURE_SIZE * 0.5), WIN_HEIGHT * 0.5 - (TEXTURE_SIZE * 0.5));
 	}
 
 	MLXSetup.keyHook(keyhook, this);
@@ -72,7 +74,7 @@ void Program::run() {
 
 //Unused
 
-Program::Program(Program const &src) : MLXSetup(WIDTH, HEIGHT, false) {
+Program::Program(Program const &src) : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false) {
 	*this = src;
 }
 
@@ -89,7 +91,7 @@ void process(void *program) {
 	Program		*prgm = static_cast<Program *>(program);
 	Keyboard	*keyboard = &prgm->keyboard;
 	MLXWrapper	*mlx = &prgm->MLXSetup;
-	Map			*map = &prgm->map;
+	Map			*map = prgm->map;
 
 	//Basic actions
 	if (keyboard->isActionActive(KEY_QUIT)) {
@@ -99,7 +101,10 @@ void process(void *program) {
 		mlx_image_to_png(prgm->renderer, "screenshot.png");
 	}
 	if (prgm->keyboard.isActionActive(KEY_GENERATE_MAP)) {
-		map->generateMap();
+		if (map) {
+			delete map;
+		}
+		map = MapTools::generateMap();
 	}
 
 	//Player movement
@@ -124,7 +129,7 @@ void keyhook(mlx_key_data_t keydata, void *program) {
 	prgm->keyboard.update(keydata);
 }
 
-void moosehook(mouse_key_t button, action_t action, modifier_key_t mods, void* program) {
+void moosehook(mouse_key_t button, action_t action, modifier_key_t mods, void *program) {
 	// Program		*prgm = static_cast<Program *>(program);
 	// t_veci pos = (t_veci){.x = 0, .y = 0};
 	(void)button;
