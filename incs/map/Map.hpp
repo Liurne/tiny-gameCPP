@@ -22,7 +22,6 @@ public:
     uint32_t        getNbCollectible() const { return _nbCollectible; }
     t_veci          getStart() const { return _start; }
 
-protected:
     void            setTile(int x, int y, Tile *tile);
     void            setStart(int x, int y) { _start = (t_veci){x, y}; }
     void            setNbCollectible(uint32_t nb) { _nbCollectible = nb; }

@@ -9,7 +9,7 @@
 
 //MAP RULES
 # define MAP_MARGING 3
-# define MAP_TILE_SIZE 32
+# define MAP_TILE_SIZE 10//32
 # define MAP_WIDTH 50
 # define MAP_HEIGHT 50
 # define NB_MAX_COLLECTIBLE(width, height) (width - MAP_MARGING * 2) * (height - MAP_MARGING * 2) * 0.04
@@ -17,6 +17,7 @@
 
 
 # define MAP_BASIC_DENSITY 0.55
+# define MAP_ARCHI_DENSITY 0.45
 # define MAP_LAKE_DENSITY 0.20
 # define MAP_DEEP_DENSITY 0.60
 # define MAP_GRASS_DENSITY 0.50

@@ -5,7 +5,6 @@
 
 class Dock : public Tile {
 public:
-    Dock();
     Dock(int height = 2, int variant = 0);
 
     bool isWalkable() const { return _walkable; }

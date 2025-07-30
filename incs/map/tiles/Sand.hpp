@@ -5,7 +5,6 @@
 
 class Sand : public Tile {
 public:
-    Sand();
     Sand(int height = 1, int variant = 0);
 
     bool isWalkable() const { return _walkable; }

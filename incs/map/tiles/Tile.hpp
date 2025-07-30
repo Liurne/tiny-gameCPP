@@ -12,7 +12,7 @@ typedef enum {
 class Tile {
 public:
     Tile();
-    virtual ~Tile();
+    ~Tile();
 
     int             getType() const { return _type; };
     void            setType(int type) { _type = type; };
@@ -22,13 +22,13 @@ public:
     void            setVariant(int variant) { _variant = variant; }
     void            setIsWalkable(bool isWalkable) { _walkable = isWalkable; }
 
-    virtual bool   isWalkable() const = 0;
+    bool            isWalkable() const;
 
 protected:
-    int     _type;
-    int     _variant;
-    int     _height;
-    bool    _walkable;
+int     _type;
+int     _variant;
+int     _height;
+bool    _walkable;
 
 };
 
