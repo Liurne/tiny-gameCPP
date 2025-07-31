@@ -19,6 +19,7 @@ typedef struct s_key {
     t_action    action_type;
     keys        key;
     action_t    key_action;
+    bool        one_shot;
 } t_key;
 
 class Keyboard {
@@ -28,7 +29,7 @@ public:
 
     void update(mlx_key_data_t keydata);
 
-    bool isActionActive(t_action action) const;
+    bool isActionActive(t_action action);
 
 
 private:

@@ -105,6 +105,7 @@ void process(void *program) {
 			delete map;
 		}
 		map = MapTools::generateMap();
+		MapTools::generateView(map, prgm->renderer);
 	}
 
 	//Player movement

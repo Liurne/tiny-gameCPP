@@ -15,6 +15,7 @@ public:
     Map();
     ~Map();
 
+    Tile            *getTile(int x, int y) const { return _map[x][y]; }
     int             getTileType(int x, int y) const { return _map[x][y]->getType(); }
     int             getTileHeight(int x, int y) const { return _map[x][y]->getHeight(); }
     int             getTileVariant(int x, int y) const { return _map[x][y]->getVariant(); }

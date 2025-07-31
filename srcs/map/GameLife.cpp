@@ -16,7 +16,6 @@ void GameLife::generateGrid(uint32_t width, uint32_t height, uint32_t marging, f
 	_createGrid(width, height, density);
 
 	int nbCellToPlace = ((_width - marging * 2) * (_height - marging * 2)) * _density;
-	std::cout << "nbCellToPlace: " << nbCellToPlace << std::endl;
 	for (int i = 0; i < nbCellToPlace; i++) {
 		t_veci vec;
 		do {
@@ -82,7 +81,6 @@ void GameLife::fillZone(uint32_t x, uint32_t y, uint32_t width, uint32_t height,
 	if (x >= _width || y >= _height || x + width > _width || y + height > _height)
 		throw std::out_of_range("FillZone: Out of grid bounds");
 	int nbCellToPlace = ((width - marging * 2) * (height - marging * 2)) * density;
-	std::cout << "nbCellToPlace: " << nbCellToPlace << std::endl;
 	for (int i = 0; i < nbCellToPlace; i++) {
 		t_veci vec;
 		do {
