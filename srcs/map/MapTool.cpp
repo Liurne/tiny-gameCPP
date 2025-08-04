@@ -19,6 +19,7 @@ Map *MapTools::generateMap() {
         }
     }
     _generateFlower(newMap);
+    _findStart(newMap);
 
     return newMap;
 }
@@ -223,9 +224,23 @@ void MapTools::_generateBeachForSandIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     }
 }
 
-void MapTools::_generateDock(int map[MAP_WIDTH][MAP_HEIGHT]) {
-    (void) map; // Suppress unused variable warning
-    std::cout << "Generating dock..." << std::endl;
+void MapTools::_findStart(Map *map) {
+    t_veci  result;
+    bool    isFound;
+    do {
+        isFound = false;
+        result.x = (rand() % (MAP_WIDTH - 2 * MAP_MARGING)) + MAP_MARGING;
+        result.y = (rand() % (MAP_HEIGHT - 2 * MAP_MARGING)) + MAP_MARGING;
+        if (map->getTileType(result.x, result.y) == TILE_WATEREDSAND) {
+            for (int side = 0; side < 4; side++) {
+                if (_isAccessibleFromBorder(map, result, side)) {
+                    map->setStart(result.x, result.y, side);
+                    map->getTile(result.x, result.y)->setVariant(1);
+                    return;
+                }
+            }
+        }
+    } while (!isFound);
 }
 
 void MapTools::_generateTallGrass(int map[MAP_WIDTH][MAP_HEIGHT], int mapVar[MAP_WIDTH][MAP_HEIGHT]) {
@@ -328,10 +343,37 @@ int MapTools::_getSumLandSurfaces(int map[MAP_WIDTH][MAP_HEIGHT]) {
     return 0; // Placeholder return value
 }
 
-t_veci MapTools::_findLandFromBorder(int map[MAP_WIDTH][MAP_HEIGHT], int side, int pos, int dir) {
-    (void) map; // Suppress unused variable warning
-    std::cout << "Finding land from border side: " << side << ", position: " << pos << ", direction: " << dir << std::endl;
-    return (t_veci){0, 0}; // Placeholder return value
+bool MapTools::_isAccessibleFromBorder(Map *map, t_veci pos, int side) {
+    if (side == 0) {
+        while (pos.x != 0) {
+            if (map->getTileType(pos.x, pos.y) != TILE_WATEREDSAND && map->getTileType(pos.x, pos.y) != TILE_OCEAN)
+                return false;
+            pos.x--;
+        }
+
+    }
+    else if (side == 1) {
+        while (pos.y != 0) {
+            if (map->getTileType(pos.x, pos.y) != TILE_WATEREDSAND && map->getTileType(pos.x, pos.y) != TILE_OCEAN)
+                return false;
+            pos.y--;
+        }
+    }
+    else if (side == 2) {
+        while (pos.x != MAP_WIDTH) {
+            if (map->getTileType(pos.x, pos.y) != TILE_WATEREDSAND && map->getTileType(pos.x, pos.y) != TILE_OCEAN)
+                return false;
+            pos.x++;
+        }
+    }
+    else {
+        while (pos.y != MAP_HEIGHT) {
+            if (map->getTileType(pos.x, pos.y) != TILE_WATEREDSAND && map->getTileType(pos.x, pos.y) != TILE_OCEAN)
+                return false;
+            pos.y++;
+        }
+    }
+    return true;
 }
 
 void MapTools::_copyGoLBeach(int map[MAP_WIDTH][MAP_HEIGHT], GameLife &gameLife) {
@@ -391,6 +433,10 @@ void MapTools::_drawTile(mlx_image_t *image, int x, int y, Tile *tile) {
     } else if (tileType == TILE_WATEREDSAND) {
         color = WATEREDSAND_COLOR;
         draw_rect(image, x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, color);
+        if (tileVariant == 1) {
+            color = BRIDGE_COLOR;
+            draw_rect(image, (x * MAP_TILE_SIZE) + (MAP_TILE_SIZE / 4) , (y * MAP_TILE_SIZE) + (MAP_TILE_SIZE / 4), MAP_TILE_SIZE / 2, MAP_TILE_SIZE / 2, color);
+        }
     } else if (tileType == TILE_DOCK) {
         color = BRIDGE_COLOR;
         draw_rect(image, x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, color);

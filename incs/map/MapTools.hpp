@@ -36,7 +36,7 @@ private:
 	static void		_generateBeachForArchipelago(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateBeachForSandIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 
-	static void		_generateDock(int map[MAP_WIDTH][MAP_HEIGHT]);
+	static void		_findStart(Map *map);
 
 	// Terrain decoration generation methods
 	static void		_generateTallGrass(int map[MAP_WIDTH][MAP_HEIGHT], int mapVar[MAP_WIDTH][MAP_HEIGHT]);
@@ -52,11 +52,11 @@ private:
 	// Generation Tools
 	static void		_spreadingAlgoOcean(int map[MAP_WIDTH][MAP_HEIGHT], int lakeMapping[MAP_WIDTH][MAP_HEIGHT], int x, int y);
 	static bool		_isLandNearWater(int map[MAP_WIDTH][MAP_HEIGHT], int x, int y);
+	static bool		_isAccessibleFromBorder(Map *map, t_veci pos, int side);
 	static int		_getSumLandSurfaces(int map[MAP_WIDTH][MAP_HEIGHT]);
-	static t_veci	_findLandFromBorder(int map[MAP_WIDTH][MAP_HEIGHT], int side, int pos, int dir);
 	static void		_copyGoLBeach(int map[MAP_WIDTH][MAP_HEIGHT], GameLife &gameLife);
 
-	// Map utilities
+	// utilities
 	static void		_clearMap(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static Tile		*_createTile(int tile, int variant = 0);
 	static void		_drawTile(mlx_image_t *image, int x, int y, Tile *tile);
