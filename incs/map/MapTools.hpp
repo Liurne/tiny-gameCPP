@@ -54,6 +54,7 @@ private:
 	static bool		_isLandNearWater(int map[MAP_WIDTH][MAP_HEIGHT], int x, int y);
 	static int		_getSumLandSurfaces(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static t_veci	_findLandFromBorder(int map[MAP_WIDTH][MAP_HEIGHT], int side, int pos, int dir);
+	static void		_copyGoLBeach(int map[MAP_WIDTH][MAP_HEIGHT], GameLife &gameLife);
 
 	// Map utilities
 	static void		_clearMap(int map[MAP_WIDTH][MAP_HEIGHT]);

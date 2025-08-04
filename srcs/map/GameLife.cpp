@@ -15,6 +15,10 @@ void GameLife::generateGrid(uint32_t width, uint32_t height, uint32_t marging, f
 		throw std::out_of_range("GenerateGrid: Marging is too big for the grid size");
 	_createGrid(width, height, density);
 
+	if (density == 0) {
+		return;
+	}
+
 	int nbCellToPlace = ((_width - marging * 2) * (_height - marging * 2)) * _density;
 	for (int i = 0; i < nbCellToPlace; i++) {
 		t_veci vec;

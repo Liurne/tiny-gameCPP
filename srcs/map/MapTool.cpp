@@ -47,6 +47,7 @@ void MapTools::_generateIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
         std::cout << "Generating island type: Archipelago" << std::endl;
         _generateArchipelago(map);
     } else if (islandType == SAND_ISLAND) {
+        std::cout << "Generating island type: Sand" << std::endl;
         _generateSandIsland(map);
     } else {
         std::cout << "Generating island type: Basic" << std::endl;
@@ -134,29 +135,17 @@ void MapTools::_generateSandIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
 }
 
 void MapTools::_generateBeach(int map[MAP_WIDTH][MAP_HEIGHT], int islandType) {
-    int tmpBeachMap[MAP_WIDTH][MAP_HEIGHT];
-    _clearMap(tmpBeachMap);
 
     if (islandType == CRESCENT_ISLAND) {
-        _generateBeachForCrescentIsland(tmpBeachMap);
+        _generateBeachForCrescentIsland(map);
     } else if (islandType == LAKE_ISLAND) {
-        _generateBeachForLakeIsland(tmpBeachMap);
+        _generateBeachForLakeIsland(map);
     } else if (islandType == ARCHIPELAGO) {
-        _generateBeachForArchipelago(tmpBeachMap);
+        _generateBeachForArchipelago(map);
     } else if (islandType == SAND_ISLAND) {
-        _generateBeachForSandIsland(tmpBeachMap);
+        _generateBeachForSandIsland(map);
     } else {
-        _generateBeachForBasicIsland(tmpBeachMap);
-    }
-    for (int x = 0; x < MAP_WIDTH; x++) {
-        for (int y = 0; y < MAP_HEIGHT; y++) {
-            if (tmpBeachMap[x][y] && map[x][y] == TILE_OCEAN){
-                if (_isLandNearWater(map, x, y))
-                    map[x][y] = TILE_SAND;
-                else
-                    map[x][y] = TILE_WATEREDSAND;
-            }
-        }
+        _generateBeachForBasicIsland(map);
     }
 }
 
@@ -165,13 +154,7 @@ void MapTools::_generateBeachForBasicIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 1.5, MAP_BEACH_DENSITY);
     gameLife.updateLife(20);
 
-    for (uint32_t x = 0; x < MAP_WIDTH; x++) {
-        for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
-            if (gameLife.getCell(x, y)) {
-                map[x][y] = TILE_SAND;
-            }
-        }
-    }
+    _copyGoLBeach(map, gameLife);
 }
 
 void MapTools::_generateBeachForCrescentIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
@@ -183,13 +166,7 @@ void MapTools::_generateBeachForCrescentIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
 
     gameLife.updateLife(20);
 
-    for (uint32_t x = 0; x < MAP_WIDTH; x++) {
-        for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
-            if (gameLife.getCell(x, y)) {
-                map[x][y] = TILE_SAND;
-            }
-        }
-    }
+    _copyGoLBeach(map, gameLife);
 }
 
 void MapTools::_generateBeachForLakeIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
@@ -198,13 +175,7 @@ void MapTools::_generateBeachForLakeIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     gameLife.fillBorder(MAP_MARGING, MAP_MARGING, MAP_WIDTH - MAP_MARGING, MAP_HEIGHT - MAP_MARGING, MAP_BEACH_DENSITY, MAP_MARGING * 2);
     gameLife.updateLife(20);
 
-    for (uint32_t x = 0; x < MAP_WIDTH; x++) {
-        for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
-            if (gameLife.getCell(x, y)) {
-                map[x][y] = TILE_SAND;
-            }
-        }
-    }
+    _copyGoLBeach(map, gameLife);
 }
 
 void MapTools::_generateBeachForArchipelago(int map[MAP_WIDTH][MAP_HEIGHT]) {
@@ -220,13 +191,7 @@ void MapTools::_generateBeachForArchipelago(int map[MAP_WIDTH][MAP_HEIGHT]) {
     gameLife.fillZone(MAP_WIDTH / 8, angleH, MAP_WIDTH / 3.5, MAP_HEIGHT / 3.5, MAP_BEACH_DENSITY, 0);
     gameLife.updateLife(20);
 
-    for (uint32_t x = 0; x < MAP_WIDTH; x++) {
-        for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
-            if (gameLife.getCell(x, y)) {
-                map[x][y] = TILE_SAND;
-            }
-        }
-    }
+    _copyGoLBeach(map, gameLife);
 }
 
 void MapTools::_generateBeachForSandIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
@@ -242,9 +207,16 @@ void MapTools::_generateBeachForSandIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     gameLife.fillZone(MAP_MARGING, angleH, MAP_WIDTH / 3, MAP_HEIGHT / 3, MAP_BEACH_DENSITY, 0);
     gameLife.updateLife(20);
 
+    _copyGoLBeach(map, gameLife);
+
+    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING, MAP_BEACH_WEAK_DENSITY);
+    gameLife.clearZone(MAP_WIDTH / 4, MAP_HEIGHT / 4, MAP_WIDTH / 2, MAP_HEIGHT / 2);
+    gameLife.fillZone(MAP_WIDTH / 4, MAP_HEIGHT / 4, MAP_WIDTH / 2, MAP_HEIGHT / 2, MAP_BEACH_DENSITY, MAP_MARGING);
+
+    gameLife.updateLife(20);
     for (uint32_t x = 0; x < MAP_WIDTH; x++) {
         for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
-            if (gameLife.getCell(x, y)) {
+            if (gameLife.getCell(x, y) && (map[x][y] == TILE_OCEAN || map[x][y] == TILE_WATEREDSAND)) {
                 map[x][y] = TILE_SAND;
             }
         }
@@ -360,6 +332,19 @@ t_veci MapTools::_findLandFromBorder(int map[MAP_WIDTH][MAP_HEIGHT], int side, i
     (void) map; // Suppress unused variable warning
     std::cout << "Finding land from border side: " << side << ", position: " << pos << ", direction: " << dir << std::endl;
     return (t_veci){0, 0}; // Placeholder return value
+}
+
+void MapTools::_copyGoLBeach(int map[MAP_WIDTH][MAP_HEIGHT], GameLife &gameLife) {
+    for (uint32_t x = 0; x < MAP_WIDTH; x++) {
+        for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
+            if (gameLife.getCell(x, y) && map[x][y] == TILE_OCEAN) {
+                if (!_isLandNearWater(map, x, y))
+                    map[x][y] = TILE_WATEREDSAND;
+                else
+                    map[x][y] = TILE_SAND;
+            }
+        }
+    }
 }
 
 void MapTools::_clearMap(int map[MAP_WIDTH][MAP_HEIGHT]) {
