@@ -10,9 +10,13 @@ Map *MapTools::generateMap() {
     _clearMap(tmpMapVar);
 
     _generateIsland(tmpMap, tmpMapVar);
+    _generateDeepSea(tmpMap, tmpMapVar);
+    _generateTallGrass(tmpMap, tmpMapVar);
+    _generateFlower(newMap);
     for (int x = 0; x < MAP_WIDTH; x++) {
         for (int y = 0; y < MAP_HEIGHT; y++) {
             newMap->setTile(x, y, _createTile(tmpMap[x][y], tmpMapVar[x][y]));
+            
         }
     }
 
@@ -54,8 +58,7 @@ void MapTools::_generateIsland(int map[MAP_WIDTH][MAP_HEIGHT], int mapVar[MAP_WI
 
 void MapTools::_generateBasicIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     GameLife gameLife;
-    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING, 0);
-    gameLife.fillZone(0, 0, MAP_WIDTH, MAP_HEIGHT, MAP_BASIC_DENSITY, MAP_MARGING * 2.5);
+    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 2, MAP_BASIC_DENSITY);
     gameLife.updateLife(20);
     for (uint32_t x = 0; x < MAP_WIDTH; x++) {
         for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
@@ -90,7 +93,7 @@ void MapTools::_generateLakeIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     int x = (MAP_WIDTH / 2) - (MAP_WIDTH / 8);
     int y = (MAP_HEIGHT / 2) - (MAP_HEIGHT / 8);
 
-    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING, MAP_BASIC_DENSITY);
+    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 1.5, MAP_BASIC_DENSITY);
     gameLife.clearZone(x, y, MAP_WIDTH / 4, MAP_HEIGHT / 4);
     gameLife.updateLife(20);
     for (uint32_t x = 0; x < MAP_WIDTH; x++) {
@@ -141,8 +144,9 @@ void MapTools::_generateBeach(int map[MAP_WIDTH][MAP_HEIGHT], int mapVar[MAP_WID
 
 void MapTools::_generateBeachForBasicIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     GameLife gameLife;
-    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 1.5, MAP_BASIC_DENSITY);
+    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 1.5, MAP_BEACH_DENSITY);
     gameLife.updateLife(20);
+
     for (uint32_t x = 0; x < MAP_WIDTH; x++) {
         for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
             if (gameLife.getCell(x, y)) {
@@ -155,9 +159,12 @@ void MapTools::_generateBeachForBasicIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
 void MapTools::_generateBeachForCrescentIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     GameLife gameLife;
     gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 2, 0);
-    gameLife.fillZone(MAP_WIDTH / 2, MAP_HEIGHT / 2, MAP_WIDTH / 2, MAP_HEIGHT / 8, MAP_BASIC_DENSITY, MAP_MARGING);
-    gameLife.fillZone(MAP_WIDTH / 2, MAP_HEIGHT / 2, MAP_WIDTH / 8, MAP_HEIGHT / 2, MAP_BASIC_DENSITY, MAP_MARGING);
+    gameLife.fillZone(MAP_WIDTH / 3 , MAP_HEIGHT / 3, MAP_WIDTH / 2.5, MAP_HEIGHT / 2.5, MAP_BEACH_DENSITY, 0);
+    gameLife.fillZone(MAP_WIDTH / 5, MAP_HEIGHT / 5, MAP_WIDTH / 1.75, MAP_HEIGHT / 6, MAP_BEACH_DENSITY, 0);
+    gameLife.fillZone(MAP_WIDTH / 5, MAP_HEIGHT / 5 + MAP_HEIGHT / 6, MAP_WIDTH / 6, MAP_HEIGHT / 1.75 - MAP_HEIGHT / 6, MAP_BEACH_DENSITY, 0);
+
     gameLife.updateLife(20);
+
     for (uint32_t x = 0; x < MAP_WIDTH; x++) {
         for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
             if (gameLife.getCell(x, y)) {
@@ -170,8 +177,9 @@ void MapTools::_generateBeachForCrescentIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
 void MapTools::_generateBeachForLakeIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     GameLife gameLife;
     gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING, 0);
-    gameLife.fillZone(MAP_WIDTH / 2, (MAP_HEIGHT / 2) - (MAP_HEIGHT / 4), MAP_WIDTH / 2, MAP_HEIGHT / 2, MAP_BASIC_DENSITY, 0);
+    gameLife.fillBorder(MAP_MARGING, MAP_MARGING, MAP_WIDTH - MAP_MARGING, MAP_HEIGHT - MAP_MARGING, MAP_BEACH_DENSITY, MAP_MARGING * 2);
     gameLife.updateLife(20);
+
     for (uint32_t x = 0; x < MAP_WIDTH; x++) {
         for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
             if (gameLife.getCell(x, y)) {
@@ -184,12 +192,16 @@ void MapTools::_generateBeachForLakeIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
 void MapTools::_generateBeachForArchipelago(int map[MAP_WIDTH][MAP_HEIGHT]) {
     GameLife gameLife;
     gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 2, 0);
-    gameLife.fillZone(MAP_WIDTH / 4, MAP_HEIGHT / 4, MAP_WIDTH / 2, MAP_HEIGHT / 2, MAP_BASIC_DENSITY, 0);
-    gameLife.fillZone(MAP_WIDTH / 4, MAP_MARGING + MAP_MARGING / 2, MAP_WIDTH / 2, MAP_HEIGHT / 4, MAP_BASIC_DENSITY, 0);
-    gameLife.fillZone(MAP_WIDTH / 4, (MAP_HEIGHT / 4) * 3, MAP_WIDTH / 2, MAP_HEIGHT / 4, MAP_BASIC_DENSITY, 0);
-    gameLife.fillZone(MAP_MARGING + MAP_MARGING / 2, MAP_HEIGHT / 4, MAP_WIDTH / 4, MAP_HEIGHT / 2, MAP_BASIC_DENSITY, 0);
-    gameLife.fillZone((MAP_WIDTH / 4) * 3, MAP_HEIGHT / 4, MAP_WIDTH / 4, MAP_HEIGHT / 2, MAP_BASIC_DENSITY, 0);
+    gameLife.fillZone(MAP_WIDTH / 4, MAP_HEIGHT / 4, MAP_WIDTH / 2, MAP_HEIGHT / 2, MAP_BEACH_DENSITY, 0);
+
+    int angleW = MAP_WIDTH - (MAP_WIDTH / 8) - (MAP_WIDTH / 3.5);
+    int angleH = MAP_HEIGHT - (MAP_HEIGHT / 8) - (MAP_HEIGHT / 3.5);
+    gameLife.fillZone(MAP_WIDTH / 8, MAP_HEIGHT / 8, MAP_WIDTH / 3.5, MAP_HEIGHT / 3.5, MAP_BEACH_DENSITY, 0);
+    gameLife.fillZone(angleW, angleH, MAP_WIDTH / 3.5, MAP_HEIGHT / 3.5, MAP_BEACH_DENSITY, 0);
+    gameLife.fillZone(angleW, MAP_HEIGHT / 8, MAP_WIDTH / 3.5, MAP_HEIGHT / 3.5, MAP_BEACH_DENSITY, 0);
+    gameLife.fillZone(MAP_WIDTH / 8, angleH, MAP_WIDTH / 3.5, MAP_HEIGHT / 3.5, MAP_BEACH_DENSITY, 0);
     gameLife.updateLife(20);
+
     for (uint32_t x = 0; x < MAP_WIDTH; x++) {
         for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
             if (gameLife.getCell(x, y)) {
@@ -204,19 +216,56 @@ void MapTools::_generateDock(int map[MAP_WIDTH][MAP_HEIGHT]) {
     std::cout << "Generating dock..." << std::endl;
 }
 
-void MapTools::_generateTallGrass(Map *map) {
-    (void) map; // Suppress unused variable warning
-    std::cout << "Generating tall grass..." << std::endl;
+void MapTools::_generateTallGrass(int map[MAP_WIDTH][MAP_HEIGHT], int mapVar[MAP_WIDTH][MAP_HEIGHT]) {
+    GameLife gameLife;
+    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, 0, MAP_GRASS_DENSITY);
+    gameLife.updateLife(20);
+    for (uint32_t x = 0; x < MAP_WIDTH; x++) {
+        for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
+            if (map[x][y] == TILE_GRASS && !gameLife.getCell(x, y)) {
+                mapVar[x][y] = 1; // Mark as tall grass
+            }
+        }
+    }
 }
 
 void MapTools::_generateFlower(Map *map) {
-    (void) map; // Suppress unused variable warning
-    std::cout << "Generating flowers..." << std::endl;
+    GameLife    gameLife;
+    int         mapFlower[MAP_WIDTH][MAP_HEIGHT];
+    _clearMap(mapFlower);
+
+    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING, 1);
+    gameLife.updateLife(20);
+
+    for (int i = 0; i < MAP_WIDTH; i++) {
+        for (int j = 0; j < MAP_HEIGHT; j++) {
+            std::cout << map->getTileType(i, j) << " tile grass:" << TILE_GRASS << std::endl;
+            if (map->getTileType(i, j) == TILE_GRASS && gameLife.getCell(i, j)) {
+                std::cout << "flower" << std::endl;
+                Grass *tile = reinterpret_cast<Grass *>(map->getTile(i, j));
+                tile->setFlower(true);
+            }
+        }
+    }
+
 }
 
-void MapTools::_generateDeepSea(Map *map) {
-    (void) map; // Suppress unused variable warning
-    std::cout << "Generating deep sea..." << std::endl;
+void MapTools::_generateDeepSea(int map[MAP_WIDTH][MAP_HEIGHT], int mapVar[MAP_WIDTH][MAP_HEIGHT]) {
+    GameLife gameLife;
+    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, 0, 0);
+    gameLife.fillBorder(0, 0, MAP_WIDTH, MAP_HEIGHT, 1, 1);
+    gameLife.fillBorder(0, 0, MAP_WIDTH, MAP_HEIGHT, MAP_DEEP_DENSITY, MAP_MARGING + 1);
+    gameLife.updateLife(20);
+    gameLife.fillBorder(0, 0, MAP_WIDTH, MAP_HEIGHT, 1, MAP_MARGING * 0.6);
+
+    for (uint32_t x = 0; x < MAP_WIDTH; x++) {
+        for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
+            if ((map[x][y] == TILE_OCEAN || map[x][y] == TILE_SAND) && gameLife.getCell(x, y)) {
+                map[x][y] = TILE_OCEAN;
+                mapVar[x][y] = 1;
+            }
+        }
+    }
 }
 
 void MapTools::_generateCollectible(Map *map) {
@@ -294,7 +343,7 @@ Tile *MapTools::_createTile(int tile, int variant) {
     else if (tile == TILE_DOCK)
         return new Dock();
     else
-        return new Ocean();
+        return new Ocean(variant);
 }
 
 void MapTools::_drawTile(mlx_image_t *image, int x, int y, Tile *tile) {
@@ -307,7 +356,7 @@ void MapTools::_drawTile(mlx_image_t *image, int x, int y, Tile *tile) {
             color = LONG_GRASS_COLOR;
         draw_rect(image, x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, color);
         if (reinterpret_cast<Grass *>(tile)->hasFlower()) {
-            draw_rect(image, (x * MAP_TILE_SIZE) + MAP_TILE_SIZE / 4, (y * MAP_TILE_SIZE) * MAP_TILE_SIZE / 4, MAP_TILE_SIZE / 2, MAP_TILE_SIZE / 2, FLOWER_COLOR); // Clear the tile area
+            draw_rect(image, (x * MAP_TILE_SIZE) + MAP_TILE_SIZE / 4, (y * MAP_TILE_SIZE) * MAP_TILE_SIZE / 4, MAP_TILE_SIZE / 2, MAP_TILE_SIZE / 2, FLOWER_COLOR);
         }
     } else if (tileType == TILE_LAKE) {
         color = LAKE_COLOR;

@@ -36,9 +36,9 @@ private:
 	static void		_generateDock(int map[MAP_WIDTH][MAP_HEIGHT]);
 
 	// Terrain decoration generation methods
-	static void		_generateTallGrass(Map *map);
+	static void		_generateTallGrass(int map[MAP_WIDTH][MAP_HEIGHT], int mapVar[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateFlower(Map *map);
-	static void		_generateDeepSea(Map *map);
+	static void		_generateDeepSea(int map[MAP_WIDTH][MAP_HEIGHT], int mapVar[MAP_WIDTH][MAP_HEIGHT]);
 
 	// Element generation methods
 	static void		_generateCollectible(Map *map);

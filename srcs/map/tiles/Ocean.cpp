@@ -1,7 +1,7 @@
 #include "map/tiles/Ocean.hpp"
 
-Ocean::Ocean() {
+Ocean::Ocean(int variant) {
     _type = TILE_OCEAN;
-    _variant = 0;
-    _walkable = true; // Oceans are not walkable
+    _variant = variant;
+    _walkable = false; // Oceans are not walkable
 }

@@ -12,6 +12,7 @@ public:
 	void	generateGrid(uint32_t width, uint32_t height, uint32_t marging, float density);
 	void	clearZone(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
 	void	fillZone(uint32_t x, uint32_t y, uint32_t width, uint32_t height, float density, uint32_t marging);
+	void	fillBorder(uint32_t x, uint32_t y, uint32_t width, uint32_t height, float density, uint32_t marging);
 	void	updateLife();
 	void	updateLife(uint32_t iterations);
 	void	displayAliveCell(mlx_image_t *renderer, uint32_t cell_size) const;

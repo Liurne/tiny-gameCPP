@@ -5,7 +5,7 @@
 
 class Ocean : public Tile {
 public:
-    Ocean();
+    Ocean(int variant = 0);
 
     bool isWalkable() const { return _walkable; }
 
