@@ -11,6 +11,7 @@ INCS		:=	\
 				map/tiles/Ocean.hpp\
 				map/tiles/Lake.hpp\
 				map/tiles/Sand.hpp\
+				map/tiles/WateredSand.hpp\
 				map/tiles/Dock.hpp\
 				map/GameLife.hpp\
 				map/MapTool.hpp\
@@ -29,6 +30,7 @@ SRCS		:=	\
 				map/tiles/Ocean.cpp\
 				map/tiles/Lake.cpp\
 				map/tiles/Sand.cpp\
+				map/tiles/WateredSand.cpp\
 				map/tiles/Dock.cpp\
 				map/MapTool.cpp\
 				map/GameLife.cpp\

@@ -6,7 +6,8 @@ typedef enum {
     TILE_GRASS = 1,
     TILE_LAKE = 2,
     TILE_SAND = 3,
-    TILE_DOCK = 4,
+    TILE_WATEREDSAND = 4,
+    TILE_DOCK = 5,
 } t_tile;
 
 class Tile {

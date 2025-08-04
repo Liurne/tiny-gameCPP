@@ -23,3 +23,24 @@ void    Map::setTile(int x, int y, Tile *tile) {
         _map[x][y] = tile; // Set the new tile
     }
 }
+
+bool Map::isPositionValid(t_veci currentPos, t_veci newPos) const {
+    int x = currentPos.x / MAP_TILE_SIZE;
+    int y = currentPos.y / MAP_TILE_SIZE;
+    int newX = newPos.x / MAP_TILE_SIZE;
+    int newY = newPos.y / MAP_TILE_SIZE;
+
+    if (newX < 0 || newX >= MAP_WIDTH || newY < 0 || newY >= MAP_HEIGHT) {
+        return false;
+    }
+
+    Tile *tile = _map[x][y];
+    Tile *newTile = _map[newX][newY];
+    if (!newTile->isWalkable()) {
+        return false;
+    }
+    if (tile->getHeight() > newTile->getHeight() + 1 || tile->getHeight() < newTile->getHeight() - 1) {
+        return false;
+    }
+    return true;
+}

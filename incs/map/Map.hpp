@@ -8,6 +8,7 @@
 # include "tiles/Grass.hpp"
 # include "tiles/Lake.hpp"
 # include "tiles/Sand.hpp"
+# include "tiles/WateredSand.hpp"
 # include "tiles/Dock.hpp"
 
 class Map {
@@ -28,6 +29,7 @@ public:
     void            setNbCollectible(uint32_t nb) { _nbCollectible = nb; }
     void            setMapView(mlx_image_t *image) { _mapView = image; }
     void            setMapPreview(mlx_image_t *image) { _mapPreview = image; }
+    bool            isPositionValid(t_veci currentPos, t_veci newPos) const;
 
 private:
     Tile            *_map[MAP_WIDTH][MAP_HEIGHT];

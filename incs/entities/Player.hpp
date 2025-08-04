@@ -6,10 +6,10 @@
 
 class Player : public AEntity {
 public:
-    Player(int id, float x, float y, Keyboard *keyboard);
+    Player(int id, int x, int y, Keyboard *keyboard);
     ~Player();
 
-    void update();
+    void update(Map *map);
 
 private:
     Player();

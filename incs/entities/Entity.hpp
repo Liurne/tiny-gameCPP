@@ -2,29 +2,31 @@
 # define ENTITY_HPP
 
 # include "include.h"
+# include "map/Map.hpp"
 
 class AEntity {
 public:
-    AEntity(int id, float x, float y, t_rect hitbox ,float speed = 1.0f);
+    AEntity(int id, t_rect hitbox ,float speed = 1.0f);
     ~AEntity();
     AEntity(const AEntity&);
     AEntity& operator=(const AEntity&);
 
-    virtual void    update() = 0;
+    virtual void    update(Map *map) = 0;
 
     int     getId() const;
 
     void    setPosition(float x, float y);
-    t_vecf  getPosition() const;
+    t_veci  getPosition() const;
     t_rect  getHitbox() const;
 
     int     getDirection() const;
     int     getFrame() const;
 
+    bool    move(Map *map, float dx, float dy);
+
 protected:
     int     id;
 
-    t_vecf  position;
     t_rect  hitbox;
 
     float   speed;

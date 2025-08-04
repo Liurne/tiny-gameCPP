@@ -17,21 +17,24 @@ private:
 		CRESCENT_ISLAND = 1,
 		LAKE_ISLAND = 2,
 		ARCHIPELAGO = 3,
+		SAND_ISLAND = 4
 	} t_island_type;
 
 	// Island generation methods
-	static void		_generateIsland(int map[MAP_WIDTH][MAP_HEIGHT], int mapVar[MAP_WIDTH][MAP_HEIGHT]);
+	static void		_generateIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateBasicIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateCrescentIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateLakeIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateArchipelago(int map[MAP_WIDTH][MAP_HEIGHT]);
+	static void		_generateSandIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 
 	// Beach generation methods
-	static void		_generateBeach(int map[MAP_WIDTH][MAP_HEIGHT], int mapVar[MAP_WIDTH][MAP_HEIGHT], int islandType);
+	static void		_generateBeach(int map[MAP_WIDTH][MAP_HEIGHT], int islandType);
 	static void		_generateBeachForBasicIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateBeachForCrescentIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateBeachForLakeIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateBeachForArchipelago(int map[MAP_WIDTH][MAP_HEIGHT]);
+	static void		_generateBeachForSandIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 
 	static void		_generateDock(int map[MAP_WIDTH][MAP_HEIGHT]);
 

@@ -24,7 +24,7 @@ Program::Program(int run_mode) : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false), runMode
 		renderer = MLXSetup.newImage(WIN_WIDTH, WIN_HEIGHT);
 		mapView = MLXSetup.newImage(MAP_WIDTH * TEXTURE_SIZE, MAP_HEIGHT * TEXTURE_SIZE);
 		mapPreview = MLXSetup.newImage(MAP_WIDTH * MAP_TILE_SIZE, MAP_HEIGHT * MAP_TILE_SIZE);
-		playerView = MLXSetup.newImage(TEXTURE_SIZE, TEXTURE_SIZE);
+		playerView = MLXSetup.newImage(PLAYER_SIZE, PLAYER_SIZE);
 	}
 	catch (const std::exception &e) {
 		exit_error(e.what());
