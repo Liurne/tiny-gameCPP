@@ -1,7 +1,7 @@
 #include "entities/Entity.hpp"
 
 AEntity::AEntity(int id, t_rect hitbox, float speed)
-    : id(id), hitbox(hitbox), speed(speed), direction(0), frame(0) {
+    : id(id), hitbox(hitbox), speed(speed), direction(0), frame(0), view(NULL) {
 }
 
 AEntity::~AEntity() {
@@ -27,9 +27,17 @@ int AEntity::getId() const {
     return id;
 }
 
-void AEntity::setPosition(float x, float y) {
+void AEntity::setPosition(int x, int y) {
     hitbox.pos.x = x;
     hitbox.pos.y = y;
+    if (view) {
+        view->instances[0].x = x;
+        view->instances[0].y = y;
+    }
+}
+
+void AEntity::setView(mlx_image_t *newView) {
+    this->view = newView;
 }
 
 t_veci AEntity::getPosition() const {
@@ -48,9 +56,9 @@ int AEntity::getFrame() const {
     return frame;
 }
 
-bool AEntity::move(Map *map, float dx, float dy) {
+bool AEntity::move(Map *map, int dx, int dy) {
     t_veci cornerUL = {hitbox.pos.x, hitbox.pos.y};
-    t_veci cornerDR = {cornerUL.x + hitbox.width, cornerUL.y + hitbox.height};
+    t_veci cornerDR = {cornerUL.x + hitbox.width - 1, cornerUL.y + hitbox.height - 1};
     t_veci cornerUR = {cornerDR.x, cornerUL.y};
     t_veci cornerDL = {cornerUL.x, cornerDR.y};
     t_veci newCornerUL = {cornerUL.x + dx, cornerUL.y + dy};
@@ -62,7 +70,7 @@ bool AEntity::move(Map *map, float dx, float dy) {
         map->isPositionValid(cornerUR, newCornerUR) &&
         map->isPositionValid(cornerDL, newCornerDL) &&
         map->isPositionValid(cornerDR, newCornerDR)) {
-        setPosition(cornerUL.x, cornerUL.y);
+        setPosition(newCornerUL.x, newCornerUL.y);
         return true;
     }
     return false;

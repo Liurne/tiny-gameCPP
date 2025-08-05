@@ -7,7 +7,7 @@
 class AEntity {
 public:
     AEntity(int id, t_rect hitbox ,float speed = 1.0f);
-    ~AEntity();
+    virtual ~AEntity();
     AEntity(const AEntity&);
     AEntity& operator=(const AEntity&);
 
@@ -15,14 +15,16 @@ public:
 
     int     getId() const;
 
-    void    setPosition(float x, float y);
+    void    setPosition(int x, int y);
+    void    setView(mlx_image_t *newView);
+
+
     t_veci  getPosition() const;
     t_rect  getHitbox() const;
-
     int     getDirection() const;
     int     getFrame() const;
 
-    bool    move(Map *map, float dx, float dy);
+    bool    move(Map *map, int dx, int dy);
 
 protected:
     int     id;
@@ -33,6 +35,8 @@ protected:
 
     int     direction; // 0: up, 1: right, 2: down, 3: left
     int     frame;
+
+    mlx_image_t *view;
 
 private:
     AEntity();

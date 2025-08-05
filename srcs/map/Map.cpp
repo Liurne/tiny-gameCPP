@@ -30,17 +30,17 @@ bool Map::isPositionValid(t_veci currentPos, t_veci newPos) const {
     int newX = newPos.x / MAP_TILE_SIZE;
     int newY = newPos.y / MAP_TILE_SIZE;
 
-    if (newX < 0 || newX >= MAP_WIDTH || newY < 0 || newY >= MAP_HEIGHT) {
+    if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT)
         return false;
-    }
+    if (newX < 0 || newX >= MAP_WIDTH || newY < 0 || newY >= MAP_HEIGHT)
+        return false;
 
     Tile *tile = _map[x][y];
     Tile *newTile = _map[newX][newY];
-    if (!newTile->isWalkable()) {
+
+    if (!newTile->isWalkable())
         return false;
-    }
-    if (tile->getHeight() > newTile->getHeight() + 1 || tile->getHeight() < newTile->getHeight() - 1) {
+    if (tile->getHeight() > newTile->getHeight() + 1 || tile->getHeight() < newTile->getHeight() - 1)
         return false;
-    }
     return true;
 }

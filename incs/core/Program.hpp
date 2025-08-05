@@ -3,6 +3,7 @@
 
 # include "core/MLXWrapper.hpp"
 # include "map/MapTools.hpp"
+# include "entities/Player.hpp"
 
 class Program {
 public:
@@ -19,6 +20,8 @@ public:
 	Keyboard	keyboard;
 
 	Map *map;
+
+	Player *player;
 
 	mlx_image_t	*mapView;
 	mlx_image_t	*mapPreview;

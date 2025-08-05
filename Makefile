@@ -34,6 +34,8 @@ SRCS		:=	\
 				map/tiles/Dock.cpp\
 				map/MapTool.cpp\
 				map/GameLife.cpp\
+				entities/Entity.cpp\
+				entities/Player.cpp\
 				utils.cpp\
 				main.cpp\
 				# entities/Entity.cpp\

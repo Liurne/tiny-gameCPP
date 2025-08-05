@@ -1,6 +1,6 @@
 #include "core/Program.hpp"
 
-Program::Program() : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false) {
+Program::Program() : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false), runMode(0) {
 	try {
 		MLXSetup.init();
 		renderer = MLXSetup.newImage(WIN_WIDTH, WIN_HEIGHT);
@@ -14,7 +14,9 @@ Program::Program() : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false) {
 
 	map = NULL;
 
-	fill_img(renderer, DEEP_WATER_COLOR);
+	player = new Player(0, 0, 0, &keyboard);
+	player->setView(playerView);
+
 	fill_img(playerView, 0xFF000099);
 }
 
@@ -32,7 +34,9 @@ Program::Program(int run_mode) : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false), runMode
 
 	map = NULL;
 
-	fill_img(renderer, DEEP_WATER_COLOR);
+	player = new Player(0, 0, 0, &keyboard);
+	player->setView(playerView);
+
 	fill_img(playerView, 0xFF000099);
 }
 
@@ -42,6 +46,9 @@ Program::~Program() {
 	}
 	if (map) {
 		delete map;
+	}
+	if (player) {
+		delete player;
 	}
 	if (mapView) {
 		mlx_delete_image(MLXSetup.getMlx(), mapView);
@@ -64,6 +71,11 @@ void Program::run() {
 		std::cout << "Running in release mode" << std::endl;
 		MLXSetup.imageToWindow(mapView, WIN_WIDTH * 0.5 - (MAP_WIDTH * TEXTURE_SIZE * 0.5), WIN_HEIGHT * 0.5 - (MAP_HEIGHT * TEXTURE_SIZE * 0.5));
 		MLXSetup.imageToWindow(playerView, WIN_WIDTH * 0.5 - (TEXTURE_SIZE * 0.5), WIN_HEIGHT * 0.5 - (TEXTURE_SIZE * 0.5));
+
+		map = MapTools::generateMap();
+		MapTools::generateView(map, renderer);
+
+		player->setPosition(map->getStart().x * TILE_SIZE, map->getStart().y * TILE_SIZE);
 	}
 
 	MLXSetup.keyHook(keyhook, this);
@@ -92,6 +104,8 @@ void process(void *program) {
 	Keyboard	*keyboard = &prgm->keyboard;
 	MLXWrapper	*mlx = &prgm->MLXSetup;
 	Map			*map = prgm->map;
+	Player		*player = prgm->player;
+
 
 	//Basic actions
 	if (keyboard->isActionActive(KEY_QUIT)) {
@@ -106,22 +120,24 @@ void process(void *program) {
 		}
 		map = MapTools::generateMap();
 		MapTools::generateView(map, prgm->renderer);
-	}
+		player->setPosition(map->getStart().x * TILE_SIZE, map->getStart().y * TILE_SIZE);
 
-	//Player movement
-	if (prgm->keyboard.isActionActive(KEY_UP)) {
-		prgm->playerView->instances[0].y -= 5;
 	}
-	if (prgm->keyboard.isActionActive(KEY_DOWN)) {
-		prgm->playerView->instances[0].y += 5;
-	}
-	if (prgm->keyboard.isActionActive(KEY_LEFT)) {
-		prgm->playerView->instances[0].x -= 5;
-	}
-	if (prgm->keyboard.isActionActive(KEY_RIGHT)) {
-		prgm->playerView->instances[0].x += 5;
-	}
-	//displayMapPreview(prgm->renderer, *map);
+	player->update(map);
+	// std::cout << "Player position: (" << player->getPosition().x << ", " << player->getPosition().y << ")" << std::endl;
+	// //Player movement
+	// if (prgm->keyboard.isActionActive(KEY_UP)) {
+	// 	prgm->playerView->instances[0].y -= 5;
+	// }
+	// if (prgm->keyboard.isActionActive(KEY_DOWN)) {
+	// 	prgm->playerView->instances[0].y += 5;
+	// }
+	// if (prgm->keyboard.isActionActive(KEY_LEFT)) {
+	// 	prgm->playerView->instances[0].x -= 5;
+	// }
+	// if (prgm->keyboard.isActionActive(KEY_RIGHT)) {
+	// 	prgm->playerView->instances[0].x += 5;
+	// }
 }
 
 void keyhook(mlx_key_data_t keydata, void *program) {

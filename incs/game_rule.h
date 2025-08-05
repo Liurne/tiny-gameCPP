@@ -45,6 +45,6 @@
 
 //PLAYER
 # define PLAYER_SIZE 10
-# define PLAYER_SPEED 1.0f
+# define PLAYER_SPEED 2.0f
 
 #endif

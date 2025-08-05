@@ -21,4 +21,5 @@ void Player::update(Map *map) {
         move(map, -speed, 0);
         direction = 3;
     }
+    // std::cout << "Player position: (" << hitbox.pos.x << ", " << hitbox.pos.y << ")" << std::endl;
 }
