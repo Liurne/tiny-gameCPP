@@ -11,13 +11,16 @@ void Player::update(Map *map) {
     if (_keyboard->isActionActive(KEY_UP)) {
         move(map, 0, -speed);
         direction = 0;
-    } else if (_keyboard->isActionActive(KEY_RIGHT)) {
+    }
+    if (_keyboard->isActionActive(KEY_RIGHT)) {
         move(map, speed, 0);
         direction = 1;
-    } else if (_keyboard->isActionActive(KEY_DOWN)) {
+    }
+    if (_keyboard->isActionActive(KEY_DOWN)) {
         move(map, 0, speed);
         direction = 2;
-    } else if (_keyboard->isActionActive(KEY_LEFT)) {
+    }
+    if (_keyboard->isActionActive(KEY_LEFT)) {
         move(map, -speed, 0);
         direction = 3;
     }

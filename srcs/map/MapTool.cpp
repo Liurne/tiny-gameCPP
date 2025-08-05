@@ -125,7 +125,7 @@ void MapTools::_generateArchipelago(int map[MAP_WIDTH][MAP_HEIGHT]) {
 void MapTools::_generateSandIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     GameLife gameLife;
 
-    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING *3, MAP_ARCHI_DENSITY);
+    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 3.5, MAP_BASIC_DENSITY);
     gameLife.updateLife(20);
 
     for (uint32_t x = 0; x < MAP_WIDTH; x++) {
