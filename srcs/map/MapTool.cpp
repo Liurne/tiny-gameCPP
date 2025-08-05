@@ -56,6 +56,7 @@ void MapTools::_generateIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     }
     _mappingLakes(map);
     _generateBeach(map, islandType);
+    _mappingLakes(map);
 
 }
 
@@ -303,15 +304,16 @@ void MapTools::_mappingLakes(int map[MAP_WIDTH][MAP_HEIGHT]) {
     _spreadingAlgoOcean(map, lakeMapping, 0, 0);
     for (int x = 0; x < MAP_WIDTH; x++) {
         for (int y = 0; y < MAP_HEIGHT; y++) {
-            if (map[x][y] == TILE_OCEAN && lakeMapping[x][y] == 0) {
+            if (map[x][y] == TILE_OCEAN && lakeMapping[x][y] == 0)
                 map[x][y] = TILE_LAKE;
-            }
+            if (map[x][y] == TILE_WATEREDSAND && lakeMapping[x][y] == 0)
+                map[x][y] = TILE_SAND;
         }
     }
 }
 
 void MapTools::_spreadingAlgoOcean(int map[MAP_WIDTH][MAP_HEIGHT], int lakeMapping[MAP_WIDTH][MAP_HEIGHT], int x, int y) {
-    if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT || map[x][y] != TILE_OCEAN || lakeMapping[x][y] != 0) {
+    if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT || (map[x][y] != TILE_OCEAN && map[x][y] != TILE_WATEREDSAND) || lakeMapping[x][y] != 0) {
         return;
     }
     lakeMapping[x][y] = 1;
