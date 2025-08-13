@@ -45,13 +45,13 @@ private:
 
 	// Element generation methods
 	static void		_generateCollectible(Map *map);
-
-	// Mapping methods
-	static void		_mappingLakes(int map[MAP_WIDTH][MAP_HEIGHT]);
-
+	
 	// Generation Tools
+	static void		_mappingLakes(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_spreadingAlgoOcean(int map[MAP_WIDTH][MAP_HEIGHT], int lakeMapping[MAP_WIDTH][MAP_HEIGHT], int x, int y);
-	static bool		_isLandNearWater(int map[MAP_WIDTH][MAP_HEIGHT], int x, int y);
+	static void		_clearSoloOcean(int map[MAP_WIDTH][MAP_HEIGHT]);
+	static bool		_isLandNear(int map[MAP_WIDTH][MAP_HEIGHT], int x, int y);
+	static bool		_isOceanNear(int map[MAP_WIDTH][MAP_HEIGHT], int x, int y);
 	static bool		_isAccessibleFromBorder(Map *map, t_veci pos, int side);
 	static int		_getSumLandSurfaces(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_copyGoLBeach(int map[MAP_WIDTH][MAP_HEIGHT], GameLife &gameLife);

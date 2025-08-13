@@ -56,6 +56,7 @@ void MapTools::_generateIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     }
     _mappingLakes(map);
     _generateBeach(map, islandType);
+    _clearSoloOcean(map);
     _mappingLakes(map);
 
 }
@@ -154,6 +155,7 @@ void MapTools::_generateBeach(int map[MAP_WIDTH][MAP_HEIGHT], int islandType) {
 void MapTools::_generateBeachForBasicIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     GameLife gameLife;
     gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 1.5, MAP_BEACH_DENSITY);
+    gameLife.clearZone(MAP_WIDTH / 3, MAP_HEIGHT / 3, MAP_WIDTH / 3, MAP_HEIGHT / 3);
     gameLife.updateLife(20);
 
     _copyGoLBeach(map, gameLife);
@@ -212,7 +214,7 @@ void MapTools::_generateBeachForSandIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     _copyGoLBeach(map, gameLife);
 
     gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING, MAP_BEACH_WEAK_DENSITY);
-    gameLife.clearZone(MAP_WIDTH / 4, MAP_HEIGHT / 4, MAP_WIDTH / 2, MAP_HEIGHT / 2);
+    gameLife.clearZone(MAP_WIDTH / 3, MAP_HEIGHT / 3, MAP_WIDTH / 3, MAP_HEIGHT / 3);
     gameLife.fillZone(MAP_WIDTH / 4, MAP_HEIGHT / 4, MAP_WIDTH / 2, MAP_HEIGHT / 2, MAP_BEACH_DENSITY, MAP_MARGING);
 
     gameLife.updateLife(20);
@@ -323,7 +325,16 @@ void MapTools::_spreadingAlgoOcean(int map[MAP_WIDTH][MAP_HEIGHT], int lakeMappi
     _spreadingAlgoOcean(map, lakeMapping, x, y - 1);
 }
 
-bool MapTools::_isLandNearWater(int map[MAP_WIDTH][MAP_HEIGHT], int x, int y) {
+void MapTools::_clearSoloOcean(int map[MAP_WIDTH][MAP_HEIGHT]) {
+    for (int i = 0; i < MAP_WIDTH; i++) {
+        for (int j = 0; j < MAP_HEIGHT; j++) {
+            if (map[i][j] == TILE_OCEAN && !_isOceanNear(map, i, j))
+                map[i][j] = TILE_WATEREDSAND;
+        }
+    }
+}
+
+bool MapTools::_isLandNear(int map[MAP_WIDTH][MAP_HEIGHT], int x, int y) {
     if (x + 1 < MAP_WIDTH && map[x + 1][y] == TILE_GRASS) {
         return true;
     }
@@ -334,6 +345,22 @@ bool MapTools::_isLandNearWater(int map[MAP_WIDTH][MAP_HEIGHT], int x, int y) {
         return true;
     }
     if (y - 1 > 0 && map[x][y - 1] == TILE_GRASS) {
+        return true;
+    }
+    return false;
+}
+
+bool MapTools::_isOceanNear(int map[MAP_WIDTH][MAP_HEIGHT], int x, int y) {
+    if (x + 1 < MAP_WIDTH && map[x + 1][y] == TILE_OCEAN) {
+        return true;
+    }
+    if (x - 1 > 0 && map[x - 1][y] == TILE_OCEAN) {
+        return true;
+    }
+    if (y + 1 < MAP_HEIGHT && map[x][y + 1] == TILE_OCEAN) {
+        return true;
+    }
+    if (y - 1 > 0 && map[x][y - 1] == TILE_OCEAN) {
         return true;
     }
     return false;
@@ -382,7 +409,7 @@ void MapTools::_copyGoLBeach(int map[MAP_WIDTH][MAP_HEIGHT], GameLife &gameLife)
     for (uint32_t x = 0; x < MAP_WIDTH; x++) {
         for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
             if (gameLife.getCell(x, y) && map[x][y] == TILE_OCEAN) {
-                if (!_isLandNearWater(map, x, y))
+                if (!_isLandNear(map, x, y))
                     map[x][y] = TILE_WATEREDSAND;
                 else
                     map[x][y] = TILE_SAND;
