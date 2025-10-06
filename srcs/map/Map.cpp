@@ -12,7 +12,8 @@ Map::Map() : _nbCollectible(0), _start((t_veci){0, 0}), _mapView(NULL), _mapPrev
 Map::~Map() {
     for (int x = 0; x < MAP_WIDTH; ++x) {
         for (int y = 0; y < MAP_HEIGHT; ++y) {
-            delete _map[x][y];
+            if (_map[x][y])
+                delete _map[x][y];
         }
     }
 }
