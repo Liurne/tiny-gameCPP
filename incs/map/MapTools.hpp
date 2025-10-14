@@ -18,7 +18,8 @@ private:
 		CRESCENT_ISLAND = 1,
 		LAKE_ISLAND = 2,
 		ARCHIPELAGO = 3,
-		SAND_ISLAND = 4
+		SAND_ISLAND = 4,
+		SWAMP_ISLAND = 5
 	} t_island_type;
 
 	// Island generation methods
@@ -28,6 +29,7 @@ private:
 	static void		_generateLakeIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateArchipelago(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateSandIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
+	static void		_generateSwampIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 
 	// Beach generation methods
 	static void		_generateBeach(int map[MAP_WIDTH][MAP_HEIGHT], int islandType);
@@ -36,6 +38,7 @@ private:
 	static void		_generateBeachForLakeIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateBeachForArchipelago(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_generateBeachForSandIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
+	static void		_generateBeachForSwampIsland(int map[MAP_WIDTH][MAP_HEIGHT]);
 
 	static void		_findStart(Map *map);
 

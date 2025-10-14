@@ -103,7 +103,6 @@ void process(void *program) {
 	Program		*prgm = static_cast<Program *>(program);
 	Keyboard	*keyboard = &prgm->keyboard;
 	MLXWrapper	*mlx = &prgm->MLXSetup;
-	Map			*map = prgm->map;
 	Player		*player = prgm->player;
 
 
@@ -115,15 +114,37 @@ void process(void *program) {
 		mlx_image_to_png(prgm->renderer, "screenshot.png");
 	}
 	if (prgm->keyboard.isActionActive(KEY_GENERATE_MAP)) {
-		if (map) {
-			delete map;
+		if (prgm->map) {
+			std::cout << "me" << std::endl;
+			delete prgm->map;
+			prgm->map = NULL;
+			std::cout << "meme" << std::endl;
 		}
-		map = MapTools::generateMap();
-		MapTools::generateView(map, prgm->renderer);
-		player->setPosition(map->getStart().x * TILE_SIZE, map->getStart().y * TILE_SIZE);
+		std::cout << "ok" << std::endl;
+		prgm->map = MapTools::generateMap();
+		MapTools::generateView(prgm->map, prgm->renderer);
+		player->setPosition(prgm->map->getStart().x * TILE_SIZE, prgm->map->getStart().y * TILE_SIZE);
 
 	}
+<<<<<<< HEAD
 	player->update(map);
+=======
+	player->update(prgm->map);
+	// std::cout << "Player position: (" << player->getPosition().x << ", " << player->getPosition().y << ")" << std::endl;
+	// //Player movement
+	// if (prgm->keyboard.isActionActive(KEY_UP)) {
+	// 	prgm->playerView->instances[0].y -= 5;
+	// }
+	// if (prgm->keyboard.isActionActive(KEY_DOWN)) {
+	// 	prgm->playerView->instances[0].y += 5;
+	// }
+	// if (prgm->keyboard.isActionActive(KEY_LEFT)) {
+	// 	prgm->playerView->instances[0].x -= 5;
+	// }
+	// if (prgm->keyboard.isActionActive(KEY_RIGHT)) {
+	// 	prgm->playerView->instances[0].x += 5;
+	// }
+>>>>>>> a3355394f8159da3f124ebd4d12f490ca646eb48
 }
 
 void keyhook(mlx_key_data_t keydata, void *program) {
