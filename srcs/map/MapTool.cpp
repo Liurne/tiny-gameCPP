@@ -30,7 +30,18 @@ void MapTools::generateView(Map *map, mlx_image_t *image) {
 
     for (uint32_t x = 0; x < MAP_WIDTH; x++) {
         for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
-            _drawTile(image, x, y, map->getTile(x, y));
+            _drawTilePreview(image, x, y, map->getTile(x, y));
+        }
+    }
+}
+
+void MapTools::generatePreview(Map *map, mlx_image_t *image) {
+    if (!image)
+        return;
+
+    for (uint32_t x = 0; x < MAP_WIDTH; x++) {
+        for (uint32_t y = 0; y < MAP_HEIGHT; y++) {
+            _drawTilePreview(image, x, y, map->getTile(x, y));
         }
     }
 }
@@ -441,7 +452,14 @@ Tile *MapTools::_createTile(int tile, int variant) {
         return new Ocean(variant);
 }
 
-void MapTools::_drawTile(mlx_image_t *image, int x, int y, Tile *tile) {
+void MapTools::_drawTile(mlx_image_t *image, Map *map, int x, int y) {
+    (void) image;
+    (void) map;
+    (void) x;
+    (void) y;
+}
+
+void MapTools::_drawTilePreview(mlx_image_t *image, int x, int y, Tile *tile) {
     uint32_t color = 0;
     int tileType = tile->getType();
     int tileVariant = tile->getVariant();
@@ -449,32 +467,32 @@ void MapTools::_drawTile(mlx_image_t *image, int x, int y, Tile *tile) {
         color = SHORT_GRASS_COLOR;
         if (tileVariant == 1)
             color = LONG_GRASS_COLOR;
-        draw_rect(image, x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, color);
+        draw_rect(image, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, color);
         if (reinterpret_cast<Grass *>(tile)->hasFlower()) {
-            draw_rect(image, (x * MAP_TILE_SIZE) + (MAP_TILE_SIZE / 4) , (y * MAP_TILE_SIZE) + (MAP_TILE_SIZE / 4), MAP_TILE_SIZE / 2, MAP_TILE_SIZE / 2, FLOWER_COLOR);
+            draw_rect(image, (x * TILE_SIZE) + (TILE_SIZE / 4) , (y * TILE_SIZE) + (TILE_SIZE / 4), TILE_SIZE / 2, TILE_SIZE / 2, FLOWER_COLOR);
         }
     } else if (tileType == TILE_LAKE) {
         color = LAKE_COLOR;
-        draw_rect(image, x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, color);
+        draw_rect(image, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, color);
     } else if (tileType == TILE_SAND) {
         color = SAND_COLOR;
-        draw_rect(image, x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, color);
+        draw_rect(image, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, color);
     } else if (tileType == TILE_WATEREDSAND) {
         color = WATEREDSAND_COLOR;
-        draw_rect(image, x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, color);
+        draw_rect(image, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, color);
         if (tileVariant == 1) {
             color = BRIDGE_COLOR;
-            draw_rect(image, (x * MAP_TILE_SIZE) + (MAP_TILE_SIZE / 4) , (y * MAP_TILE_SIZE) + (MAP_TILE_SIZE / 4), MAP_TILE_SIZE / 2, MAP_TILE_SIZE / 2, color);
+            draw_rect(image, (x * TILE_SIZE) + (TILE_SIZE / 4) , (y * TILE_SIZE) + (TILE_SIZE / 4), TILE_SIZE / 2, TILE_SIZE / 2, color);
         }
     } else if (tileType == TILE_DOCK) {
         color = BRIDGE_COLOR;
-        draw_rect(image, x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, color);
+        draw_rect(image, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, color);
     } else if (tileType == TILE_OCEAN) {
         if (tileVariant == 1) {
             color = DEEP_WATER_COLOR;
         } else {
             color = WATER_COLOR;
         }
-        draw_rect(image, x * MAP_TILE_SIZE, y * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE, color);
+        draw_rect(image, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, color);
     }
 }

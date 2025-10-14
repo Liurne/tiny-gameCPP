@@ -10,6 +10,7 @@ public:
 
 	static Map	*generateMap();
 	static void	generateView(Map *map, mlx_image_t *image);
+	static void	generatePreview(Map *map, mlx_image_t *image);
 
 private:
 	typedef enum {
@@ -56,10 +57,17 @@ private:
 	static int		_getSumLandSurfaces(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static void		_copyGoLBeach(int map[MAP_WIDTH][MAP_HEIGHT], GameLife &gameLife);
 
-	// utilities
+	// Utilities
 	static void		_clearMap(int map[MAP_WIDTH][MAP_HEIGHT]);
 	static Tile		*_createTile(int tile, int variant = 0);
-	static void		_drawTile(mlx_image_t *image, int x, int y, Tile *tile);
+
+	// Draw Tool
+	static void		_drawTilePreview(mlx_image_t *image, int x, int y, Tile *tile);
+	static void		_drawTile(mlx_image_t *image, Map *map, int x, int y);
+	static void		_drawOceanTile(mlx_image_t *image, Map *map, int x, int y);
+	static void		_drawSandTile(mlx_image_t *image, Map *map, int x, int y);
+	static void		_drawGrassTile(mlx_image_t *image, Map *map, int x, int y);
+	
 
 
 
