@@ -48,7 +48,7 @@ void MapTools::generatePreview(Map *map, mlx_image_t *image) {
 
 void MapTools::_generateIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     int islandType = rand() % 6;
-    islandType = LAKE_ISLAND;
+    // islandType = LAKE_ISLAND;
 
     if (islandType == CRESCENT_ISLAND) {
         std::cout << "Generating island type: Crescent" << std::endl;
