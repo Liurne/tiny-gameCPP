@@ -113,10 +113,12 @@ void MapTools::_generateLakeIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     int x = (MAP_WIDTH / 2) - (MAP_WIDTH / 10);
     int y = (MAP_HEIGHT / 2) - (MAP_HEIGHT / 10);
 
-    // gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 1.75, MAP_LAKE_DENSITY);
-    // gameLife.clearZone(x, y, MAP_WIDTH / 5, MAP_HEIGHT / 5);
-    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 1.75, 0);
-    gameLife.fillZone(x, y, MAP_WIDTH / 5, MAP_HEIGHT / 5, MAP_LAKE_DENSITY, 0);
+    gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING * 1.75, MAP_LAKE_DENSITY);
+    gameLife.clearZone(x, y, MAP_WIDTH / 5, MAP_HEIGHT / 5);
+    gameLife.clearZone(0, 0, MAP_WIDTH / 4, MAP_HEIGHT / 4);
+    gameLife.clearZone(0, MAP_HEIGHT - MAP_HEIGHT / 4, MAP_WIDTH / 4, MAP_HEIGHT / 4); 
+    gameLife.clearZone(MAP_WIDTH - MAP_WIDTH / 4, 0, MAP_WIDTH / 4, MAP_HEIGHT / 4);  
+    gameLife.clearZone(MAP_WIDTH - MAP_WIDTH / 4, MAP_HEIGHT - MAP_HEIGHT / 4, MAP_WIDTH / 4, MAP_HEIGHT / 4); 
     
     gameLife.updateLife(20);
     for (uint32_t x = 0; x < MAP_WIDTH; x++) {
@@ -213,7 +215,7 @@ void MapTools::_generateBeachForLakeIsland(int map[MAP_WIDTH][MAP_HEIGHT]) {
     GameLife gameLife;
     gameLife.generateGrid(MAP_WIDTH, MAP_HEIGHT, MAP_MARGING, 0);
     gameLife.fillBorder(MAP_MARGING, MAP_MARGING, MAP_WIDTH - MAP_MARGING * 2, MAP_HEIGHT - MAP_MARGING * 2, MAP_BEACH_DENSITY, MAP_MARGING * 2);
-    // gameLife.updateLife(20);
+    gameLife.updateLife(20);
 
     _copyGoLBeach(map, gameLife);
 }

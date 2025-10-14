@@ -66,9 +66,9 @@ void GameLife::fillBorder(uint32_t x, uint32_t y, uint32_t width, uint32_t heigh
 	if (x >= _width || y >= _height || x + width > _width || y + height > _height)
 		throw std::out_of_range("FillBorder: Out of grid bounds");
 	fillZone(x, y, marging, height, density, 0);
-	// fillZone(width - marging, y, marging, height, density, 0);
+	fillZone(x + width - marging, y, marging, height, density, 0);
 	fillZone(x + marging, y, width - (marging * 2), marging, density, 0);
-	fillZone(x + marging, height - marging, width - (marging * 2), marging, density, 0);
+	fillZone(x + marging, y + height - marging, width - (marging * 2), marging, density, 0);
 }
 
 void GameLife::updateLife() {

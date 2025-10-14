@@ -126,9 +126,6 @@ void process(void *program) {
 		player->setPosition(prgm->map->getStart().x * TILE_SIZE, prgm->map->getStart().y * TILE_SIZE);
 
 	}
-<<<<<<< HEAD
-	player->update(map);
-=======
 	player->update(prgm->map);
 	// std::cout << "Player position: (" << player->getPosition().x << ", " << player->getPosition().y << ")" << std::endl;
 	// //Player movement
@@ -144,7 +141,6 @@ void process(void *program) {
 	// if (prgm->keyboard.isActionActive(KEY_RIGHT)) {
 	// 	prgm->playerView->instances[0].x += 5;
 	// }
->>>>>>> a3355394f8159da3f124ebd4d12f490ca646eb48
 }
 
 void keyhook(mlx_key_data_t keydata, void *program) {
