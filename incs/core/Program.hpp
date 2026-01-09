@@ -4,6 +4,7 @@
 # include "core/MLXWrapper.hpp"
 # include "map/MapTools.hpp"
 # include "entities/Player.hpp"
+# include "entities/Mob.hpp"
 
 class Program {
 public:
@@ -22,10 +23,12 @@ public:
 	Map *map;
 
 	Player *player;
+	Mob *mob;
 
 	mlx_image_t	*mapView;
 	mlx_image_t	*mapPreview;
 	mlx_image_t	*playerView;
+	mlx_image_t *mobView;
 
 	int runMode;
 

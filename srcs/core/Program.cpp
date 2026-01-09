@@ -7,6 +7,7 @@ Program::Program() : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false), runMode(0) {
 		mapView = MLXSetup.newImage(MAP_WIDTH * TEXTURE_SIZE, MAP_HEIGHT * TEXTURE_SIZE);
 		mapPreview = MLXSetup.newImage(MAP_WIDTH * MAP_TILE_SIZE, MAP_HEIGHT * MAP_TILE_SIZE);
 		playerView = MLXSetup.newImage(TEXTURE_SIZE, TEXTURE_SIZE);
+		mobView = MLXSetup.newImage(MOB_SIZE, MOB_SIZE);
 	}
 	catch (const std::exception &e) {
 		exit_error(e.what());
@@ -17,7 +18,11 @@ Program::Program() : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false), runMode(0) {
 	player = new Player(0, 0, 0, &keyboard);
 	player->setView(playerView);
 
+	mob = new Mob(1, 0, 0, player);
+	mob->setView(mobView);
+
 	fill_img(playerView, 0xFF000099);
+	fill_img(mobView, 0x0000FF99);
 }
 
 Program::Program(int run_mode) : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false), runMode(run_mode) {
@@ -27,6 +32,7 @@ Program::Program(int run_mode) : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false), runMode
 		mapView = MLXSetup.newImage(MAP_WIDTH * TEXTURE_SIZE, MAP_HEIGHT * TEXTURE_SIZE);
 		mapPreview = MLXSetup.newImage(MAP_WIDTH * MAP_TILE_SIZE, MAP_HEIGHT * MAP_TILE_SIZE);
 		playerView = MLXSetup.newImage(PLAYER_SIZE, PLAYER_SIZE);
+		mobView = MLXSetup.newImage(MOB_SIZE, MOB_SIZE);
 	}
 	catch (const std::exception &e) {
 		exit_error(e.what());
@@ -37,7 +43,11 @@ Program::Program(int run_mode) : MLXSetup(WIN_WIDTH, WIN_HEIGHT, false), runMode
 	player = new Player(0, 0, 0, &keyboard);
 	player->setView(playerView);
 
+	mob = new Mob(0, 0, 0, player);
+	mob->setView(mobView);
+
 	fill_img(playerView, 0xFF000099);
+	fill_img(mobView, 0x0000FF99);
 }
 
 Program::~Program() {
@@ -50,6 +60,9 @@ Program::~Program() {
 	if (player) {
 		delete player;
 	}
+	if (mob)	{
+		delete mob;
+	}
 	if (mapView) {
 		mlx_delete_image(MLXSetup.getMlx(), mapView);
 	}
@@ -58,6 +71,9 @@ Program::~Program() {
 	}
 	if (playerView) {
 		mlx_delete_image(MLXSetup.getMlx(), playerView);
+	}
+	if (mobView) {
+		mlx_delete_image(MLXSetup.getMlx(), mobView);
 	}
 }
 
@@ -71,11 +87,13 @@ void Program::run() {
 		std::cout << "Running in release mode" << std::endl;
 		MLXSetup.imageToWindow(mapView, WIN_WIDTH * 0.5 - (MAP_WIDTH * TEXTURE_SIZE * 0.5), WIN_HEIGHT * 0.5 - (MAP_HEIGHT * TEXTURE_SIZE * 0.5));
 		MLXSetup.imageToWindow(playerView, WIN_WIDTH * 0.5 - (TEXTURE_SIZE * 0.5), WIN_HEIGHT * 0.5 - (TEXTURE_SIZE * 0.5));
+		MLXSetup.imageToWindow(mobView, WIN_WIDTH * 0.5 - (TEXTURE_SIZE * 0.5), WIN_HEIGHT * 0.5 - (TEXTURE_SIZE * 0.5));
 
 		map = MapTools::generateMap();
 		MapTools::generateView(map, renderer);
 
 		player->setPosition(map->getStart().x * TILE_SIZE, map->getStart().y * TILE_SIZE);
+		mob->setPosition(player->getPosition().x, player->getPosition().y);
 	}
 
 	MLXSetup.keyHook(keyhook, this);
@@ -104,6 +122,7 @@ void process(void *program) {
 	Keyboard	*keyboard = &prgm->keyboard;
 	MLXWrapper	*mlx = &prgm->MLXSetup;
 	Player		*player = prgm->player;
+	Mob			*mob = prgm->mob;
 
 
 	//Basic actions
@@ -124,9 +143,11 @@ void process(void *program) {
 		prgm->map = MapTools::generateMap();
 		MapTools::generateView(prgm->map, prgm->renderer);
 		player->setPosition(prgm->map->getStart().x * TILE_SIZE, prgm->map->getStart().y * TILE_SIZE);
+		mob->setPosition(player->getPosition().x, player->getPosition().y);
 
 	}
 	player->update(prgm->map);
+	mob->update(prgm->map);
 	// std::cout << "Player position: (" << player->getPosition().x << ", " << player->getPosition().y << ")" << std::endl;
 	// //Player movement
 	// if (prgm->keyboard.isActionActive(KEY_UP)) {

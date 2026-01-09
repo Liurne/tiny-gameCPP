@@ -48,4 +48,7 @@
 # define PLAYER_SIZE 10
 # define PLAYER_SPEED 2.0f
 
+# define MOB_SIZE 10
+# define MOB_SPEED 2.0f
+
 #endif

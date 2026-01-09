@@ -17,6 +17,7 @@ INCS		:=	\
 				map/MapTool.hpp\
 				entities/Entity.hpp\
 				entities/Player.hpp\
+				entities/Mob.hpp\
 
 
 
@@ -36,10 +37,9 @@ SRCS		:=	\
 				map/GameLife.cpp\
 				entities/Entity.cpp\
 				entities/Player.cpp\
+				entities/Mob.cpp\
 				utils.cpp\
 				main.cpp\
-				# entities/Entity.cpp\
-				# entities/Player.cpp\
 
 
 

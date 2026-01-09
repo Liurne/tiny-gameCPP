@@ -56,6 +56,16 @@ int AEntity::getFrame() const {
     return frame;
 }
 
+bool AEntity::isCollidingWith(AEntity *target){
+
+    return !(
+            hitbox.pos.x + hitbox.width  <= target->hitbox.pos.x
+            || target->hitbox.pos.x + target->hitbox.width <= hitbox.pos.x
+            || hitbox.pos.y + hitbox.height <= target->hitbox.pos.y
+            || target->hitbox.pos.y + target->hitbox.height <= hitbox.pos.y
+        );
+}
+
 bool AEntity::move(Map *map, int dx, int dy) {
     t_veci cornerUL = {hitbox.pos.x, hitbox.pos.y};
     t_veci cornerDR = {cornerUL.x + hitbox.width - 1, cornerUL.y + hitbox.height - 1};

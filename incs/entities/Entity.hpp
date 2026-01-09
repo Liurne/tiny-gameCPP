@@ -24,6 +24,8 @@ public:
     int     getDirection() const;
     int     getFrame() const;
 
+    bool    isCollidingWith(AEntity *target);
+
     bool    move(Map *map, int dx, int dy);
 
 protected:
